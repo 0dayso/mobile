@@ -1,22 +1,27 @@
 <admintpl file="header" />
 </head>
 <body>
-	<div class="wrap js-check-wrap">
-		<ul class="nav nav-tabs">
+<div class="wrap">	
+	<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('mobile/index')}">手机号码管理</a></li>
 			<li><a href="{:U('mobile/add')}">添加手机号码</a></li>
-		</ul>
+	</ul>
+
 		<form class="js-ajax-form" action="{:U('Mobile/index')}" method="post">
 
 			<table class="table table-hover table-bordered table-list">
-<!-- 				<thead>
+				<thead>
 					<tr>
-						<th width="50">ID</th>
-						<th>手机号码</th>
-						<th width="80">{:L('STATUS')}</th>
-						<th width="180">{:L('ACTIONS')}</th>
+						<th width="50">ID</th>						
+						<th>序列号</th>						
+						<th>执行内容</th>
+						<th>执行次数</th>	
+						<th width="180">状态</th>					
+						<th>排序</th>
+						<th>备注</th>
+						<th width="80">操作</th>						
 					</tr>
-				</thead> -->
+				</thead> 
 				<tbody>
 				<?php $i=0 ?>
 				<foreach name="data" item="vo" key="k">

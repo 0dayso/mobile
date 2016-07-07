@@ -12,9 +12,9 @@ class MobileController extends AdminbaseController{
 	public function index(){
 		$count=M('mobile')->where('status=0')->count();
 		$numbpage=M('mobile')->where('id=1')->getfield('number');
-		$data=M('mobile')->where('status=0')->limit($numbpage*3,3)->getfield('id,mobile',true);
+		$data=M('mobile')->where('status=0')->limit($numbpage*5,5)->getfield('id,mobile',true);
 
-		if($count<$numbpage*3){
+		if($count<$numbpage*5){
 			$rsl=M('mobile')->where('id=1')->setField('number',0);
 		}else{
 			$rsl=M('mobile')->where('id=1')->setInc('number',1);	
@@ -116,13 +116,19 @@ class MobileController extends AdminbaseController{
 
 	public function uniqiddata(){
 		try{
-			$sql="DELETE  FROM mbl_mobile WHERE id IN(
-	SELECT id FROM (SELECT id FROM `mbl_mobile` a WHERE a.mobile IN (
-	    SELECT `mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1 
-	) AND a.id NOT IN(
-	    SELECT `id` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1 
-	)) AS t)";		
-			$result=M()->execute($sql);
+			$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+				    SELECT id,mobile FROM(
+						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
+					)AS t
+				WHERE a.mobile=t.mobile AND a.id!=t.id
+			)";
+			$result=M()->query($sql);
+			$ary=array();
+			foreach ($result as $k => $v) {		
+			 	$map['id']=$v['id'];
+				$sul=M('mobile')->where($map)->delete();
+
+			}
 		}catch(Exception $ex){
 			$this->error('请重新删除数据'.$ex);
 		}
@@ -132,6 +138,59 @@ class MobileController extends AdminbaseController{
 			$this->success('已删除');
 		}
 	}
+
+	public function nameinfo(){
+		echo "dfsdfd";
+	}
+
+
+    public function mobileweixi(){
+    	
+    	$path='D:\WWW\mobile\public\mobile.txt';
+    	$path1='D:\WWW\mobile\public\mobile1.txt';
+		if(!file_exists($path)){
+			return '文件路径错误';
+		}
+		$handle = @fopen($path, "r");
+		$arydata=array();
+		$i=0;
+		$j=0;
+		if ($handle) {
+		    while (!feof($handle)) {
+		    	
+		        $buffer = fgets($handle, 4096);
+		        if($i%4==0 and $i>0){
+			        if($j%2==0){
+				  			$arydata[]="podus20165\r\n";			
+				  	}else{
+				  			$arydata[]="lgrdym\r\n";
+				  	}
+				  	$j++;
+			    }		
+		        $arydata[]=$buffer;
+		        $i++;
+		    }
+		    fclose($handle);
+		}
+		var_dump($arydata);
+		$myfile = fopen($path1, "w") or die("Unable to open file!");
+		foreach ($arydata as $key => $value) {
+			// if($key%4==0 and $key>0){
+			    //     if($key%2==0){
+				  	// 		//$arydata[]='podus20165\r\n';
+				  	// 		fwrite($myfile,"podus20165\r\n");			
+				  	// }else{
+				  	// 		//$arydata[]='lgrdym\n';
+				  	// 		fwrite($myfile, "lgrdym\n");
+				  	// }
+			    //}		
+			  fwrite($myfile, $value);
+		}
+
+		fclose($myfile);
+		
+    }
+
 
 	
 

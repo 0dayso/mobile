@@ -1,0 +1,51 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('Directive/directivelist')}">指令列表</a></li>
+			<li class="active"><a href="{:U('Directive/add')}">增加指令</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Directive/add')}">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">名称:</label>
+					<div class="controls">
+						<input type="text" name="name">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">方法名:</label>
+					<div class="controls">
+						<input type="text" name="funname" id="action">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">文件名:</label>
+					<div class="controls">
+						<input type="text" name="filename">
+						<span class="form-required">*</span>
+						例:name.lua
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">状态:</label>
+					<div class="controls">
+						<select name="status">
+							<option value="1">显示</option>
+							<option value="0">隐藏</option>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<a class="btn" href="{:U('Directive/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
