@@ -29,6 +29,10 @@ class EquipmentController extends AdminbaseController {
         $this->assign('list',$list);
         $this->display();
     }
+
+    public function act(){        
+        $this->display();
+    }
     
     private function load_menu_lang(){
     	$apps=sp_scan_dir(SPAPP."*",GLOB_ONLYDIR);
