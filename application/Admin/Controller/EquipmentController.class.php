@@ -24,6 +24,11 @@ class EquipmentController extends AdminbaseController {
        	$this->display();
         
     }
+    public function mobile(){
+        $list=D('equictive')->select();
+        $this->assign('list',$list);
+        $this->display();
+    }
     
     private function load_menu_lang(){
     	$apps=sp_scan_dir(SPAPP."*",GLOB_ONLYDIR);
