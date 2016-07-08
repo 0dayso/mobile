@@ -11,8 +11,12 @@ class TaskController extends AdminbaseController{
 	}
 
 	public function index(){
-
 		$this->display();
+	}
+	public function add(){
+		$list=D('instruct')->select();
+        $this->assign('instruct',$list);		
+        $this->display();
 	}
 	public function mobile(){
 		$this->display();
