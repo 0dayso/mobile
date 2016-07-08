@@ -12,6 +12,9 @@ class EquictiveController extends Controller {
     }
 
     public function saveDeviceID(){
+        echo "{['ji']='56',['t']='89'}";
+        exit();
+
         $deviceid=I('cdkey');
         if(!$deviceid){
         	echo 0;
