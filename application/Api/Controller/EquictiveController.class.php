@@ -17,7 +17,7 @@ class EquictiveController extends Controller {
         	echo 0;
         	return;
         }
-        $device=D('equictive')->where('cdkey=%s',array($deviceid))->find();  
+        $device=D('equictive')->where("cdkey='%s'",array($deviceid))->find();  
         if($device){
         	echo 1;
         	return ;
