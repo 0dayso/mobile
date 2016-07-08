@@ -12,9 +12,9 @@
 					<tr>
 						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>
-						<th>序列号</th>
-						<th>版本号</th>
-						<th>微信个数</th>		
+						<th>序列号</th>						
+						<th>微信个数</th>
+						<th>执行指令</th>		
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
@@ -24,11 +24,11 @@
 					<tr>					
 						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
 						<td>{$vo.id}</td>
-						<td>{$vo.cdkey}</td>
-						<td>{$vo.version}</td>
+						<td>{$vo.cdkey}</td>						
 						<td>{$vo.numb}</td>
+						<td>{$vo.runcode}</td>
 						<td>{$vo.status}</td>
-						<td></td>
+						<td><a href="#">执行指令</a></td>
 					</tr>
 					</volist>
 				</tbody>
@@ -36,9 +36,9 @@
 					<tr>
 						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>
-						<th>序列号</th>
-						<th>版本号</th>
-						<th>微信个数</th>		
+						<th>序列号</th>						
+						<th>微信个数</th>	
+						<th>正在执行指令</th>		
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>

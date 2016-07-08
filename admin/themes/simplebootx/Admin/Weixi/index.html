@@ -2,13 +2,21 @@
 </head>
 <body>
 	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Equipment/mobile')}">微信列表</a></li>			
+		</ul>
 		<form class="js-ajax-form" action="{:U('Menu/listorders')}" method="post">			
-			<table class="table table-hover table-bordered table-list" id="">
+			<table class="table table-hover table-bordered table-list" id="menus-table">
 				<thead>
 					<tr>
-						<!--<th width="80">{:L('SORT')}</th>-->
+						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>
-						<th>任务名称</th>			
+						<th>微信昵称</th>
+						<th>微信号</th>
+						<th>微信密码</th>
+						<th>微信手机号</th>						
+						<th>微信邮件</th>		
+						<th>邮箱密码</th>
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
@@ -16,20 +24,31 @@
 				<tbody>
 					<volist name="list" id='vo'>
 					<tr>					
-						<!--<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>-->
+						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
 						<td>{$vo.id}</td>
-						<td>{$vo.taskname}</td>			
+						<td>{$vo.cdkey}</td>						
+						<td>{$vo.numb}</td>
+						<td>{$vo.runcode}</td>
 						<td>{$vo.status}</td>
-						<td><a href="#" class="js-ajax-dialog-btn" data-msg="确定安装该插件吗？">指定设备执行</a></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td><a href="#">执行指令</a></td>
 					</tr>
 					</volist>
 				</tbody>
 				<tfoot>
 					<tr>
-						<!--<th width="80">{:L('SORT')}</th>-->
+						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>
-						<th>任务名称</th>
-		
+						<th>微信昵称</th>
+						<th>微信号</th>
+						<th>微信密码</th>
+						<th>微信手机号</th>						
+						<th>微信邮件</th>		
+						<th>邮箱密码</th>
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>

@@ -10,37 +10,46 @@
 			<table class="table table-hover table-bordered table-list" id="">
 				<thead>
 					<tr>
-						<th width="80">{:L('SORT')}</th>
+						<!--<th width="80">{:L('SORT')}</th>-->
 						<th width="50">ID</th>
-						<th>名称</th>
-						<th>方法名</th>
-						<th>文件名称</th>
-						<th width="80">{:L('STATUS')}</th>
-						<th width="180">{:L('ACTIONS')}</th>
+						<th>任务名称</th>
+						<th>更换ip</th>
+						<th>切换微信</th>
+						<th>进入方式</th>
+						<th>必须操作事项</th>
+						<th>混合选择</th>
+						<!--<th width="80">{:L('STATUS')}</th>-->
+						<th width="80">{:L('ACTIONS')}</th>
 					</tr>
 				</thead>
 				<tbody>
 					<volist name="list" id='vo'>
 					<tr>					
-						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
+						<!--<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>-->
 						<td>{$vo.id}</td>
-						<td>{$vo.name}</td>
-						<td>{$vo.funname}</td>
-						<td>{$vo.filename}</td>
-						<td>{$vo.status}</td>
+						<td>{$vo.taskname}</td>
+						<td>{$vo.alterip}</td>
+						<td>{$vo.weixicut}</td>
+						<td>{$vo.onmoble}</td>
+						<td>{$vo.mustt}</td>
+						<td>{$vo.mingle}</td>
+					<!--	<td></td>-->
 						<td></td>
 					</tr>
 					</volist>
 				</tbody>
 				<tfoot>
 					<tr>
-						<th width="80">{:L('SORT')}</th>
+						<!--<th width="80">{:L('SORT')}</th>-->
 						<th width="50">ID</th>
-						<th>名称</th>
-						<th>方法名</th>
-						<th>文件名称</th>
-						<th width="80">{:L('STATUS')}</th>
-						<th width="180">{:L('ACTIONS')}</th>
+						<th>任务名称</th>
+						<th>更换ip</th>
+						<th>切换微信</th>
+						<th>进入方式</th>
+						<th>必须操作事项</th>
+						<th>混合选择</th>
+					<!--	<th width="80">{:L('STATUS')}</th>-->
+						<th width="80">{:L('ACTIONS')}</th>
 					</tr>
 				</tfoot>
 			</table>	

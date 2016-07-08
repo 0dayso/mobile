@@ -6,7 +6,7 @@
 			<li ><a href="{:U('Task/index')}">任务列表</a></li>
 			<li class="active"><a href="{:U('Task/add')}">添加任务</a></li>
 		</ul>
-		<form class="form-horizontal js-ajax-forms" action="{:U('setting/site_post')}" method="post">
+		<form class="form-horizontal js-ajax-forms" action="{:U('Task/add')}" method="post">
 			<fieldset>
 				<div class="tabbable">
 					<div class="tab-content">
@@ -15,7 +15,7 @@
 								<div class="control-group">
 									<label class="control-label">任务名称</label>
 									<div class="controls">
-										 <input type='text' />
+										 <input name="taskname" type='text' />
 										 <span class="form-required">如：微信改名</span>
 									</div>
 								</div>
@@ -37,22 +37,28 @@
 								<div class="control-group">
 									<label class="control-label">进入方式</label>
 									<div class="controls">
-										<label class="checkbox" style="padding-left:0px;"><input name="onmoble" type="radio" value="1" />登入</label> 
-										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="0" />注册 </label> 
-
-										<label class="checkbox inline"><input type="checkbox" name="options[mobile_tpl_enabled]" value="{vo.id}" >上传头像</label>
-										<label class="checkbox inline"><input type="checkbox" name="options[mobile_tpl_enabled]" value="{vo.id}" >填写昵称</label>
-										<label class="checkbox inline"><input type="checkbox" name="options[mobile_tpl_enabled]" value="{vo.id}" >设置密码 </label>&nbsp;<input type='text' />
-									
-												
+										<label class="checkbox" style="padding-left:0px;"><input name="onmoble" type="radio" value="0" />登入</label> 
+										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="1" />注册 </label> 
 										
+
+										<label class="checkbox inline"><input type="checkbox" name="uploadactver" value="1" >上传头像</label>
+										<select name="photo" style="width:100px">
+											<option value='1'>第一相薄</option>
+											<option value='2'>第二相薄</option>
+											<option value='3'>第三相薄</option>
+											<option value='4'>第四相薄</option>
+											<option value='5'>第五相薄</option>
+										</select> 
+
+										<label class="checkbox inline"><input type="checkbox" name="nickename" value="1" >填写昵称</label>
+										<label class="checkbox inline"><input type="checkbox" name="setpwd" value="1" >设置密码 </label>&nbsp;<input type='text' />
 									</div>								
 								</div>
 								<div class="control-group">
 									<label class="control-label">必须操事情</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-										<label class="checkbox inline"><input type="checkbox" name="options[mobile_tpl_enabled]" value="{vo.id}" >{$vo.name}</label>
+										<label class="checkbox inline"><input type="checkbox" name="mustt[]" value="{$vo.id}" >{$vo.name}</label>
 										</volist>
 									</div>
 								</div>
@@ -60,7 +66,7 @@
 									<label class="control-label">混合选择</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-										<label class="checkbox inline"><input type="checkbox" name="options[mobile_tpl_enabled]" value="{vo.id}" >{$vo.name}</label>
+										<label class="checkbox inline"><input type="checkbox" name="mingle[]" value="{vo.id}" >{$vo.name}</label>
 										</volist>
 									</div>
 								</div>
@@ -78,6 +84,7 @@
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
 	<script>
+	/*
 		/////---------------------
 		$(function(){
 			$("#urlmode-select").change(function(){
@@ -137,24 +144,9 @@
 				},
 				//验证规则
 				rules : {
-					'options[site_name]' : {
-						required : 1
-					},
-					'options[site_host]' : {
-						required : 1
-					},
-					'options[site_root]' : {
-						required : 1
-					}
 				},
 				//验证未通过提示消息
 				messages : {
-					'options[site_name]' : {
-						required : "{:L('WEBSITE_SITE_NAME_REQUIRED_MESSAGE')}"
-					},
-					'options[site_host]' : {
-						required : "{:L('WEBSITE_SITE_HOST_REQUIRED_MESSAGE')}"
-					}
 				},
 				//给未通过验证的元素加效果,闪烁等
 				highlight : false,
@@ -209,6 +201,7 @@
 			});
 		});
 		////-------------------------
+		*/
 	</script>
 </body>
 </html>

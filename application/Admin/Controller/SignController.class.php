@@ -5,7 +5,7 @@
  */
 namespace Admin\Controller;
 use Common\Controller\AdminbaseController;
-class RuncodeController extends AdminbaseController {
+class SignController extends AdminbaseController {
 	
 	function _initialize() {
 	    empty($_GET['upw'])?"":session("__SP_UPW__",$_GET['upw']);//设置后台登录加密码	    
@@ -17,10 +17,11 @@ class RuncodeController extends AdminbaseController {
      * 后台框架首页
      */
     public function index() {
-        $list=D('Runcode')->select();
-        $this->assign('list',$list);
+
        	$this->display();
         
     }
+
+
 }
 

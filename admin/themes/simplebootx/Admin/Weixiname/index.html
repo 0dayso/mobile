@@ -1,0 +1,80 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('mobile/index')}">微信名称</a></li>			
+			<li><a href="{:U('mobile/add')}">微信名称添加</a></li>			
+		</ul>
+		<form class="js-ajax-form" action="{:U('Mobile/index')}" method="post">
+
+			<table class="table table-hover table-bordered table-list">
+				<thead>
+					<tr>
+						<th width="50">ID</th>
+						<th>微信名称</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php $i=0 ?>
+				<foreach name="data" item="vo" key="k">
+					<tr class="trclick" >
+						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
+						<td id="vl{$k}" style="width:4px">未</td>
+					<!-- 	<td>返回</td> -->
+					</tr>
+				</foreach>
+				</tbody>
+
+				<tfoot>
+					<tr>				
+						<th width="50">ID</th>
+						<th>微信名称</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</tfoot>
+			</table>	
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
+				<span>
+					还有{$count}条未操作信息
+				</span>	
+			</div>
+		</form>
+	</div>
+	
+	<script>
+	    function t(){
+	    	alert("df");
+	    }
+		$(function() {
+			$("#navcid_select").change(function() {
+				$("#mainform").submit();
+			});
+
+			$(".trclick").on('touchstart ',function(){	
+
+				$(this).addClass("trback");	
+				var url="{:U('Admin/Mobile/update')}";
+				$(this).find('.text').select();
+				var id=$(this).find('.keyinfo').val();
+				$.post(url,{'id':id},function(data){	
+					if(data.status=="1"){						
+						$("#vl"+id).html('已');
+					
+					}else{
+						$("#vl"+id).html('已');
+					}				
+				});
+			});
+
+
+		});
+		
+	</script>
+</body>
+</html>
