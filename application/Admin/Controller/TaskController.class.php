@@ -25,18 +25,19 @@ class TaskController extends AdminbaseController{
 			$data['taskname']=I('taskname');			
 			$data['alterip']=I('alterip');
 			$data['addtime']=time();
-
 			$data['mustt']=serialize($_POST['mustt']);
 			$data['mingle']=serialize($_POST['mingle']);
-
 			$data['weixicut']=$_POST['weixicut'];
-			
-			$register['onmoble']=$_POST['onmoble'];
-			$register['pwd']=$_POST['pwd'];
-			$register['photo']=$_POST['photo'];
-			$register['nickename']=$_POST['nickename'];
+			$data['onmoble']=$_POST['onmoble'];
 
-			$data['onmoble']=serialize($register);
+			$parame['vpnuser']=I('vpnuser');
+			$parame['vpnpwd']=I('vpnpwd');
+			$parame['pwd']=$_POST['pwd'];
+			$parame['photo']=$_POST['photo'];
+			$parame['nickename']=$_POST['nickename'];
+
+			$data['parame']=serialize($parame);
+
 			$runcode=D('runcode');			
 			$data=$runcode->create($data);
 			if($data){
