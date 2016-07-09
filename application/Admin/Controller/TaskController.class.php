@@ -12,8 +12,7 @@ class TaskController extends AdminbaseController{
 
 	public function index(){
 		$list=D('runcode')->select();
-		foreach ($list as $k => $v) {
-			$list[$k]['onmoble']=implode(unserialize($v['onmoble']),',');
+		foreach ($list as $k => $v) {			
 			$list[$k]['mustt']=implode(unserialize($v['mustt']),',');
 			$list[$k]['mingle']=implode(unserialize($v['mingle']),',');
 		}
