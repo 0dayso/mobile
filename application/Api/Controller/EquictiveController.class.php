@@ -28,13 +28,12 @@ class EquictiveController extends Controller {
                 $parame['alterip']=$result['alterip'];
                 $parame['weixicut']=$result['weixicut']; 
                 $parame['onmoble']=$onmoble['onmoble'];
-                
                 $data['parame']=implode($parame,',');
+
                 $data['onmoble']=$onmoble;
-
-
                 $data['mingle']=unserialize($result['mingle']);
                 $data['mustt']=unserialize($result['mustt']);
+                $data['paramegc']=unserialize($result['parame']);
 
                 $this->ajaxReturn($data,'xml');
 
