@@ -23,12 +23,19 @@ class EquictiveController extends Controller {
         if($device){
         	$result=D('equictive')->alias('eq')->join('mbl_runcode as rc on eq.runcodeid=rc.id')->where("cdkey='%s'",array($deviceid))->find();
             if($result){
-                $data['alterip']=$result['alterip'];
-                $data['weixicut']=$result['weixicut'];
+                $onmoble=unserialize($result['onmoble']);
 
-                $data['onmoble']=unserialize($result['onmoble']);                
+                $parame['alterip']=$result['alterip'];
+                $parame['weixicut']=$result['weixicut']; 
+                $parame['onmoble']=$onmoble['onmoble'];
+                
+                $data['parame']=implode($parame,',');
+                $data['onmoble']=$onmoble;
+
+
                 $data['mingle']=unserialize($result['mingle']);
                 $data['mustt']=unserialize($result['mustt']);
+
                 $this->ajaxReturn($data,'xml');
 
             }else{
