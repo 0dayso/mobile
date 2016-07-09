@@ -33,6 +33,23 @@ class EquipmentController extends AdminbaseController {
     public function act(){        
         $this->display();
     }
+
+    public function info(){
+        $eqid=I('id');        
+        if(IS_POST&&$eqid){
+            $runcode=I('post.runcode');
+            $result=D('equictive')->where('id=%d',array($eqid))->setfield('runcodeid',$runcode);
+
+            if($result){
+                $this->success('修改成功');
+            }else{
+                $this->error('修改失败');
+            }
+        }
+        $list=D('runcode')->getfield('id,taskname',true);
+        $this->assign('list',$list);
+        $this->display();
+    }
     
     private function load_menu_lang(){
     	$apps=sp_scan_dir(SPAPP."*",GLOB_ONLYDIR);

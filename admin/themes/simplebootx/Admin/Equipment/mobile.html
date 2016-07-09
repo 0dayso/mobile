@@ -28,7 +28,7 @@
 						<td>{$vo.numb}</td>
 						<td>{$vo.runcodeid}</td>
 						<td>{$vo.status}</td>
-						<td><a href="javascript:open_iframe_dialog('{:U('comment/commentadmin/index',array('post_id'=>$post['id']))}','评论列表')">执行指令</a></td>
+						<td><a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a></td>
 					</tr>
 					</volist>
 				</tbody>

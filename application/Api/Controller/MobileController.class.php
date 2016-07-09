@@ -30,6 +30,20 @@ class MobileController extends Controller {
     		echo 0;
     	}
     }
+    public function wxname(){
+        $data=D('weixiname')->field('id,weixiname')->where('status=%d',0)->find();
+        if($data){
+            $info['status']=1;
+            $result=M('weixiname')->where('id=%d',$data['id'])->save($info);
+            if($result){
+                echo $data['weixiname'];
+            }else{
+                echo 0;
+            }
+            return;
+        }       
+        echo 0;
+    }
     //修改 ajax手机状态
     public function ajaxmobile(){
     	$mobile=I('get.mobile');
