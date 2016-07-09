@@ -12,8 +12,6 @@ class EquictiveController extends Controller {
     }
 
     public function saveDeviceID(){
-        echo "['ji']='56',['t']='89'";
-        exit();
 
         $deviceid=I('cdkey');
         if(!$deviceid){
@@ -21,9 +19,23 @@ class EquictiveController extends Controller {
         	exit();
         }
         $device=D('equictive')->where("cdkey='%s'",array($deviceid))->find();  
+
         if($device){
-        	echo 1;
-        	exit();
+        	$result=D('equictive')->alias('eq')->join('mbl_runcode as rc on eq.runcodeid=rc.id')->where("cdkey='%s'",array($deviceid))->find();
+            if($result){
+                $data['alterip']=$result['alterip'];
+                $data['weixicut']=$result['weixicut'];
+
+                $data['onmoble']=unserialize($result['onmoble']);                
+                $data['mingle']=unserialize($result['mingle']);
+                $data['mustt']=unserialize($result['mustt']);
+                $this->ajaxReturn($data,'xml');
+
+            }else{
+                echo 0;
+                exit();
+            }
+        	
         }else{
         	$data['cdkey']=$deviceid;
         	$data['status']=1;
@@ -32,7 +44,6 @@ class EquictiveController extends Controller {
         	echo 2;
         	exit();
         }
-
 
     }
 

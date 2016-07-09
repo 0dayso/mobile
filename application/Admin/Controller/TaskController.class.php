@@ -12,6 +12,11 @@ class TaskController extends AdminbaseController{
 
 	public function index(){
 		$list=D('runcode')->select();
+		foreach ($list as $k => $v) {
+			$list[$k]['onmoble']=implode(unserialize($v['onmoble']),',');
+			$list[$k]['mustt']=implode(unserialize($v['mustt']),',');
+			$list[$k]['mingle']=implode(unserialize($v['mingle']),',');
+		}
 		$this->assign('list',$list);
 		$this->display();
 	}
@@ -27,7 +32,7 @@ class TaskController extends AdminbaseController{
 			$data['weixicut']=$_POST['weixicut'];
 			
 			$register['onmoble']=$_POST['onmoble'];
-			$register['pwd']=$_POST['setpwd'];
+			$register['pwd']=$_POST['pwd'];
 			$register['photo']=$_POST['photo'];
 			$register['nickename']=$_POST['nickename'];
 

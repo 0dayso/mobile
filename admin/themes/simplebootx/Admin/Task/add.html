@@ -51,7 +51,7 @@
 										</select> 
 
 										<label class="checkbox inline"><input type="checkbox" name="nickename" value="1" >填写昵称</label>
-										<label class="checkbox inline"><input type="checkbox" name="setpwd" value="1" >设置密码 </label>&nbsp;<input type='text' />
+										<label class="checkbox inline"><input type="checkbox" name="setpwd" value="1" >设置密码 </label>&nbsp;<input type='text' name="pwd" />
 									</div>								
 								</div>
 								<div class="control-group">
@@ -66,7 +66,7 @@
 									<label class="control-label">混合选择</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-										<label class="checkbox inline"><input type="checkbox" name="mingle[]" value="{vo.id}" >{$vo.name}</label>
+											<label class="checkbox inline"><input type="checkbox" name="mingle[]" value="{$vo.id}" >{$vo.name}</label>
 										</volist>
 									</div>
 								</div>
