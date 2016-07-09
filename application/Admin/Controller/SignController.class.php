@@ -57,7 +57,7 @@ class SignController extends AdminbaseController {
 			$ary=array();
 			foreach ($result as $k => $v) {		
 			 	$map['id']=$v['id'];
-				$sul=M('signname')->where($map)->delete();
+				$sul=M('Sign')->where($map)->delete();
 
 			}
 		}catch(Exception $ex){
