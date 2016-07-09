@@ -17,9 +17,10 @@ class MobileController extends Controller {
     		}else{
     			echo 0;
     		}
-    		return;
+    		exit();
     	}    	
     	echo 0;
+        exit();
     }
     //显示一个手机号码
     public function mboile(){
@@ -29,6 +30,7 @@ class MobileController extends Controller {
     	}else{
     		echo 0;
     	}
+        exit();
     }
     public function wxname(){
         $data=D('weixiname')->field('id,weixiname')->where('status=%d',0)->find();
@@ -40,9 +42,10 @@ class MobileController extends Controller {
             }else{
                 echo 0;
             }
-            return;
+            exit();
         }       
         echo 0;
+        exit();
     }
     //修改 ajax手机状态
     public function ajaxmobile(){
@@ -54,6 +57,7 @@ class MobileController extends Controller {
     	}else{
     		echo 0;
     	}
+        exit();
     }
 }
 
