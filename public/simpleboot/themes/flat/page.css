@@ -1,0 +1,6 @@
+
+.page{float:right}
+.page a,.page span{
+					padding:5px 10px;
+					margin:0 5px;
+					border:1px #33485d solid;}

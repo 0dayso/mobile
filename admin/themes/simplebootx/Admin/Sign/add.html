@@ -1,0 +1,22 @@
+<admintpl file="header" />
+<style>
+	.trback{background: #999; color: #666;}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Sign/index')}">个性签名管理</a></li>
+			<li><a href="{:U('Sign/add')}">添加个性签名</a></li>
+		</ul>
+		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Sign/uploadsign')}" method="post">
+			<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />
+			<button type="submit" class="btn btn-primary submit">{:L('ADD')}</button>
+		</form>
+		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Sign/uniqiddata')}" method="post">			
+			<button type="submit" class="btn btn-primary submit">一键清空重复个性签名</button>（清空比较慢请耐心等候）
+			共有重复{$cq}条数据
+		</form>		
+	</div>	
+</body>
+</html>

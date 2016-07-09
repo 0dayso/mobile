@@ -196,4 +196,65 @@ class AdminbaseController extends AppframeController {
     		}
     	}
     }
+	
+	/**
+	 *$table:表名
+	 *$column:字段名
+	 */
+	protected function upload_weixin_resourse($table,$column){
+		$config = array(    
+			'maxSize'    =>    3145728, 	
+			'rootPath'	 =>		'.',
+			'savePath'   =>    '/public/uploads/',    
+			'saveName'   =>    array('uniqid',''),    
+			'exts'       =>    array('jpg', 'gif', 'png', 'jpeg','txt'),    
+			'autoSub'    =>    true,    
+			'subName'    =>    array('date','Ymd'),
+		);
+		$upload = new \Think\Upload($config);// 实例化上传类
+		$info   =   $upload->upload();
+		if(!$info) {// 上传错误提示错误信息       			  
+			$this->error($upload->getError());    
+		}else{// 上传成功        
+			$path=$info['file']['savepath'].$info['file']['savename'];
+			$data=$this->fileinfo($path);
+			$rul=$this->fileaddall($table,$data,$column);
+			$this->success('上传成功！');    			
+		}
+	}
+	
+	protected function fileinfo($path){
+		$path=getcwd().str_replace('/','\\',$path);
+		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
+		if(!file_exists($path)){
+			return '文件路径错误';
+		}
+		$handle = @fopen($path, "r");
+		$arydata=array();
+		if ($handle) {
+		    while (!feof($handle)) {
+		        $buffer = fgets($handle, 4096);
+		        $arydata[]=$buffer;
+		    }
+		    fclose($handle);
+		}
+		
+		return $arydata;
+	}
+	
+	public function fileaddall($table,$data,$column){
+		$ary=array();
+		foreach ($data as $k => $v) {
+			if(!empty($v)){
+				$t[$column]=iconv("gb2312","utf-8",$v);
+				$t['updatetime']=time();
+				$t['creaetetime']=time();
+				$ary[]=$t;
+			}
+		}
+		$result=M($table)->addAll($ary);
+		return $result;
+	}
+	
+	
 }

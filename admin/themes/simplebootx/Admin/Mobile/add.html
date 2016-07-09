@@ -9,8 +9,8 @@
 			<li class="active"><a href="{:U('mobile/index')}">手机号码管理</a></li>
 			<li><a href="{:U('mobile/add')}">添加手机号码</a></li>
 		</ul>
-		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Mobile/add')}" method="post">
-			<label>请选择上传文件</label>：<input type="file" name="mobilefile"  id="fileupdata" />
+		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Mobile/uploadmobile')}" method="post">
+			<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />
 			<button type="submit" class="btn btn-primary submit">{:L('ADD')}</button>
 		</form>
 		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Mobile/uniqiddata')}" method="post">			
