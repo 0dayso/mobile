@@ -11,17 +11,18 @@ class MobileController extends AdminbaseController{
 	}
 	public function index(){
 		$count=M('mobile')->where('status=0')->count();
-		$numbpage=M('mobile')->where('id=1')->getfield('number');
-		$data=M('mobile')->where('status=0')->limit($numbpage*5,5)->getfield('id,mobile',true);
-
-		if($count<$numbpage*5){
-			$rsl=M('mobile')->where('id=1')->setField('number',0);
-		}else{
-			$rsl=M('mobile')->where('id=1')->setInc('number',1);	
-		}	
-
+		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('prev','上一页');
+		$Page->setConfig('next','下一页');
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+        $show = $Page->show();// 分页显示输出
+		
+		$data=M('mobile')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile',true);
+		
 		$this->assign('count',$count);
 		$this->assign('data',$data);
+		$this->assign('page',$show);
 		$this->display();
 	}
 
@@ -45,67 +46,19 @@ class MobileController extends AdminbaseController{
 		$data['status']=0;	
 		$this->ajaxreturn($data);
 	}
-
-	public function fileinfo($path){
-		$path=getcwd().str_replace('/','\\',$path);
-		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
-		if(!file_exists($path)){
-			return '文件路径错误';
-		}
-		$handle = @fopen($path, "r");
-		$arydata=array();
-		if ($handle) {
-		    while (!feof($handle)) {
-		        $buffer = fgets($handle, 4096);
-		        $arydata[]=$buffer;
-		    }
-		    fclose($handle);
-		}
-
-		return $arydata;
-	}
-	public function mobileaddall($data){
-		$ary=array();
-		foreach ($data as $k => $v) {
-			if(!empty($v)){
-				$t['mobile']=$v;
-				$t['updatetime']=time();
-				$t['creaetetime']=time();
-				$ary[]=$t;
-			}
-
-		}
-		$result=M('mobile')->addAll($ary);
-		return $result;
-	}
+	
 	public function add(){
-		if(IS_POST){
-			$config = array(    
-			'maxSize'    =>    3145728, 	
-			'rootPath'	 =>		'.',
-			'savePath'   =>    '/public/uploads/',    
-			'saveName'   =>    array('uniqid',''),    
-			'exts'       =>    array('jpg', 'gif', 'png', 'jpeg','txt'),    
-			'autoSub'    =>    true,    
-			'subName'    =>    array('date','Ymd'),
-			);
-			$upload = new \Think\Upload($config);// 实例化上传类
-			$info   =   $upload->upload();
-			if(!$info) {// 上传错误提示错误信息       			  
-			  	$this->error($upload->getError());    
-			}else{// 上传成功        
-				$path=$info['mobilefile']['savepath'].$info['mobilefile']['savename'];
-				$data=$this->fileinfo($path);
-				$rul=$this->mobileaddall($data);
-			  	$this->success('上传成功！');    			}
-		}
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
 		$this->assign('cq',count($data));
 			
 		$this->display();
 	}
-
+	
+	public function uploadmobile(){
+		$this->upload_weixin_resourse('mobile','mobile');
+	}
+	
 	public function testadd(){
 		$path='D:\WWW\mobile\public\uploads\201605305760fe811f2dc.txt';
 

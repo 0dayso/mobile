@@ -23,8 +23,8 @@
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
-						<td id="vl{$k}" style="width:4px">未</td>
-					<!-- 	<td>返回</td> -->
+					<!--	<td id="vl{$k}" style="width:4px">未</td>
+					 	<td>返回</td> -->
 					</tr>
 				</foreach>
 				</tbody>
@@ -43,6 +43,9 @@
 				<span>
 					还有{$count}条未操作信息
 				</span>	
+				<div class="page">
+				{$page}
+				</div>
 			</div>
 		</form>
 	</div>
