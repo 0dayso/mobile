@@ -60,11 +60,9 @@ class MobileController extends Controller {
         exit();
     }
 
-
-
     public function saveweixi(){
-        $mobile=I('pn');
-        if($mboile){
+        $mobile=I('pn');        
+        if($mobile){
             $wexiexists=D('weixi')->where('mobile=%s',array($mobile))->find();
             if(I('cdkey')){
                 $data['cdkey']=I('cdkey');
@@ -87,11 +85,11 @@ class MobileController extends Controller {
             if(I('wn')){
                 $data['weixiname']=I('wn');
             }
+       
             if($wexiexists){
-                $data['status']=1;
-                $data['createtime']=time();
-                $data=D('weixi')->create();
-                $result=D('weixi')->add($data);
+               $data['updatetime']=time();
+                $data=D('weixi')->create($data);
+                $result=D('weixi')->where("mobile='%s'",array($mobile))->save($data);
                 if($result){
                     echo 1;
                     exit();
@@ -99,11 +97,11 @@ class MobileController extends Controller {
                     echo 0;
                     exit();
                 }
-
             }else{
-                $data['updatetime']=time();
-                $data=D('weixi')->create();
-                $result=D('weixi')->where("mobile='%s'",array($mobile))->save($data);
+                $data['status']=1;
+                $data['createtime']=time();
+                $data=D('weixi')->create($data);
+                $result=D('weixi')->add($data);
                 if($result){
                     echo 1;
                     exit();
