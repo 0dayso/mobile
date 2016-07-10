@@ -59,5 +59,64 @@ class MobileController extends Controller {
     	}
         exit();
     }
+
+
+
+    public function saveweixi(){
+        $mobile=I('pn');
+        if($mboile){
+            $wexiexists=D('weixi')->where('mobile=%s',array($mobile))->find();
+            if(I('cdkey')){
+                $data['cdkey']=I('cdkey');
+            }
+            if(I('wx')){
+                $data['weixi']=I('wx');
+            }
+            if(I('pn')){
+                $data['mobile']=I('pn');
+            }
+            if(I('pwd')){
+                $data['pwd']=I('pwd');
+            }
+            if(I('email')){
+                $data['email']=I('email');
+            }
+            if(I('emailpwd')){
+                $data['emailpwd']=I('emailpwd');
+            }
+            if(I('wn')){
+                $data['weixiname']=I('wn');
+            }
+            if($wexiexists){
+                $data['status']=1;
+                $data['createtime']=time();
+                $data=D('weixi')->create();
+                $result=D('weixi')->add($data);
+                if($result){
+                    echo 1;
+                    exit();
+                }else{
+                    echo 0;
+                    exit();
+                }
+
+            }else{
+                $data['updatetime']=time();
+                $data=D('weixi')->create();
+                $result=D('weixi')->where("mobile='%s'",array($mobile))->save($data);
+                if($result){
+                    echo 1;
+                    exit();
+                }else{
+                    echo 0;
+                    exit();
+                }
+            }            
+            
+        }else{
+            echo 0;
+            exit();
+        }
+    }
 }
 
