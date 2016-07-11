@@ -30,7 +30,8 @@ class EquipmentController extends AdminbaseController {
 			$cate_name = D('equiact')->where('id=%d',array($v['cate_id']))->getField('cate_name');
 			$list[$k]['cate_name'] = $cate_name;
 		}
-		
+		$aryi=D('runcode')->getField('id,taskname',true);
+		$this->assign('aryi',$aryi);
         $this->assign('list',$list);
         $this->display();
     }
