@@ -26,14 +26,98 @@ class EquipmentController extends AdminbaseController {
     }
     public function mobile(){
         $list=D('equictive')->select();
+		foreach($list as $k=>$v){
+			$cate_name = D('equiact')->where('id=%d',array($v['cate_id']))->getField('cate_name');
+			$list[$k]['cate_name'] = $cate_name;
+		}
+		
         $this->assign('list',$list);
         $this->display();
     }
-
-    public function act(){        
+	
+	 public function mobilecate(){
+		$id = I('id');
+		$data = D('equictive')->where('id=%d',array($id))->find();
+		$list = D('equiact')->select();
+		
+		$this->assign('list',$list);
+        $this->assign('data',$data);
         $this->display();
     }
+	
+	public function savemobile(){
+		$id = I('id');
+		$data=array(
+					'cate_id'=>I('cate_id')
+					);
+		if($id > 0){
+			$result=D('equictive')->where('id=%d',array($id))->save($data);
+		}
+		
+		if($result){
+			$this->success('保存成功',U('Equipment/mobile'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
 
+    public function act(){        
+        $data = D('equiact')->select();
+		
+		$this->assign('list',$data);
+        $this->display();
+    }
+	
+	public function actinfo(){
+		$id = I('id');
+		$data = D('equiact')->where('id=%d',array($id))->find();
+		$list=D('equictive')->where('cate_id=%d',array($id))->select();
+       
+		
+		 $this->assign('list',$list);
+		$this->assign('data',$data);
+		$this->display();
+	}
+	
+	public function actadd(){        
+        $this->display();
+    }
+	
+	public function actedit(){  
+		$id = I('id');
+		$data = D('equiact')->where('id=%d',array($id))->find();
+		
+		$this->assign('data',$data);
+        $this->display();
+    }
+	
+	public function savedata(){
+		$id = I('id');
+		$data=array(
+					'cate_name'=>I('cate_name')
+					);
+		if($id > 0){
+			$result=D('equiact')->where('id=%d',array($id))->save($data);
+		}else{
+			$result=D('equiact')->add($data);
+		}
+		if($result){
+			$this->success('保存成功',U('Equipment/act'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
+	
+	public function actdel(){
+		$id = I('id');
+		$result = D('equiact')->where('id=%d',array($id))->delete();
+        if($result){
+			$this->success('删除成功');
+		}else{
+			$this->error('删除失败');
+		}
+    }
+	
     public function info(){
         $eqid=I('id');        
         if(IS_POST&&$eqid){
