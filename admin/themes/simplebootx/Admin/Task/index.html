@@ -28,9 +28,31 @@
 						<!--<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>-->
 						<td>{$vo.id}</td>
 						<td>{$vo.taskname}</td>
-						<td>{$vo.alterip}</td>
-						<td>{$vo.weixicut}</td>
-						<td>{$vo.onmoble}</td>
+						<td>
+							<if condition="$vo.alterip eq 101">
+							飞行模式
+							<elseif condition="$vo.alterip eq 101"/>
+							VPN
+							<else/>
+							未知
+							</if>
+						</td>
+						<td>
+							<if condition="$vo.weixicut eq 121">
+							dhfaker
+							<elseif condition="$vo.weixicut eq 122"/>
+							nzt
+							<elseif condition="$vo.weixicut eq 0"/>
+							关闭
+							</if>
+						</td>
+						<td>
+							<if condition="$vo.onmoble eq 132">
+							登入
+							<elseif condition="$vo.onmoble eq 131"/>
+							注册 
+							</if>
+						</td>
 						<td>{$vo.mustt}</td>
 						<td>{$vo.mingle}</td>
 					<!--	<td></td>-->
