@@ -17,9 +17,9 @@ class WeixiController extends AdminbaseController {
      * 后台框架首页
      */
     public function index() {
-
-       	$this->display();
-        
+    	$list=D('weixi')->select();
+    	$this->assign('list',$list);
+       	$this->display();        
     }
 
 
