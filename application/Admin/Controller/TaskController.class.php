@@ -12,13 +12,31 @@ class TaskController extends AdminbaseController{
 
 	public function index(){
 		$list=D('runcode')->select();
-		foreach ($list as $k => $v) {			
-			$list[$k]['mustt']=implode(unserialize($v['mustt']),',');
-			$list[$k]['mingle']=implode(unserialize($v['mingle']),',');
+		
+		foreach ($list as $k => $v) {	
+			$mustt_names = $this->getinstruct(unserialize($v['mustt']));
+			$list[$k]['mustt'] = $mustt_names;
+			$mingle_names = $this->getinstruct(unserialize($v['mingle']));
+			$list[$k]['mingle'] = $mingle_names;
+			//$list[$k]['mustt']=implode(unserialize($v['mustt']),',');
+			//$list[$k]['mingle']=implode(unserialize($v['mingle']),',');
 		}
+		
 		$this->assign('list',$list);
 		$this->display();
 	}
+	
+	function getinstruct($data){
+		foreach($data as $k1=>$v1){
+			$instruct_name = D('instruct')->where('id='.$v1)->getField('name');
+			if($instruct_name != ''){
+				$instruct_names .= $instruct_name.','; 
+			}
+		}
+		$instruct_names = substr($instruct_names,0,-1);
+		return $instruct_names;
+	}
+	
 	public function add(){
 		if(IS_POST){
 			$data['taskname']=I('taskname');			
