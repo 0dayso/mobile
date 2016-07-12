@@ -53,7 +53,7 @@ class TaskController extends AdminbaseController{
 			$parame['vpnpwd']=I('vpnpwd');
 			$parame['pwd']=$_POST['pwd'];
 			$parame['photo']=$_POST['photo'];
-			$parame['nickename']=$_POST['nickename'];
+			//$parame['nickename']=$_POST['nickename'];
 
 			$data['parame']=serialize($parame);
 
