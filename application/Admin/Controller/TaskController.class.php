@@ -40,8 +40,8 @@ class TaskController extends AdminbaseController{
 	public function taskinfo(){
 		$id= I('id');
 		$data = D('runcode')->where('id=%d',array($id))->find();
-		$data['mustt'] = unserialize($data['mustt']);
-		$data['mingle'] = unserialize($data['mingle']);
+		$data['mustt'] = $this->getinstruct(unserialize($data['mustt']));
+		$data['mingle'] = $this->getinstruct(unserialize($data['mingle']));
 		$data['parame'] = unserialize($data['parame']);
 		$instruct=D('instruct')->select();
 		
