@@ -12,43 +12,18 @@ class TaskController extends AdminbaseController{
 
 	public function index(){
 		$list=D('runcode')->select();
-		
+		$data=D('instruct')->getfield('code,name',true);
 		foreach ($list as $k => $v) {	
-			$mustt_names = $this->getinstruct(unserialize($v['mustt']));
+			$mustt_names = unserialize($v['mustt']);
 			$list[$k]['mustt'] = $mustt_names;
-			$mingle_names = $this->getinstruct(unserialize($v['mingle']));
+			$mingle_names = unserialize($v['mingle']);
 			$list[$k]['mingle'] = $mingle_names;
-			//$list[$k]['mustt']=implode(unserialize($v['mustt']),',');
-			//$list[$k]['mingle']=implode(unserialize($v['mingle']),',');
-		}
 		
+		}
+		$this->assign('data',$data);
 		$this->assign('list',$list);
 		$this->display();
-	}
-	
-	protected function getinstruct($data){
-		foreach($data as $k1=>$v1){
-			$instruct_name = D('instruct')->where('id='.$v1)->getField('name');
-			if($instruct_name != ''){
-				$instruct_names .= $instruct_name.','; 
-			}
-		}
-		$instruct_names = substr($instruct_names,0,-1);
-		return $instruct_names;
-	}
-	
-	public function taskinfo(){
-		$id= I('id');
-		$data = D('runcode')->where('id=%d',array($id))->find();
-		$data['mustt'] = $this->getinstruct(unserialize($data['mustt']));
-		$data['mingle'] = $this->getinstruct(unserialize($data['mingle']));
-		$data['parame'] = unserialize($data['parame']);
-		$instruct=D('instruct')->select();
-		
-		$this->assign('instruct',$instruct);
-		$this->assign('data',$data);
-		$this->display();
-	}
+	}	
 	
 	public function add(){
 		if(IS_POST){

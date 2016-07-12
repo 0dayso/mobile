@@ -53,8 +53,12 @@
 							注册 
 							</if>
 						</td>
-						<td>{$vo.mustt}</td>
-						<td>{$vo.mingle}</td>
+						<td><foreach name="vo['mustt']" item="v" key='k' >
+							{$data[$v]}&nbsp;&nbsp;
+						</foreach></td>
+						<td><foreach name="vo['mingle']" item="v" key='k' >
+							{$data[$v]}&nbsp;&nbsp;
+						</foreach></td>
 					<!--	<td></td>-->
 						<td><a class="js-ajax-delete" href="/index.php?g=&m=Task&a=delete&id={$vo.id}">删除</a></td>
 					</tr>
