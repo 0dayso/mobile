@@ -24,7 +24,7 @@ class RuncodeController extends AdminbaseController {
     }
     public function info(){
         $eqid=I('id');      
-        if(IS_POST&&$eqid){print_r($eqid); exit;
+        if(IS_POST&&$eqid){
             $runcode=I('post.runcode');
             $result=D('Runcode')->where('id=%d',array($eqid))->setfield('runcodeid',$runcode);
 
