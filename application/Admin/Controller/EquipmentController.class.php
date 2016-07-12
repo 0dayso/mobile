@@ -118,8 +118,10 @@ class EquipmentController extends AdminbaseController {
 					'cate_name'=>I('cate_name')
 					);
 		if($id > 0){
+			$data['createtime'] = time();
 			$result=D('equiact')->where('id=%d',array($id))->save($data);
 		}else{
+			$data['modifytime'] = time();
 			$result=D('equiact')->add($data);
 		}
 		if($result){

@@ -26,7 +26,7 @@ class TaskController extends AdminbaseController{
 		$this->display();
 	}
 	
-	function getinstruct($data){
+	protected function getinstruct($data){
 		foreach($data as $k1=>$v1){
 			$instruct_name = D('instruct')->where('id='.$v1)->getField('name');
 			if($instruct_name != ''){
