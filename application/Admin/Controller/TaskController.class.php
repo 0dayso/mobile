@@ -37,6 +37,19 @@ class TaskController extends AdminbaseController{
 		return $instruct_names;
 	}
 	
+	public function taskinfo(){
+		$id= I('id');
+		$data = D('runcode')->where('id=%d',array($id))->find();
+		$data['mustt'] = $this->getinstruct(unserialize($data['mustt']));
+		$data['mingle'] = $this->getinstruct(unserialize($data['mingle']));
+		$data['parame'] = unserialize($data['parame']);
+		$instruct=D('instruct')->select();
+		
+		$this->assign('instruct',$instruct);
+		$this->assign('data',$data);
+		$this->display();
+	}
+	
 	public function add(){
 		if(IS_POST){
 			$data['taskname']=I('taskname');			

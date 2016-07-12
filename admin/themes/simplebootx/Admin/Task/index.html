@@ -27,7 +27,7 @@
 					<tr>					
 						<!--<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>-->
 						<td>{$vo.id}</td>
-						<td>{$vo.taskname}</td>
+						<td><a href="{:U('Task/taskinfo',array('id'=>$vo['id']))}">{$vo.taskname}</a></td>
 						<td>
 							<if condition="$vo.alterip eq 101">
 							飞行模式
