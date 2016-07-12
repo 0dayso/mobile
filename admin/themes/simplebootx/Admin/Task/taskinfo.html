@@ -76,13 +76,17 @@
 								<div class="control-group">
 									<label class="control-label">必须操事情：</label>
 									<div class="controls" style="padding-top:5px;">
-										{$data.mustt}
+										<foreach name="data['mustt']" item="v" key='k' >
+											{$instruct[$v]}&nbsp;&nbsp;
+										</foreach>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">混合选择：</label>
 									<div class="controls" style="padding-top:5px;">
-										{$data.mingle}
+										<foreach name="data['mingle']" item="v" key='k' >
+											{$instruct[$v]}&nbsp;&nbsp;
+										</foreach>
 									</div>
 								</div>
 							</fieldset>
