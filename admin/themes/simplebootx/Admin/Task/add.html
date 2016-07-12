@@ -41,8 +41,8 @@
 								<div class="control-group">
 									<label class="control-label">进入方式</label>
 									<div class="controls">
-										<label class="checkbox" style="padding-left:0px;"><input checked="checked" name="onmoble" type="radio" value="132" />登入</label> 
-										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="131" />注册 </label> 										
+										<label class="checkbox" style="padding-left:0px;"><input checked="checked" name="onmoble" type="radio" value="132" id="onmoble_login"/>登入</label> 
+										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="131" id="onmoble_reg" />注册 </label> 										
 
 										<label class="checkbox inline"><input type="checkbox" name="uploadactver" value="1" >上传头像</label>
 										<select name="photo" style="width:100px">
@@ -84,6 +84,35 @@
 
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script>
+		
+		$("#onmoble_login").change(function(){
+			if($(this).is(':checked')){
+				$("input[name='uploadactver']").removeAttr('checked');
+				$("input[name='setpwd']").removeAttr('checked');
+			}
+		})
+		$("input[name='uploadactver']").change(function(){
+			if($(this).is(':checked')){
+				$('#onmoble_reg').attr('checked','checked');
+			}else{
+				if(!$("input[name='setpwd']").is(':checked')){
+					$('#onmoble_reg').removeAttr('checked');
+					$("#onmoble_login").attr('checked','checked');
+				}
+			}
+		})
+		$("input[name='setpwd']").change(function(){
+			if($(this).is(':checked')){
+				$('#onmoble_reg').attr('checked','checked');
+			}else{
+				if(!$("input[name='uploadactver']").is(':checked')){
+					$('#onmoble_reg').removeAttr('checked');
+					$("#onmoble_login").attr('checked','checked');
+				}
+			}
+		})
+	</script>
 	<script>
 	/*
 		/////---------------------
