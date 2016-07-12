@@ -7,15 +7,41 @@
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Runcode/info')}">
 			<fieldset>
+				<input type="hidden" name="id" value="{$data.id}" />
 				<div class="control-group">
-					<label class="control-label">设备</label>
+					<label class="control-label">任务名称</label>
 					<div class="controls">
-						<select name="runcode">
-							<foreach name="list" item="vo">
-							<option value="{$key}">{$vo}</option>
+						<input type="text" name="taskname" value="{$data.taskname}"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">选择设备</label>
+					<div class="controls">
+						<label class="control-label" style="width:auto;margin:0;"><input type="radio" name="checkequ" value="1" <if condition="$data.checkequ eq 1">checked="checked"</if>style="margin:0;padding:0"/>&nbsp;&nbsp;区分设备&nbsp;&nbsp;&nbsp;&nbsp;</label>
+						<label class="control-label" style="width:auto;margin:0;"><input type="radio" name="checkequ" value="2" <if condition="$data.checkequ eq 2">checked="checked"</if>style="margin:0;padding:0"/>&nbsp;&nbsp;设备名称</label>
+					</div>
+				</div>
+				<div class="control-group checkequ" id="checkequ_1" style="display:none;">
+					<label class="control-label">设备分类</label>
+					<div class="controls">
+						<select name="equiact_id">
+							<option value="0">请选择分类</option>
+							<foreach name="equiact" item="vo">
+							<option value="{$vo.id}" <if condition="$data.checkequ eq 1 && $vo.id == $data['equiact_id']">selected="selected"</if>>{$vo.cate_name}</option>
 							</foreach>
 						</select>
 						<input type="hidden" name="id" value="{:I('id')}" />
+					</div>
+				</div>
+				<div class="control-group checkequ" id="checkequ_2" style="display:none;">
+					<label class="control-label">设备</label>
+					<div class="controls">
+						<select name="equictive_id">
+							<option value="0">请选择设备</option>
+							<foreach name="equictive" item="vo">
+							<option value="{$vo.id}" <if condition="$data.checkequ eq 2 && $vo.id == $data['equiact_id']">selected="selected"</if>>{$vo.cdkey}</option>
+							</foreach>
+						</select>
 					</div>
 				</div>
 			</fieldset>
@@ -26,5 +52,16 @@
 		</form>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$(function(){
+			var tr = $("input[name='checkequ']:checked").val();
+			$('#checkequ_'+tr).show();
+			$("input[name='checkequ']").change(function(){
+				var index = $(this).val();
+				$('.checkequ').hide();
+				$('#checkequ_'+index).show();
+			})
+		})
+	</script>
 </body>
 </html>
