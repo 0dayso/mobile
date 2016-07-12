@@ -12,7 +12,8 @@
 					<tr>
 						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>
-						<th>序列号</th>						
+						<th>序列号</th>		
+						<th width="180">别名</th>								
 						<th>微信个数</th>
 						<th>设备分类</th>
 						<th>执行指令</th>		
@@ -25,7 +26,8 @@
 					<tr>					
 						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
 						<td>{$vo.id}</td>
-						<td>{$vo.cdkey}</td>						
+						<td>{$vo.cdkey}</td>
+						<td><input type="text" class="alias" name="alias" value="{$vo.alias}" onchange="changealias(this,{$vo.id})"/></td>		
 						<td>{$vo.numb}</td>
 						<td>{$vo.cate_name}</td>
 						<td>{$aryi[$vo['runcodeid']]}</td>
@@ -70,6 +72,18 @@
 			}
 		}, 1000);
 		setCookie('refersh_time_admin_menu_index', 0);
+		
+		function changealias(obj,id){
+			var alias = $(obj).val();
+			$.post("__URL__/savemobileajax",{id:id,alias:alias},function(data){
+				if(data.result == 1){
+					$(obj).val(alias);
+				}else{
+					alert('设置失败');
+				}
+			})
+			
+		}
 	</script>
 </body>
 </html>
