@@ -23,10 +23,10 @@ class RuncodeController extends AdminbaseController {
         
     }
     public function info(){
-        $eqid=I('id');        
-        if(IS_POST&&$eqid){
+        $eqid=I('id');      
+        if(IS_POST&&$eqid){print_r($eqid); exit;
             $runcode=I('post.runcode');
-            $result=D('equictive')->where('id=%d',array($eqid))->setfield('runcodeid',$runcode);
+            $result=D('Runcode')->where('id=%d',array($eqid))->setfield('runcodeid',$runcode);
 
             if($result){
                 $this->success('修改成功');

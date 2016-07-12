@@ -29,6 +29,10 @@ class EquipmentController extends AdminbaseController {
 		foreach($list as $k=>$v){
 			$cate_name = D('equiact')->where('id=%d',array($v['cate_id']))->getField('cate_name');
 			$list[$k]['cate_name'] = $cate_name;
+			
+			$map['cdkey'] = $v['cdkey'];
+			$numb = D('weixi')->where($map)->count('cdkey');
+			$list[$k]['numb'] = $numb;
 		}
 		$aryi=D('runcode')->getField('id,taskname',true);
 		$this->assign('aryi',$aryi);
@@ -59,6 +63,22 @@ class EquipmentController extends AdminbaseController {
 			$this->success('保存成功',U('Equipment/mobile'));
 		}else{
 			$this->error('保存失败');
+		}
+	}
+	
+	public function savemobileajax(){
+		$id = I('id');
+		$data=array(
+					'alias'=>I('alias')
+					);
+		if($id > 0){
+			$result=D('equictive')->where('id=%d',array($id))->save($data);
+		}
+		
+		if($result){
+			$this->ajaxReturn(array('result'=>1));
+		}else{
+			$this->ajaxReturn(array('result'=>0));
 		}
 	}
 

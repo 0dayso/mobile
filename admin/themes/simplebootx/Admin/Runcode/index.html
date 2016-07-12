@@ -20,7 +20,7 @@
 						<td>{$vo.id}</td>
 						<td>{$vo.taskname}</td>			
 						<td>{$vo.status}</td>
-						<td><a href="{:U('Runcode/info')}" >指定设备执行</a></td>
+						<td><a href="{:U('Runcode/info',array('id'=>$vo['id']))}" >指定设备执行</a></td>
 					</tr>
 					</volist>
 				</tbody>
