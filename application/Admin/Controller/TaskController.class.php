@@ -47,9 +47,8 @@ class TaskController extends AdminbaseController{
 			$data['weixicut']=$_POST['weixicut'];
 			$data['onmoble']=$_POST['onmoble'];
 			if(I('onmoble')=='132' and I('weixicut')=='121'){
-				$data['weixicut']='123';
+				$data['weixicut']=123;
 			}
-
 			$parame['vpnuser']=I('vpnuser');
 			$parame['vpnpwd']=I('vpnpwd');
 			$parame['pwd']=$_POST['pwd'];
