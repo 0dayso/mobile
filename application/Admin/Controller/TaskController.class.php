@@ -80,6 +80,20 @@ class TaskController extends AdminbaseController{
 	public function mobile(){
 		$this->display();
 	}
+	function delete(){
+		$id=intval(I('id'));
+		if($id){
+			$result=D('runcode')->where('id=%d',array($id))->delete();
+			if($result){
+				$this->success('删除成功');
+			}else{
+				$this->error('删除失败');
+			}
+		}else{
+			$this->error('删除失败');
+		}
+		
+	}
 
 }
 
