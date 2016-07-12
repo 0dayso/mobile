@@ -26,7 +26,9 @@ class EquictiveController extends Controller {
                 $parame['alterip']=$result['alterip'];
                 $parame['weixicut']=$result['weixicut']; 
                 $parame['onmoble']=$result['onmoble'];
-
+                $mingle=unserialize($result['mingle']);
+                $mustt=unserialize($result['mustt']);
+                $parame=array_merge($parame,$mustt);
                 $data['parame']=implode($parame,',');                        
 
                 $data['mingle']=unserialize($result['mingle']);
