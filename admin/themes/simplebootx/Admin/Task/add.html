@@ -62,7 +62,7 @@
 									<label class="control-label">必须操事情</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-										<label class="checkbox inline"><input type="checkbox" name="mustt[]" value="{$vo.id}" >{$vo.name}</label>
+										<label class="checkbox inline"><input type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
 										</volist>
 									</div>
 								</div>
@@ -70,7 +70,7 @@
 									<label class="control-label">混合选择</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-											<label class="checkbox inline"><input type="checkbox" name="mingle[]" value="{$vo.id}" >{$vo.name}</label>
+											<label class="checkbox inline"><input type="checkbox" name="mingle[]" value="{$vo.code}" >{$vo.name}</label>
 										</volist>
 									</div>
 								</div>
