@@ -18,6 +18,16 @@ class RuncodeController extends AdminbaseController {
      */
     public function index() {
         $list=D('Runcode')->select();
+		foreach($list as $k=>$v){
+			if($v['checkequ'] == 1){
+				$equiact_name = D('equiact')->where('id=%d',array($v['equiact_id']))->getfield('cate_name');
+				$list[$k]['equiact_name'] = $equiact_name;
+			}else if($v['checkequ'] == 2){
+				$equictive_name = D('equictive')->where('id=%d',array($v['equiact_id']))->getfield('cdkey');
+				$list[$k]['equictive_name'] = $equictive_name;
+			}
+		}
+		
         $this->assign('list',$list);
        	$this->display();
         
@@ -25,17 +35,34 @@ class RuncodeController extends AdminbaseController {
     public function info(){
         $eqid=I('id');      
         if(IS_POST&&$eqid){
-            $runcode=I('post.runcode');
-            $result=D('Runcode')->where('id=%d',array($eqid))->setfield('runcodeid',$runcode);
-
+			$equiact_id=I('post.equiact_id');
+			$equictive_id=I('post.equictive_id');
+			$checkequ=I('post.checkequ');
+			
+			$data['taskname'] = I('post.taskname');
+			$data['checkequ'] = I('post.checkequ');
+			if($data['checkequ'] ==1 && $equiact_id > 0){
+				$data['equiact_id'] = I('post.equiact_id');
+			}
+			if($data['checkequ'] ==2 && $equictive_id > 0){
+				$data['equiact_id'] = I('post.equictive_id');
+			}
+            $result=D('Runcode')->where('id=%d',array($eqid))->save($data);
+			
             if($result){
                 $this->success('修改成功');
             }else{
                 $this->error('修改失败');
             }
         }
-        $list=D('runcode')->getfield('id,taskname',true);
-        $this->assign('list',$list);
+		
+		$equictive=D('equictive')->getfield('id,cdkey,alias',true);
+		$equiact=D('equiact')->getfield('id,id,cate_name',true);
+        $data=D('runcode')->field('id,equiact_id,checkequ,taskname')->where('id=%d',array($eqid))->find();
+		
+        $this->assign('data',$data);
+		$this->assign('equiact',$equiact);
+		$this->assign('equictive',$equictive);
         $this->display();
     }
 }
