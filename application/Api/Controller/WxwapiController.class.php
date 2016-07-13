@@ -13,6 +13,7 @@ class WxwapiController extends Controller {
     public function sign(){
         $data['str']=  "这鬼天气，晒成狗了";
         echo $data['str'];
+        exit();
         //$this->ajaxReturn($data,'xml');
     }
 
