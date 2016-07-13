@@ -19,6 +19,8 @@ if (ini_get('magic_quotes_gpc')) {
 }
 //开启调试模式
 define("APP_DEBUG", true);
+//根目录
+define('ROOTPATRH',dirname(__FILE__));
 //网站当前路径
 define('SITE_PATH', dirname(__FILE__)."/");
 //项目路径，不可更改
