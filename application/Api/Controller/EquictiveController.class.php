@@ -7,8 +7,19 @@ namespace Api\Controller;
 use Think\Controller;
 class EquictiveController extends Controller {
 
-    public function index() {    	
-    	
+    public function index() {         
+        $path=ROOTPATRH."\public\script\scriptfile\\";        
+    	$filelist=scandir($path);        
+        $aryt=array();        
+        foreach ($filelist as $k => $v) {
+            $nbt=strpos($v,'.');            
+            if($nbt>0){
+                $t=substr($v,0,strpos($v,'.'));
+                $timenumb=date("M d H:i",filemtime($path.$v));  
+                $aryt[$t]=$timenumb;
+            } 
+        }      
+        $this->ajaxReturn($aryt,'xml');        
     }
 
     public function saveDeviceID(){
