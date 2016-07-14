@@ -1,6 +1,12 @@
 
-.page{float:right}
+.page{
+		width:100%;
+		}
 .page a,.page span{
 					padding:5px 10px;
 					margin:0 5px;
 					border:1px #33485d solid;}
+.page .rows{
+			float:left;
+			border:none;}
+.page .pagelist{float:right}

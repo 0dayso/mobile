@@ -1,12 +1,52 @@
-<admintpl file="header" />
+{__NOLAYOUT__}
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<!-- Set render engine for 360 browser -->
+	<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- HTML5 shim for IE8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <![endif]-->
+
+	<link href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/theme.min.css" rel="stylesheet">
+<link href="__PUBLIC__/simpleboot/css/simplebootadmin.css" rel="stylesheet">
+<link href="__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome.min.css"  rel="stylesheet" type="text/css">
+<!--[if IE 7]>
+	<link rel="stylesheet" href="__PUBLIC__/simpleboot/font-awesome/4.4.0/css/font-awesome-ie7.min.css">
+<![endif]-->
+<link rel="stylesheet" href="__PUBLIC__/simpleboot/themes/{:C('SP_ADMIN_STYLE')}/simplebootadminindex.min.css?">
+<!--[if lte IE 8]>
+	<link rel="stylesheet" href="__PUBLIC__/simpleboot/css/simplebootadminindex-ie.css?" />
+<![endif]-->
+<style>
+.navbar .nav_shortcuts .btn{margin-top: 5px;}
+.macro-component-tabitem{width:101px;}
+
+/*-----------------导航hack--------------------*/
+.nav-list>li.open{position: relative;}
+.nav-list>li.open .back {display: none;}
+.nav-list>li.open .normal {display: inline-block !important;}
+.nav-list>li.open a {padding-left: 7px;}
+.nav-list>li .submenu>li>a {background: #fff;}
+.nav-list>li .submenu>li a>[class*="fa-"]:first-child{left:20px;}
+.nav-list>li ul.submenu ul.submenu>li a>[class*="fa-"]:first-child{left:30px;}
+/*----------------导航hack--------------------*/
+</style>
+    <script src="__PUBLIC__/js/jquery.js"></script>
+
+    <script src="__PUBLIC__/simpleboot/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<div class="navbar">
 	<div class="wrap js-check-wrap">
-<!-- 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('mobile/index')}">手机号码管理</a></li>
-			<li><a href="{:U('mobile/add')}">添加手机号码</a></li>
-		</ul> -->
-		<form class="js-ajax-form" action="{:U('Mobileadd/index')}" method="post">
+
+		<form class="js-ajax-form" action="{:U('Mobile/index')}" method="post">
 
 			<table class="table table-hover table-bordered table-list">
 <!-- 				<thead>

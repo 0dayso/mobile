@@ -25,18 +25,44 @@ class EquipmentController extends AdminbaseController {
         
     }
     public function mobile(){
-        $list=D('equictive')->select();
+        $cate_id = I('cate_id');
+		$keyword = I('keyword');
+		if($cate_id != 0){
+			$map['cate_id'] = $cate_id;
+			$parameters['cate_id'] = $cate_id;
+		}
+		if($keyword != ''){
+			$map1['cdkey'] = array('like','%'.$keyword.'%');
+			$map1['alias'] = array('like','%'.$keyword.'%');
+			$map1['_logic'] = 'or';
+			$map['_complex'] = $map1;
+			$parameters['keyword'] = $keyword;
+		}
+		
+		$count=D('equictive')->where($map)->count();
+		$Page = new \Think\Page($count,13,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+		
+		$list=D('equictive')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
 		foreach($list as $k=>$v){
 			$cate_name = D('equiact')->where('id=%d',array($v['cate_id']))->getField('cate_name');
 			$list[$k]['cate_name'] = $cate_name;
 			
-			$map['cdkey'] = $v['cdkey'];
-			$numb = D('weixi')->where($map)->count('cdkey');
+			$weiximap['cdkey'] = $v['cdkey'];
+			$numb = D('weixi')->where($weiximap)->count('cdkey');
 			$list[$k]['numb'] = $numb;
 		}
 		$aryi=D('runcode')->getField('id,taskname',true);
+		
+		$equiact = D('equiact')->select();
+		
+		$this->assign('parameters',$parameters);
+		$this->assign('equiact',$equiact);
 		$this->assign('aryi',$aryi);
         $this->assign('list',$list);
+		$this->assign('page',$show);
         $this->display();
     }
 	

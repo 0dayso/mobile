@@ -71,7 +71,12 @@
 										设置的密码:&nbsp;{$data.parame.pwd}
 										</if>
 										
-									</div>								
+									</div>
+									<div class="controls" style="padding-left:43px;">
+										<label class="checkbox inline" style="padding-left:13px;">手机号平台用户名:&nbsp;&nbsp;{$data['parame'].abcuser}</label>
+										<label class="checkbox inline">手机号平台密码:&nbsp;&nbsp;{$data['parame'].abcpwd}</label>
+										<label class="checkbox inline">手机号平台对接码:&nbsp;&nbsp;{$data['parame'].joinbusi}</label>
+									</div>	
 								</div>
 								<div class="control-group">
 									<label class="control-label">必须操事情：</label>
@@ -95,7 +100,7 @@
 				</div>
 
 				<div class="form-actions">
-					<button type="submit" class="btn btn-primary  js-ajax-submit">{:L("BACK")}</button>
+					<a class="btn" href="{:U('Task/index')}">{:L('BACK')}</a>
 				</div>
 			</fieldset>
 		<!--</form>-->
