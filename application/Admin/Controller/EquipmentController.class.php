@@ -40,7 +40,7 @@ class EquipmentController extends AdminbaseController {
 		}
 		
 		$count=D('equictive')->where($map)->count();
-		$Page = new \Think\Page($count,1,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page = new \Think\Page($count,13,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
