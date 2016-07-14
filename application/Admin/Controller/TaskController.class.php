@@ -11,7 +11,18 @@ class TaskController extends AdminbaseController{
 	}
 
 	public function index(){
-		$list=D('runcode')->select();
+		$keyword = I('keyword');
+		if($keyword != ''){
+			$map['taskname'] = array('like','%'.$keyword.'%');
+			$parameters['keyword'] = $keyword;
+		}
+		$count=D('runcode')->where($map)->count();
+		$Page = new \Think\Page($count,13,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+		$list=D('runcode')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
+		
 		$data=D('instruct')->getfield('code,name',true);
 		foreach ($list as $k => $v) {	
 			$mustt_names = unserialize($v['mustt']);
@@ -22,6 +33,7 @@ class TaskController extends AdminbaseController{
 		}
 		$this->assign('data',$data);
 		$this->assign('list',$list);
+		$this->assign('page',$show);
 		$this->display();
 	}	
 	
@@ -36,6 +48,56 @@ class TaskController extends AdminbaseController{
 		$this->assign('data',$data);
 		$this->assign('instruct',$instruct);
 		$this->display();
+	}
+	
+	public function edit(){
+		$id = I('id');
+		$data=D('runcode')->where('id=%d',array($id))->find();
+		$data['mustt'] = implode(unserialize($data['mustt']),',');
+		$data['mingle'] = implode(unserialize($data['mingle']),',');
+		$data['parame'] = unserialize($data['parame']);
+		$instruct=D('instruct')->select();
+		
+        $this->assign('instruct',$instruct);	
+		$this->assign('data',$data);			
+		$this->display();
+	}
+	
+	public function savetask(){
+		$id = I('id');
+		$data['taskname']=I('taskname');			
+		$data['alterip']=I('alterip');
+		$data['addtime']=time();
+		$data['mustt']=serialize($_POST['mustt']);
+		$data['mingle']=serialize($_POST['mingle']);
+		$data['weixicut']=$_POST['weixicut'];
+		$data['onmoble']=$_POST['onmoble'];
+		if(I('onmoble')=='132' and I('weixicut')=='121'){
+			$data['weixicut']=123;
+		}
+		$parame['vpnuser']=I('vpnuser');
+		$parame['vpnpwd']=I('vpnpwd');
+		$parame['pwd']=$_POST['pwd'];
+		$parame['photo']=$_POST['photo'];
+		$parame['abcuser']=$_POST['abcuser'];
+		$parame['abcpwd']=$_POST['abcpwd'];
+		$parame['joinbusi']=$_POST['joinbusi'];
+
+		$data['parame']=serialize($parame);
+
+		$runcode=D('runcode');			
+		$data=$runcode->create($data);
+		if($data){
+			$sult=$runcode->where('id=%d',array($id))->save($data);
+			if($sult){
+				$this->success('修改成功');
+			}else{
+				$this->error('修改错误'.$runcode->getError());
+			}
+			
+		}else{
+			$this->error('数据错误'.$runcode->getError());
+		}
 	}
 	
 	public function add(){
