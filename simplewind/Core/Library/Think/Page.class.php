@@ -30,7 +30,7 @@ class Page{
         'next'   => '>>',
         'first'  => '1...',
         'last'   => '...%TOTAL_PAGE%',
-        'theme'  => '%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
+        'theme'  => '<div class="rows">共 %TOTAL_ROW% 条记录</div><div class="pagelist"> %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%</div>',
     );
 
     /**
