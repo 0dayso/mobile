@@ -1,0 +1,346 @@
+<admintpl file="header" />
+<script src="__PUBLIC__/simpleboot/themes/validation/dist/jquery.validate.js"></script>
+<script src="__PUBLIC__/simpleboot/themes/validation/dist/localization/messages_zh.js"></script> 
+
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('Task/index')}">任务列表</a></li>
+			<li class="active"><a href="{:U('Admin/Task/edit',array('id'=>$data['id']))}">修改任务</a></li>
+		</ul>
+		<form class="form-horizontal js-ajax-forms" id="form1" action="{:U('Task/savetask')}" method="post" >
+			<fieldset>
+				<div class="tabbable">
+					<div class="tab-content">
+						<div class="tab-pane active" id="A">
+							<fieldset>
+								<input name="id" type='hidden' value="{$data.id}"/>
+								<div class="control-group">
+									<label class="control-label">任务名称<b style="color:red">*</b></label>
+									<div class="controls">
+										 <input name="taskname" type='text' value="{$data.taskname}"/>
+										 <span class="form-required">如：微信改名</span>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">更换ip</label>
+									<div class="controls">
+										 <label><input name="alterip" type="radio" value="101" <if condition="$data.alterip eq 101">checked="checked"</if> />飞行模式</label>
+										 <label  style="padding-left:0px;" class="checkbox inline"><input name="alterip" type="radio" value="102" <if condition="$data.alterip eq 102">checked="checked"</if> />VPN</label>
+										 &nbsp;用户名&nbsp;<input style="width:100px;" type='text' name="vpnuser" />
+										 &nbsp;密码&nbsp;<input style="width:100px" type='text' name="vpnpwd" />
+
+										  <label><input name="alterip" type="radio" value="0" <if condition="$data.alterip neq 101 && $data.alterip neq 102">checked="checked"</if> />关闭</label>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">切换微信</label>
+									<div class="controls">
+										 <label><input name="weixicut" type="radio" value="121" <if condition="$data.weixicut eq 121 || $data.weixicut eq 123">checked="checked"</if> />dhfaker</label>
+										 <label><input name="weixicut" type="radio" value="122" <if condition="$data.weixicut eq 122">checked="checked"</if> />nzt</label>
+										 <label><input name="weixicut" type="radio" value="0" <if condition="$data.weixicut neq 121 && $data.weixicut neq 123 && $data.weixicut neq 122">checked="checked"</if>  />关闭</label>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">进入方式</label>
+									<div class="controls">
+										<label class="checkbox" style="padding-left:0px;"><input name="onmoble" type="radio" value="132" id="onmoble_login" <if condition="$data.onmoble eq 132">checked="checked"</if> />登入</label> 
+										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="131" id="onmoble_reg" <if condition="$data.onmoble eq 131">checked="checked"</if> />注册 </label> 										
+
+										<label class="checkbox inline"><input type="checkbox" name="uploadactver" value="1" <if condition="$data['parame']['photo'] gt 0">checked="checked"</if> >上传头像</label>
+										<select name="photo" style="width:100px">
+											<option value='1' <if condition="$data['parame']['photo'] eq 1">selected="selected"</if> >第一相薄</option>
+											<option value='2' <if condition="$data['parame']['photo'] eq 2">selected="selected"</if> >第二相薄</option>
+											<option value='3' <if condition="$data['parame']['photo'] eq 3">selected="selected"</if> >第三相薄</option>
+											<option value='4' <if condition="$data['parame']['photo'] eq 4">selected="selected"</if> >第四相薄</option>
+											<option value='5' <if condition="$data['parame']['photo'] eq 5">selected="selected"</if> >第五相薄</option>
+										</select> 							
+										<label class="checkbox inline"><input type="checkbox" name="setpwd" value="1" <if condition="$data.parame.pwd != '' && $data.parame.pwd != 0">checked="checked"</if> >设置密码 </label>&nbsp;<input type='text' name="pwd" />
+									</div>	
+									<div class="controls" style="margin-top:10px;">
+										<label class="checkbox inline" style="padding-left:13px;">手机号平台用户名<b style="color:red">*</b></label>
+										<input style="width:120px"  type='text' name="abcuser" id="abcuser" value="{$data['parame'].abcuser}" /><label class="reg_cerror cerror"></label>
+										<label class="checkbox inline">手机号平台密码<b style="color:red">*</b></label>
+										<input style="width:120px"  type='text' name="abcpwd" id="abcpwd" value="{$data['parame'].abcpwd}" /><label class="reg_cerror cerror"></label>
+										<label class="checkbox inline">手机号平台对接码<b style="color:red">*</b></label>
+										<input style="width:120px" type='text' name="joinbusi" id="joinbusi" value="{$data['parame'].joinbusi}" /><label class="reg_cerror cerror"></label>
+									</div>	
+								</div>
+								<div class="control-group">
+									<label class="control-label">必须操事情</label>
+									<div class="controls" id="mustt_val" mustt_val="{$data.mustt}">
+										<volist name="instruct" id="vo">
+										<label class="checkbox inline"><input class="mustt_val" type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
+										</volist>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">混合选择</label>
+									<div class="controls" id="mingle_val" mingle_val="{$data.mingle}">
+										<volist name="instruct" id="vo">
+											<label class="checkbox inline"><input class="mingle_val" type="checkbox" name="mingle[]" value="{$vo.code}" >{$vo.name}</label>
+										</volist>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary  js-ajax-submit">{:L("SAVE")}</button>
+				</div>
+			</fieldset>
+		</form>
+
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$(function(){
+			delfaule_checked('mustt_val');
+			delfaule_checked('mingle_val');
+			
+			
+			
+		
+			$("#onmoble_login").change(function(){
+				if($(this).is(':checked')){
+					$("input[name='uploadactver']").removeAttr('checked');
+					$("input[name='setpwd']").removeAttr('checked');
+					required('#onmoble_reg');
+				}
+			})
+			$("input[name='uploadactver']").change(function(){
+				if($(this).is(':checked')){
+					$('#onmoble_reg').attr('checked','checked');
+				}else{
+					if(!$("input[name='setpwd']").is(':checked')){
+						$('#onmoble_reg').removeAttr('checked');
+						$("#onmoble_login").attr('checked','checked');
+					}
+				}
+			})
+			$("input[name='setpwd']").change(function(){
+				if($(this).is(':checked')){
+					$('#onmoble_reg').attr('checked','checked');
+				}else{
+					if(!$("input[name='uploadactver']").is(':checked')){
+						$('#onmoble_reg').removeAttr('checked');
+						$("#onmoble_login").attr('checked','checked');
+					}
+				}
+			})
+			
+			$.validator.setDefaults({
+				submitHandler:function(from) {
+					if(required('#onmoble_reg')){
+						from.submit();
+					}
+					
+				}
+			});
+			$("#form1").validate({
+				rules:{
+					taskname:'required',
+				},
+				messages:{				
+					taskname:'请输入任务名称',	
+				},
+				errorClass:'cerror',
+				
+			});
+					
+					
+			$("#onmoble_reg").change(function(){
+				required(this);
+			})
+			
+			required('#onmoble_reg');
+			
+			
+		});	
+		
+		function delfaule_checked(idname){
+			$('#'+idname+' .'+idname).each(function(){
+				var mustt_val = $('#'+idname).attr(idname);
+				var val = $(this).val();
+				var str_index = mustt_val.indexOf(val);
+				if(str_index >= 0){
+					$(this).attr('checked','checked');
+				}else{
+					$(this).removeAttr('checked');
+				}
+			})
+		}
+		
+		function required(obj){
+			if($(obj).is(':checked')){
+				var abcuser = $("input[name='abcuser']").val();
+				var abcpwd = $("input[name='abcpwd']").val();
+				var joinbusi = $("input[name='joinbusi']").val();
+				if(abcuser == ''){
+					$("input[name='abcuser']").next('.cerror').text('必填项');
+					$("input[name='abcuser']").next('.cerror').show();
+				}
+				if(abcpwd == ''){
+					$("input[name='abcpwd']").next('.cerror').text('必填项');
+					$("input[name='abcpwd']").next('.cerror').show();
+				}
+				if(joinbusi == ''){
+					$("input[name='joinbusi']").next('.cerror').text('必填项');
+					$("input[name='joinbusi']").next('.cerror').show();
+				}
+				if(abcuser == '' || abcpwd == '' || joinbusi == ''){
+					return false;
+				}
+			}else{
+				$('.reg_cerror').text('');
+				$('.reg_cerror').hide();
+			}
+			return true;
+		}
+		
+		$("input[name='abcuser']").blur(function(){
+			inputblur(this);
+		})
+		$("input[name='abcpwd']").blur(function(){
+			inputblur(this);
+		})
+		$("input[name='joinbusi']").blur(function(){
+			inputblur(this);
+		})
+		
+		function inputblur(obj){
+			if($('#onmoble_reg').is(':checked') && $(obj).val() == ''){
+				$(obj).next('.cerror').text('必填项');
+				$(obj).next('.cerror').show();
+			}else{
+				$(obj).next('.cerror').text('');
+				$(obj).next('.cerror').hide();
+			}
+		}
+		
+	</script>
+	<script>
+	/*
+		/////---------------------
+		$(function(){
+			$("#urlmode-select").change(function(){
+				if($(this).val()==1){
+					alert("更改后，若发现前台链接不能正常访问，可能是您的服务器不支持PATHINFO，请先修改data/conf/config.php文件的URL_MODEL为0保证网站正常运行,在配置服务器PATHINFO功能后再更新为PATHINFO模式！");
+				}
+				
+				if($(this).val()==2){
+					alert("更改后，若发现前台链接不能正常访问，可能是您的服务器不支持REWRITE，请先修改data/conf/config.php文件的URL_MODEL为0保证网站正常运行，在开启服务器REWRITE功能后再更新为REWRITE模式！");
+				}
+			});
+			$("#js-site-admin-url-password").change(function(){
+				$(this).data("changed",true);
+			});
+		});
+		Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+			//javascript
+			var form = $('form.js-ajax-forms');
+			//ie处理placeholder提交问题
+			if ($.browser.msie) {
+				form.find('[placeholder]').each(function() {
+					var input = $(this);
+					if (input.val() == input.attr('placeholder')) {
+						input.val('');
+					}
+				});
+			}
+			//表单验证开始
+			form.validate({
+				//是否在获取焦点时验证
+				onfocusout : false,
+				//是否在敲击键盘时验证
+				onkeyup : false,
+				//当鼠标掉级时验证
+				onclick : false,
+				//验证错误
+				showErrors : function(errorMap, errorArr) {
+					//errorMap {'name':'错误信息'}
+					//errorArr [{'message':'错误信息',element:({})}]
+					try {
+						$(errorArr[0].element).focus();
+						art.dialog({
+							id : 'error',
+							icon : 'error',
+							lock : true,
+							fixed : true,
+							background : "#CCCCCC",
+							opacity : 0,
+							content : errorArr[0].message,
+							cancelVal : "{:L('OK')}",
+							cancel : function() {
+								$(errorArr[0].element).focus();
+							}
+						});
+					} catch (err) {
+					}
+				},
+				//验证规则
+				rules : {
+				},
+				//验证未通过提示消息
+				messages : {
+				},
+				//给未通过验证的元素加效果,闪烁等
+				highlight : false,
+				//是否在获取焦点时验证
+				onfocusout : false,
+				//验证通过，提交表单
+				submitHandler : function(forms) {
+					$(forms).ajaxSubmit({
+						url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+						dataType : 'json',
+						beforeSubmit : function(arr, $form, options) {
+
+						},
+						success : function(data, statusText, xhr, $form) {
+							if (data.status) {
+								setCookie("refersh_time", 1);
+								var admin_url_changed=$("#js-site-admin-url-password").data("changed");
+								var message =admin_url_changed?data.info+'<br><span style="color:red;">后台地址已更新(请劳记！)</span>':data.info;
+								
+								//添加成功
+								Wind.use("artDialog", function() {
+									art.dialog({
+										id : "succeed",
+										icon : "succeed",
+										fixed : true,
+										lock : true,
+										background : "#CCCCCC",
+										opacity : 0,
+										content : message,
+										button : [ {
+											name : "{:L('OK')}",
+											callback : function() {
+												reloadPage(window);
+												return true;
+											},
+											focus : true
+										}, {
+											name : "{:L('CLOSE')}",
+											callback : function() {
+												reloadPage(window);
+												return true;
+											}
+										} ]
+									});
+								});
+							} else {
+								alert(data.info);
+							}
+						}
+					});
+				}
+			});
+		});
+		////-------------------------
+		*/
+	</script>
+</body>
+</html>
