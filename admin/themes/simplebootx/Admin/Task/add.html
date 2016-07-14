@@ -59,11 +59,11 @@
 									</div>	
 									<div class="controls" style="margin-top:10px;">
 										<label class="checkbox inline" style="padding-left:13px;">手机号平台用户名<b style="color:red">*</b></label>
-										<input style="width:120px"  type='text' name="abcuser" id="abcuser" /><label class="cerror"></label>
+										<input style="width:120px"  type='text' name="abcuser" id="abcuser" /><label class="reg_cerror cerror"></label>
 										<label class="checkbox inline">手机号平台密码<b style="color:red">*</b></label>
-										<input style="width:120px"  type='text' name="abcpwd" id="abcpwd"/><label class="cerror"></label>
+										<input style="width:120px"  type='text' name="abcpwd" id="abcpwd"/><label class="reg_cerror cerror"></label>
 										<label class="checkbox inline">手机号平台对接码<b style="color:red">*</b></label>
-										<input style="width:120px" type='text' name="joinbusi" id="joinbusi"/><label class="cerror"></label>
+										<input style="width:120px" type='text' name="joinbusi" id="joinbusi"/><label class="reg_cerror cerror"></label>
 									</div>	
 								</div>
 								<div class="control-group">
@@ -177,8 +177,8 @@
 					return false;
 				}
 			}else{
-				$('.cerror').text('');
-				$('.cerror').hide();
+				$('.reg_cerror').text('');
+				$('.reg_cerror').hide();
 			}
 			return true;
 		}
