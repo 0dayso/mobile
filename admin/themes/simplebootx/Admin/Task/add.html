@@ -1,4 +1,17 @@
 <admintpl file="header" />
+<script src="__PUBLIC__/simpleboot/themes/validation/dist/jquery.validate.js"></script>
+<script src="__PUBLIC__/simpleboot/themes/validation/dist/localization/messages_zh.js"></script> 
+<style>
+
+.cerror{
+	display: inline-block;
+    margin-bottom: 0;
+    padding-top: 5px;
+    vertical-align: middle;
+	color: red;
+    text-indent: 10px;
+    width: auto;}
+</style>
 </head>
 <body>
 	<div class="wrap js-check-wrap">
@@ -6,14 +19,14 @@
 			<li ><a href="{:U('Task/index')}">任务列表</a></li>
 			<li class="active"><a href="{:U('Task/add')}">添加任务</a></li>
 		</ul>
-		<form class="form-horizontal js-ajax-forms" action="{:U('Task/add')}" method="post">
+		<form class="form-horizontal js-ajax-forms" id="form1" action="{:U('Task/add')}" method="post" >
 			<fieldset>
 				<div class="tabbable">
 					<div class="tab-content">
 						<div class="tab-pane active" id="A">
 							<fieldset>
 								<div class="control-group">
-									<label class="control-label">任务名称</label>
+									<label class="control-label">任务名称<b style="color:red">*</b></label>
 									<div class="controls">
 										 <input name="taskname" type='text' />
 										 <span class="form-required">如：微信改名</span>
@@ -53,13 +66,15 @@
 											<option value='5'>第五相薄</option>
 										</select> 							
 										<label class="checkbox inline"><input type="checkbox" name="setpwd" value="1" >设置密码 </label>&nbsp;<input type='text' name="pwd" />
-										<label class="checkbox inline">手机号平台用户名</label>
-										<input style="width:120px"  type='text' name="abcuser" />
-										<label class="checkbox inline">手机号平台密码</label>
-										<input style="width:120px"  type='text' name="abcpwd" />
-										<label class="checkbox inline">手机号平台对接码</label>
-										<input style="width:120px" type='text' name="joinbusi" />
-									</div>								
+									</div>	
+									<div class="controls" style="margin-top:10px;">
+										<label class="checkbox inline" style="padding-left:13px;">手机号平台用户名<b style="color:red">*</b></label>
+										<input style="width:120px"  type='text' name="abcuser" id="abcuser" /><label class="cerror"></label>
+										<label class="checkbox inline">手机号平台密码<b style="color:red">*</b></label>
+										<input style="width:120px"  type='text' name="abcpwd" id="abcpwd"/><label class="cerror"></label>
+										<label class="checkbox inline">手机号平台对接码<b style="color:red">*</b></label>
+										<input style="width:120px" type='text' name="joinbusi" id="joinbusi"/><label class="cerror"></label>
+									</div>	
 								</div>
 								<div class="control-group">
 									<label class="control-label">必须操事情</label>
@@ -91,33 +106,113 @@
 	</div>
 	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
 	<script>
+		$(function(){
+	
 		
-		$("#onmoble_login").change(function(){
-			if($(this).is(':checked')){
-				$("input[name='uploadactver']").removeAttr('checked');
-				$("input[name='setpwd']").removeAttr('checked');
-			}
-		})
-		$("input[name='uploadactver']").change(function(){
-			if($(this).is(':checked')){
-				$('#onmoble_reg').attr('checked','checked');
-			}else{
-				if(!$("input[name='setpwd']").is(':checked')){
-					$('#onmoble_reg').removeAttr('checked');
-					$("#onmoble_login").attr('checked','checked');
+			$("#onmoble_login").change(function(){
+				if($(this).is(':checked')){
+					$("input[name='uploadactver']").removeAttr('checked');
+					$("input[name='setpwd']").removeAttr('checked');
+					required('#onmoble_reg');
 				}
-			}
-		})
-		$("input[name='setpwd']").change(function(){
-			if($(this).is(':checked')){
-				$('#onmoble_reg').attr('checked','checked');
-			}else{
-				if(!$("input[name='uploadactver']").is(':checked')){
-					$('#onmoble_reg').removeAttr('checked');
-					$("#onmoble_login").attr('checked','checked');
+			})
+			$("input[name='uploadactver']").change(function(){
+				if($(this).is(':checked')){
+					$('#onmoble_reg').attr('checked','checked');
+				}else{
+					if(!$("input[name='setpwd']").is(':checked')){
+						$('#onmoble_reg').removeAttr('checked');
+						$("#onmoble_login").attr('checked','checked');
+					}
 				}
+			})
+			$("input[name='setpwd']").change(function(){
+				if($(this).is(':checked')){
+					$('#onmoble_reg').attr('checked','checked');
+				}else{
+					if(!$("input[name='uploadactver']").is(':checked')){
+						$('#onmoble_reg').removeAttr('checked');
+						$("#onmoble_login").attr('checked','checked');
+					}
+				}
+			})
+			
+			$.validator.setDefaults({
+				submitHandler:function(from) {
+					if(required('#onmoble_reg')){
+						from.submit();
+					}
+					
+				}
+			});
+			$("#form1").validate({
+				rules:{
+					taskname:'required',
+				},
+				messages:{				
+					taskname:'请输入任务名称',	
+				},
+				errorClass:'cerror',
+				
+			});
+					
+					
+			$("#onmoble_reg").change(function(){
+				required(this);
+			})
+			
+			required('#onmoble_reg');
+			
+			
+		});	
+		
+		function required(obj){
+			if($(obj).is(':checked')){
+				var abcuser = $("input[name='abcuser']").val();
+				var abcpwd = $("input[name='abcpwd']").val();
+				var joinbusi = $("input[name='joinbusi']").val();
+				if(abcuser == ''){
+					$("input[name='abcuser']").next('.cerror').text('必填项');
+					$("input[name='abcuser']").next('.cerror').show();
+				}
+				if(abcpwd == ''){
+					$("input[name='abcpwd']").next('.cerror').text('必填项');
+					$("input[name='abcpwd']").next('.cerror').show();
+				}
+				if(joinbusi == ''){
+					$("input[name='joinbusi']").next('.cerror').text('必填项');
+					$("input[name='joinbusi']").next('.cerror').show();
+				}
+				if(abcuser == '' || abcpwd == '' || joinbusi == ''){
+					return false;
+				}
+			}else{
+				$('.cerror').text('');
+				$('.cerror').hide();
 			}
+			return true;
+		}
+		
+		$("input[name='abcuser']").blur(function(){
+			inputblur(this);
 		})
+		$("input[name='abcpwd']").blur(function(){
+			inputblur(this);
+		})
+		$("input[name='joinbusi']").blur(function(){
+			inputblur(this);
+		})
+		
+		function inputblur(obj){
+			if($('#onmoble_reg').is(':checked') && $(obj).val() == ''){
+				$(obj).next('.cerror').text('必填项');
+				$(obj).next('.cerror').show();
+			}else{
+				$(obj).next('.cerror').text('');
+				$(obj).next('.cerror').hide();
+			}
+		}
+		
 	</script>
 	<script>
 	/*

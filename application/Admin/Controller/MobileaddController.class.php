@@ -11,13 +11,13 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		$count=M('mobile')->where('status=0')->count();
-		$numbpage=M('mobile')->where('id=1')->getfield('number');
+		$numbpage=M('options')->where("option_name='mobilev'")->getfield('option_value');
 		$data=M('mobile')->where('status=0')->limit($numbpage*5,5)->getfield('id,mobile',true);
 
 		if($count<$numbpage*5){
-			$rsl=M('mobile')->where('id=1')->setField('number',0);
+			$rsl=M('options')->where("option_name='mobilev'")->setField('option_value',0);
 		}else{
-			$rsl=M('mobile')->where('id=1')->setInc('number',1);	
+			$rsl=M('options')->where("option_name='mobilev'")->setInc('option_value',1);	
 		}	
 
 		$this->assign('count',$count);
