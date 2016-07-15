@@ -58,28 +58,5 @@ class WxwapiController extends Controller {
     
 
 
-/**
- * whatme()
- * 获取朋友圈语录
- */
-    public function whatme(){
-        $info = D('weixiname')->field('id,weixiname')->where('status=0')->limit(1)->find();
-        if($info){
-            $parame['status']=1;
-            $parame['updatetime']=time();
-            $parame['number']=array('exp','number+1');
-            $result=D('weixiname')->where('id=%d',array($info['id']))->save($parame);
-            if($result){
-                echo $info['weixiname'];
-            }else{
-                echo 0;
-            }
-        }else{
-            echo 0;
-        }
-        exit();
-    }
-
-
 }
 
