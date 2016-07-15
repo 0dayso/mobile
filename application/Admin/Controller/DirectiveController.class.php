@@ -9,23 +9,43 @@ class DirectiveController extends AdminbaseController {
     /**
     *指令列表
     **/
-    function index(){
+    public function index(){
         $list=D('instruct')->select();
         $this->assign('list',$list);
         $this->display();
     }
-    function directivelist(){
+    public function directivelist(){
         $list=D('instruct')->select();
         $this->assign('list',$list);
         $this->display('index');
     }
-    function add(){
+    public function add(){
         if(!IS_POST){
             $this->display();
             exit();
         }
         $driectivemodel=D('instruct');
-        $data=$driectivemodel->create();        
+        $data=$driectivemodel->create();   
+		$parame = explode('|',$data['parame']);
+		foreach($parame as $k=>$v){
+			$parame[$k] = explode(':',$v);
+			foreach($parame[$k] as $k1=>$v1){
+				if(strpos($v1,'-') > 0){
+					$parame[$k]['column'] = explode('-',$v1);
+					$parame[$k]['column']['name'] = $parame[$k]['column']['0'];
+					$parame[$k]['column']['text_name'] = $parame[$k]['column']['1'];
+					unset($parame[$k]['column'][0]);
+					unset($parame[$k]['column'][1]);
+				}
+				if(strpos($v1,',') > 0){
+					$parame[$k]['vals'] = explode(',',$v1);
+				}
+				unset($parame[$k][$k1]);
+			}
+		}
+		//$data['parame'] = json_encode($parame);
+		$data['parame'] = serialize($parame);
+		
         if($data){
             $result=$driectivemodel->add($data);            
 
@@ -38,9 +58,76 @@ class DirectiveController extends AdminbaseController {
              $this->error('增添加失败'.$driectivemodel->getError());
         }
     }
-    function upload(){
-        
+    public function edit(){
+		$id=intval(I('id'));
+        $data = D('instruct')->where('id=%d',array($id))->find();
+		
+		$data['parame'] = unserialize($data['parame']);
+		foreach($data['parame'] as $k=>$v){
+			$data['parame'][$k]['column'] = implode($v['column'],'-');
+			$data['parame'][$k]['vals'] = implode($v['vals'],',');
+			if(!empty($v['vals'])){
+				$data['parame'][$k] = implode($data['parame'][$k],':');
+			}else{
+				$data['parame'][$k] = $data['parame'][$k]['column'];
+			}
+		}
+		$data['parame'] = implode($data['parame'],'|');
+		
+		$this->assign('data',$data);
         $this->display();
     }
+	
+	public function savedata(){
+        $id=intval(I('id'));
+		$driectivemodel=D('instruct');
+		
+        $data=$driectivemodel->create();   
+		$parame = explode('|',$data['parame']);
+		foreach($parame as $k=>$v){
+			$parame[$k] = explode(':',$v);
+			foreach($parame[$k] as $k1=>$v1){
+				if(strpos($v1,'-') > 0){
+					$parame[$k]['column'] = explode('-',$v1);
+					$parame[$k]['column']['name'] = $parame[$k]['column']['0'];
+					$parame[$k]['column']['text_name'] = $parame[$k]['column']['1'];
+					unset($parame[$k]['column'][0]);
+					unset($parame[$k]['column'][1]);
+				}
+				if(strpos($v1,',') > 0){
+					$parame[$k]['vals'] = explode(',',$v1);
+				}
+				unset($parame[$k][$k1]);
+			}
+		}
+		//$data['parame'] = json_encode($parame);
+		$data['parame'] = serialize($parame);
+		
+        if($data){
+            $result=$driectivemodel->where('id=%d',array($id))->save($data);            
 
+            if($result){
+                $this->success('保存成功');                
+            }else{
+                $this->error('保存失败'.$driectivemodel->getError());
+            }
+        }else{            
+             $this->error('保存失败'.$driectivemodel->getError());
+        }
+    }
+	
+	public function delete(){
+		$id=intval(I('id'));
+		if($id){
+			$result=D('instruct')->where('id=%d',array($id))->delete();
+			if($result){
+				$this->success('删除成功');
+			}else{
+				$this->error('删除失败');
+			}
+		}else{
+			$this->error('删除失败');
+		}
+		
+	}
 }

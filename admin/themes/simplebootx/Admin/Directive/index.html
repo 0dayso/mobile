@@ -34,7 +34,10 @@
 							隐藏
 							</if>
 						</td>
-						<td></td>
+						<td>
+							<a href="{:U('Admin/Directive/edit',array('id'=>$vo['id']))}">修改</a>&nbsp;&nbsp;&nbsp;
+							<a class="js-ajax-delete" href="/index.php?g=&m=Directive&a=delete&id={$vo.id}">删除</a>
+						</td>
 					</tr>
 					</volist>
 				</tbody>

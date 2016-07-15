@@ -57,6 +57,9 @@ class TaskController extends AdminbaseController{
 		$data['mingle'] = implode(unserialize($data['mingle']),',');
 		$data['parame'] = unserialize($data['parame']);
 		$instruct=D('instruct')->select();
+		foreach($instruct as $k=>$v){
+			$instruct[$k]['parame'] = unserialize($v['parame']);
+		}
 		
         $this->assign('instruct',$instruct);	
 		$this->assign('data',$data);			
@@ -141,6 +144,10 @@ class TaskController extends AdminbaseController{
 			exit();
 		}
 		$list=D('instruct')->select();
+		foreach($list as $k=>$v){
+			$list[$k]['parame'] = unserialize($v['parame']);
+		}
+		
         $this->assign('instruct',$list);		
         $this->display();
 	}

@@ -71,6 +71,20 @@
 									<div class="controls">
 										<volist name="instruct" id="vo">
 										<label class="checkbox inline"><input type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											<foreach name="vo.parame" item="val">
+											<label class="checkbox inline">{$val.column.text_name}&nbsp;</label>
+											<if condition="$val.vals == ''">
+											<input type='text' name="{$val.column.name}_{$vo.code}" />&nbsp;&nbsp;&nbsp;
+											<else/>
+											<select name="{$val.column.name}_{$vo.code}" style="width:100px">
+												<foreach name="val.vals" item="v" key="k">
+												<option value="{$k+1}">{$v}</option>
+												</foreach>
+											</select>
+											</if>
+											</foreach>
+											<br/>
 										</volist>
 									</div>
 								</div>
