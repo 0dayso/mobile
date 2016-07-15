@@ -63,14 +63,14 @@ class WxwapiController extends Controller {
  * 获取朋友圈语录
  */
     public function whatme(){
-        $info = D('weixiname')->field('id,wiexiname')->where('status=0')->limit(1)->find();
+        $info = D('weixiname')->field('id,weixiname')->where('status=0')->limit(1)->find();
         if($info){
             $parame['status']=1;
             $parame['updatetime']=time();
             $parame['number']=array('exp','number+1');
             $result=D('weixiname')->where('id=%d',array($info['id']))->save($parame);
             if($result){
-                echo $info['wiexiname'];
+                echo $info['weixiname'];
             }else{
                 echo 0;
             }
