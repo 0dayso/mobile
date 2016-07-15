@@ -74,11 +74,12 @@
 										<label class="checkbox inline"><input class="mustt_val" type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 											<foreach name="vo.parame" item="val">
+											<input type='hidden' name="mustt_colname_{$vo.code}[]" value="{$val.column.name}" />
 											<label class="checkbox inline">{$val.column.text_name}&nbsp;</label>
 											<if condition="$val.vals == ''">
-											<input type='text' name="{$val.column.name}" />&nbsp;&nbsp;&nbsp;
+											<input type='text' name="mustt_{$val.column.name}_{$vo.code}" value="{$data['parame']['mustt_1007_pwd']}"/>&nbsp;&nbsp;&nbsp;
 											<else/>
-											<select name="{$val.column.name}" style="width:100px">
+											<select name="mustt_{$val.column.name}_{$vo.code}" style="width:100px">
 												<foreach name="val.vals" item="v" key="k">
 												<option value="{$k+1}">{$v}</option>
 												</foreach>
@@ -95,6 +96,21 @@
 									<div class="controls" id="mingle_val" mingle_val="{$data.mingle}">
 										<volist name="instruct" id="vo">
 											<label class="checkbox inline"><input class="mingle_val" type="checkbox" name="mingle[]" value="{$vo.code}" >{$vo.name}</label>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											<foreach name="vo.parame" item="val">
+											<input type='hidden' name="mingle_colname_{$vo.code}[]" value="{$val.column.name}" />
+											<label class="checkbox inline">{$val.column.text_name}&nbsp;</label>
+											<if condition="$val.vals == ''">
+											<input type='text' name="mingle_{$val.column.name}_{$vo.code}" />&nbsp;&nbsp;&nbsp;
+											<else/>
+											<select name="mingle_{$val.column.name}_{$vo.code}" style="width:100px">
+												<foreach name="val.vals" item="v" key="k">
+												<option value="{$k+1}">{$v}</option>
+												</foreach>
+											</select>
+											</if>
+											</foreach>
+											<br/>
 										</volist>
 									</div>
 								</div>
