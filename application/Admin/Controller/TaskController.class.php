@@ -57,6 +57,9 @@ class TaskController extends AdminbaseController{
 		$data['mingle'] = implode(unserialize($data['mingle']),',');
 		$data['parame'] = unserialize($data['parame']);
 		$instruct=D('instruct')->select();
+		foreach($instruct as $k=>$v){
+			$instruct[$k]['parame'] = unserialize($v['parame']);
+		}
 		
         $this->assign('instruct',$instruct);	
 		$this->assign('data',$data);			
@@ -82,7 +85,19 @@ class TaskController extends AdminbaseController{
 		$parame['abcuser']=$_POST['abcuser'];
 		$parame['abcpwd']=$_POST['abcpwd'];
 		$parame['joinbusi']=$_POST['joinbusi'];
-
+		$parame_mustts = $this->coldata('mustt');
+		$parame_mingle = $this->coldata('mingle');
+		foreach($parame_mustts as $k=>$v){
+			if(isset($parame_mustts[$k]) && $v !='' && $v != 0){
+				$parame[$k] = $v;
+			}
+		}
+		foreach($parame_mingle as $k=>$v){
+			if(isset($parame_mingle[$k]) && $v !='' && $v != 0){
+				$parame[$k] = $v;
+			}
+		}
+		
 		$data['parame']=serialize($parame);
 
 		$runcode=D('runcode');			
@@ -105,6 +120,8 @@ class TaskController extends AdminbaseController{
 			$data['taskname']=I('taskname');			
 			$data['alterip']=I('alterip');
 			$data['addtime']=time();
+			
+			
 			$data['mustt']=serialize($_POST['mustt']);
 			$data['mingle']=serialize($_POST['mingle']);
 			$data['weixicut']=$_POST['weixicut'];
@@ -119,7 +136,19 @@ class TaskController extends AdminbaseController{
 			$parame['abcuser']=$_POST['abcuser'];
 			$parame['abcpwd']=$_POST['abcpwd'];
 			$parame['joinbusi']=$_POST['joinbusi'];
-
+			$parame_mustts = $this->coldata('mustt');
+			$parame_mingle = $this->coldata('mingle');
+			foreach($parame_mustts as $k=>$v){
+				if(isset($parame_mustts[$k]) && $v !='' && $v != 0){
+					$parame[$k] = $v;
+				}
+			}
+			foreach($parame_mingle as $k=>$v){
+				if(isset($parame_mingle[$k]) && $v !='' && $v != 0){
+					$parame[$k] = $v;
+				}
+			}
+			
 			//$parame['nickename']=$_POST['nickename'];
 
 			$data['parame']=serialize($parame);
@@ -141,9 +170,29 @@ class TaskController extends AdminbaseController{
 			exit();
 		}
 		$list=D('instruct')->select();
+		foreach($list as $k=>$v){
+			$list[$k]['parame'] = unserialize($v['parame']);
+		}
+		
         $this->assign('instruct',$list);		
         $this->display();
 	}
+	
+	protected function coldata($col='mustt'){
+		$mustt = I($col);
+		foreach($mustt as $k=>$v){
+			$mustts[][] = $v;
+		}
+		foreach($mustts as $k=>$v){
+			$column_name = I($col.'_colname_'.$v[0]);
+			foreach($column_name as $k1=>$v1){
+				$mustts[$col.'_'.$v[0].'_'.$v1] = I($col.'_'.$v1.'_'.$v[0]);
+			}
+			unset($mustts[$k]);
+		}
+		return $mustts;
+	}
+	
 	public function mobile(){
 		$this->display();
 	}

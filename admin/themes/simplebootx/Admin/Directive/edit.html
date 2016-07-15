@@ -4,35 +4,36 @@
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li ><a href="{:U('Directive/directivelist')}">指令列表</a></li>
-			<li class="active"><a href="{:U('Directive/add')}">增加指令</a></li>
+			<li class="active"><a href="{:U('Directive/edit')}">修改指令</a></li>
 		</ul>
-		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Directive/add')}">
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Directive/savedata')}">
 			<fieldset>
+				<input type="hidden" name="id" value="{$data.id}">
 				<div class="control-group">
 					<label class="control-label">名称:</label>
 					<div class="controls">
-						<input type="text" name="name">
+						<input type="text" name="name" value="{$data.name}" />
 						<span class="form-required">*</span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">编号:</label>
 					<div class="controls">
-						<input type="text" name="code" id="action">
+						<input type="text" name="code" id="action" value="{$data.code}"/>
 						<span class="form-required">*三位数据</span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">方法名:</label>
 					<div class="controls">
-						<input type="text" name="funname" id="action">
+						<input type="text" name="funname" id="action" value="{$data.funname}" />
 						<span class="form-required">*</span>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">文件名:</label>
 					<div class="controls">
-						<input type="text" name="filename">
+						<input type="text" name="filename" value="{$data.filename}" />
 						<span class="form-required">*</span>
 						例:name.lua
 					</div>
@@ -40,7 +41,7 @@
 				<div class="control-group">
 					<label class="control-label">参数:</label>
 					<div class="controls">
-						<input type="text" name="parame" style="width:400px;">
+						<input type="text" name="parame" style="width:400px;" value="{$data.parame}" />
 						例:pwd-密码设置|photo-相册:第一相册,第二相册,第三相册
 					</div>
 				</div>
@@ -48,14 +49,14 @@
 					<label class="control-label">状态:</label>
 					<div class="controls">
 						<select name="status">
-							<option value="1">显示</option>
-							<option value="0">隐藏</option>
+							<option value="1" <if condition="$data.status eq 1">selected="selected"</if> >显示</option>
+							<option value="0" <if condition="$data.status eq 0">selected="selected"</if> >隐藏</option>
 						</select>
 					</div>
 				</div>
 			</fieldset>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
 				<a class="btn" href="{:U('Directive/index')}">{:L('BACK')}</a>
 			</div>
 		</form>
