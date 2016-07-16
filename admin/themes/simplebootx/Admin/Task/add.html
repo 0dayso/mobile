@@ -70,7 +70,14 @@
 									<label class="control-label">必须操事情</label>
 									<div class="controls">
 										<volist name="instruct" id="vo">
-										<label class="checkbox inline"><input type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
+										<label class=""><input type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}	 <input style="width:120px" type='text' name="joinbusi" id="joinbusi"/>				
+										<select name="photo" style="width:100px">
+											<option value='1'>第一相薄</option>
+											<option value='2'>第二相薄</option>
+											<option value='3'>第三相薄</option>
+											<option value='4'>第四相薄</option>
+											<option value='5'>第五相薄</option>
+										</select></label>						
 										</volist>
 									</div>
 								</div>

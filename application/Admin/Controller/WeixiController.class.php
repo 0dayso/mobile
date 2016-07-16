@@ -33,7 +33,7 @@ class WeixiController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-    	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->select();
+    	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
 		
     	$this->assign('list',$list);
 		$this->assign('parameters',$parameters);
