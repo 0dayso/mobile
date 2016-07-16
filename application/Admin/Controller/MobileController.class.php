@@ -90,6 +90,8 @@ class MobileController extends AdminbaseController{
 		if($result > 0){
 			Header( "Content-type:   application/octet-stream ");
 			header( "Content-Disposition:   attachment;   filename=".$filepath);
+			header("Cache-Control: no-cache, must-revalidate");
+			header( 'Pragma: no-cache' );
 			echo $datas;
 			exit();
 			
