@@ -244,14 +244,26 @@ class AdminbaseController extends AppframeController {
 	
 	public function fileaddall($table,$data,$column){
 		$ary=array();
+		
 		foreach ($data as $k => $v) {
 			if(!empty($v)){
-				$t[$column]=iconv("gb2312","utf-8",$v);
-				$t['updatetime']=time();
-				$t['creaetetime']=time();
-				$ary[]=$t;
+				if(is_array($column)){
+					if(strpos($v,',') > 0){
+						$v = explode(',',$v);
+					}
+					foreach($column as $k1=>$v1){
+						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);;
+					}
+					$ary[] = $one_da;
+				}else{
+					$t[$column]=iconv("gb2312","utf-8",$v);
+					$t['updatetime']=time();
+					$t['creaetetime']=time();
+					$ary[]=$t;
+				}
 			}
 		}
+		
 		$result=M($table)->addAll($ary);
 		return $result;
 	}

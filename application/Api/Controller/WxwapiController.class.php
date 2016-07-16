@@ -55,7 +55,30 @@ class WxwapiController extends Controller {
         }
         exit();
     }
+
+    /**
+ * Circle()
+ * email
+ */
+    public function emailinfo(){
+        $info = D('emailinfo')->field('id,email,pwd')->where('status=0')->limit(1)->find();
+        if($info){
+            $parame['status']=1;
+            $parame['updatetime']=time();
+            $parame['number']=array('exp','number+1');
+            $result=D('emailinfo')->where('id=%d',array($info['id']))->save($parame);
+            if($result){
+                echo $info['email'].','.$info['pwd'];
+            }else{
+                echo 0;
+            }
+        }else{
+            echo 0;
+        }
+        exit();
+    }
     
+
 
 }
 
