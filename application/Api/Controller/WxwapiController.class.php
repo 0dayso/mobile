@@ -80,5 +80,41 @@ class WxwapiController extends Controller {
     
 
 
+/**
+ * mobilestatus()
+ * 手机号码被封异常帐号
+ */
+    public function mobilestatus(){
+        $mobile=I('pn');
+        $cdkey=I('cdkey');
+        if(!$mobile){
+            echo '0';
+        }        
+        $info = D('weixi')->where("mobile='%s'",array($mobile))->find();
+        if($info){            
+            $parame['status']=2;
+            $parame['updatetime']=time();            
+            $result=D('weixi')->where('id=%d',array($info['id']))->save($parame);            
+            if($result){
+                echo $info['mobile'];
+            }else{
+                echo 0;
+            }
+        }else{
+            $parame['status']=2;
+            $parame['updatetime']=time();   
+            $parame['mobile']=$mobile;   
+            $parame['createtime']=time();               
+            $parame['cdkey']=$cdkey;   
+            $result=D('weixi')->add($parame);            
+            if($result){
+                echo $parame['mobile'];
+            }else{
+                echo 0;
+            }
+        }
+        exit();
+    }
+
 }
 
