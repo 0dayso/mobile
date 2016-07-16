@@ -57,6 +57,52 @@ class MobileController extends AdminbaseController{
 		$this->upload_weixin_resourse('mobile','mobile');
 	}
 	
+	public function Cleardata(){
+		$sql = "truncate table mbl_mobile";
+		$result=M()->execute($sql);
+		
+		if($result == 0){
+			$this->success('清除成功');
+		}else{
+			$this->error('清除失败');
+		}
+	}
+	/**
+	 *备份数据库表
+	 */
+	public function backups(){
+		$status = I('status');
+		if($status == -1){
+			$map['status'] = 0;
+			$filename = "par_mobile";
+		}else{
+			$filename = "allmobile";
+		}
+		$data = D('Mobile')->where($map)->getField('id,mobile');
+		foreach($data as $k=>$v){
+			$datas .= $v."\r\n";
+		}
+		
+		$file = fopen("./data/".$filename.".txt",'w');
+		$result = fwrite($file,$datas);
+		fclose($file);
+		if($result > 0){
+			$this->success('备份成功');
+		}else{
+			$this->error('备份失败');
+		}
+		/*Header( "Content-type:   application/octet-stream "); 
+		Header( "Accept-Ranges:   bytes "); 
+		header( "Content-Disposition:   attachment;   filename=test.txt "); 
+		header( "Expires:   0 "); 
+		header( "Cache-Control:   must-revalidate,   post-check=0,   pre-check=0 "); 
+		header( "Pragma:   public "); 
+		echo "测试/r/n";
+		echo "测试/r/n";
+
+		echo "输入的内容为文本文件的内容。";*/
+	}
+	
 	public function testadd(){
 		$path='D:\WWW\mobile\public\uploads\201605305760fe811f2dc.txt';
 
