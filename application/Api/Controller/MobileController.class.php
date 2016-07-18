@@ -57,12 +57,20 @@ class MobileController extends Controller {
         exit();
     }
     //显示一个手机号码检查是否存在
-    public function getmboiletype(){
-        $data=M('mobile')->lock(true)->field('id,mobile')->where('type=%d',0)->find();        
+    public function getmboiletype(){ 
+        $count=M('mobile')->field('id,mobile')->where('type=%d',0)->count();               
+        $nub=rand(1,$count);
+
+        $data=M('mobile')->field('id,mobile')->where('type=%d',0)->limit($nub,1)->select(); 
+      
+
+        if($count<$nub+1){           
+            $data=M('mobile')->field('id,mobile')->where('type=%d',0)->limit(1)->select();              
+        }
+
         if($data){
-            $info['type']=3;
-            $result=M('mobile')->where('type=%d',$data['id'])->save($info);
-            echo $data['mobile'];
+            echo $data[0]['mobile']; 
+        
         }else{
             echo 0;
         }
