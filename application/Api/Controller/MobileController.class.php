@@ -32,6 +32,28 @@ class MobileController extends Controller {
     	}
         exit();
     }
+    //修改 ajax手机状态
+    public function setmobiletype(){
+        $mobile=I('get.id');
+        if($mobile){
+            $info['type']=1;
+            $result=M('mobile')->where('id=%d',$data['id'])->save($info);   
+            echo 1;
+        }else{
+            echo 0;
+        }
+        exit();
+    }
+    //显示一个手机号码检查是否存在
+    public function getmboiletype(){
+        $data=M('mobile')->field('id,mobile')->where('type=%d',0)->find();
+        if($data){
+            echo $data['mobile'];
+        }else{
+            echo 0;
+        }
+        exit();
+    }
     public function wxname(){
         $data=D('weixiname')->field('id,weixiname')->where('status=%d',0)->find();
         if($data){
