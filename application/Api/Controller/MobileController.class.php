@@ -24,6 +24,7 @@ class MobileController extends Controller {
     }
     //显示一个手机号码
     public function mboile(){
+
     	$data=M('mobile')->field('id,mobile')->where('status=%d',0)->find();
     	if($data){
     		echo $data['mobile'];
@@ -32,7 +33,49 @@ class MobileController extends Controller {
     	}
         exit();
     }
-    
+    //修改 ajax手机状态
+    public function setmobiletype(){
+        $mobile=I('get.mobile');
+        $type=I('get.st');
+        if($mobile){
+            if($type==1){
+                $info['type']=1;
+                $info['status']=1;
+            }else{
+                $info['type']=2;
+            }
+            $result=M('mobile')->where("mobile='%s'",$mobile)->save($info);               
+            if($result){
+                echo 1;
+            }else{
+                echo 0;
+            }   
+            
+        }else{
+            echo 0;
+        }
+        exit();
+    }
+    //显示一个手机号码检查是否存在
+    public function getmboiletype(){ 
+        $count=M('mobile')->field('id,mobile')->where('type=%d',0)->count();               
+        $nub=rand(1,$count);
+
+        $data=M('mobile')->field('id,mobile')->where('type=%d',0)->limit($nub,1)->select(); 
+      
+
+        if($count<$nub+1){           
+            $data=M('mobile')->field('id,mobile')->where('type=%d',0)->limit(1)->select();              
+        }
+
+        if($data){
+            echo $data[0]['mobile']; 
+        
+        }else{
+            echo 0;
+        }
+        exit();
+    }
     public function wxname(){
         $data=D('weixiname')->field('id,weixiname')->where('status=%d',0)->find();
         if($data){
