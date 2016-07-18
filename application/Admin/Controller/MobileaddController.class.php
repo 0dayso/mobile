@@ -15,7 +15,7 @@ class MobileaddController extends AdminbaseController{
 		$count=M('mobile')->where('status=0')->count();            
         $nub=rand(1,$count);
 
-        if($count<$nub*5+5){
+        if($count<$nub+5){
         	$nub=$count;
         }
 		
