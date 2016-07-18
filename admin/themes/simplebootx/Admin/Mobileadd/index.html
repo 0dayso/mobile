@@ -99,7 +99,7 @@
 			$(".trclick").on('touchstart ',function(){	
 
 				$(this).addClass("trback");	
-				var url="{:U('Admin/MobileAdd/update')}";
+				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
 				var id=$(this).find('.keyinfo').val();
 				$.post(url,{'id':id},function(data){	
