@@ -116,5 +116,22 @@ class WxwapiController extends Controller {
         exit();
     }
 
+
+    /*
+    *得到原密码
+    */
+    public function getpwd(){
+        $mobile=I('pn');        
+        $info = D('weixi')->where("mobile='%s'",array($mobile))->getfield('pwd'); 
+        if($info){
+            echo $info;
+        }else{
+            echo 0;
+        }   
+        exit();
+    }
+
+
+
 }
 
