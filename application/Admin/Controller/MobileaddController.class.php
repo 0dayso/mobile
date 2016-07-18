@@ -10,8 +10,6 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
-		
-
 		$count=M('mobile')->where('status=0')->count();            
         $nub=rand(1,$count);
 
@@ -41,9 +39,11 @@ class MobileaddController extends AdminbaseController{
 		if($data1){
 			$data['status']=1;	
 			$this->ajaxreturn($data);
+			exit();
 		}
 		$data['status']=0;	
 		$this->ajaxreturn($data);
+		exit();
 	}
 
 	public function fileinfo($path){
