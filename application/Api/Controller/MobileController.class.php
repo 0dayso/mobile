@@ -43,7 +43,12 @@ class MobileController extends Controller {
                 $info['type']=2;
             }
             $result=M('mobile')->where("mobile='%s'",mobile)->save($info);   
-            echo 1;
+            if($result){
+                echo 1;
+            }else{
+                echo 0;
+            }   
+            
         }else{
             echo 0;
         }
