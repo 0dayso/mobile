@@ -32,6 +32,7 @@ class MobileController extends Controller {
     	}
         exit();
     }
+    
     public function wxname(){
         $data=D('weixiname')->field('id,weixiname')->where('status=%d',0)->find();
         if($data){
