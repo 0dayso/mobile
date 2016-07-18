@@ -60,7 +60,7 @@ class MobileController extends Controller {
     public function getmboiletype(){
         $data=M('mobile')->lock(true)->field('id,mobile')->where('type=%d',0)->find();        
         if($data){
-            $info['status']=3;
+            $info['type']=3;
             $result=M('mobile')->where('type=%d',$data['id'])->save($info);
             echo $data['mobile'];
         }else{
