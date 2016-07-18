@@ -24,6 +24,7 @@ class MobileController extends Controller {
     }
     //显示一个手机号码
     public function mboile(){
+
     	$data=M('mobile')->field('id,mobile')->where('status=%d',0)->find();
     	if($data){
     		echo $data['mobile'];
@@ -57,7 +58,7 @@ class MobileController extends Controller {
     }
     //显示一个手机号码检查是否存在
     public function getmboiletype(){
-        $data=M('mobile')->field('id,mobile')->where('type=%d',0)->find();
+        $data=M('mobile')->lock(true)->field('id,mobile')->where('type=%d',0)->find();
         if($data){
             echo $data['mobile'];
         }else{
