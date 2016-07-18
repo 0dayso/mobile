@@ -35,7 +35,7 @@ class MobileController extends Controller {
     //修改 ajax手机状态
     public function setmobiletype(){
         $mobile=I('get.mobile');
-        $type=I('get.s');
+        $type=I('get.st');
         if($mobile){
             if($type==1){
                 $info['type']=1;
