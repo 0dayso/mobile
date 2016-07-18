@@ -39,6 +39,7 @@ class MobileController extends Controller {
         if($mobile){
             if($type==1){
                 $info['type']=1;
+                $info['status']=1;
             }else{
                 $info['type']=2;
             }
