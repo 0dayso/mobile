@@ -12,7 +12,7 @@
 					<div class="controls">
 						<select name="runcode">
 							<foreach name="list" item="vo">
-							<option value="{$key}">{$vo}</option>
+							<option value="{$key}" <if condition="$data.runcodeid == $key">selected="selected"</if>>{$vo}</option>
 							</foreach>
 						</select>
 						<input type="hidden" name="id" value="{:I('id')}" />

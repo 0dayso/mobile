@@ -83,11 +83,19 @@ class MobileController extends AdminbaseController{
 			$datas .= $v."\r\n";
 		}
 		
-		$file = fopen("./data/".$filename.".txt",'w');
+		$filepath = "./data/".$filename.".txt";
+		$file = fopen($filepath,'w');
 		$result = fwrite($file,$datas);
 		fclose($file);
 		if($result > 0){
-			$this->success('备份成功');
+			Header( "Content-type:   application/octet-stream ");
+			header( "Content-Disposition:   attachment;   filename=".$filepath);
+			header("Cache-Control: no-cache, must-revalidate");
+			header( 'Pragma: no-cache' );
+			echo $datas;
+			exit();
+			
+			//$this->success('备份成功');
 		}else{
 			$this->error('备份失败');
 		}

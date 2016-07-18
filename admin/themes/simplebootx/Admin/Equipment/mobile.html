@@ -42,7 +42,7 @@
 						<td><input type="text" class="alias" name="alias" value="{$vo.alias}" onchange="changealias(this,{$vo.id})"/></td>		
 						<td>{$vo.numb}</td>
 						<td>{$vo.cate_name}</td>
-						<td>{$aryi[$vo['runcodeid']]}</td>
+						<td><a href="{:U('Task/taskinfo',array('id'=>$vo['runcodeid']))}">{$aryi[$vo['runcodeid']]}</a></td>
 						<!--<td>{$vo.status}</td>-->
 						<td>
 							<a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a>

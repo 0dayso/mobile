@@ -26,25 +26,25 @@ class DirectiveController extends AdminbaseController {
         }
         $driectivemodel=D('instruct');
         $data=$driectivemodel->create();   
-		$parame = explode('|',$data['parame']);
-		foreach($parame as $k=>$v){
-			$parame[$k] = explode(':',$v);
-			foreach($parame[$k] as $k1=>$v1){
-				if(strpos($v1,'-') > 0){
-					$parame[$k]['column'] = explode('-',$v1);
-					$parame[$k]['column']['name'] = $parame[$k]['column']['0'];
-					$parame[$k]['column']['text_name'] = $parame[$k]['column']['1'];
-					unset($parame[$k]['column'][0]);
-					unset($parame[$k]['column'][1]);
+		if($data['parame'] != ''){
+			$parame = explode('|',$data['parame']);
+			foreach($parame as $k=>$v){
+				$parame[$k] = explode(':',$v);
+				foreach($parame[$k] as $k1=>$v1){
+					if(strpos($v1,'-') > 0){
+						$parame[$k]['column'] = explode('-',$v1);
+						$parame_data[$k]['column']['name'] = $parame[$k]['column']['0'];
+						$parame_data[$k]['column']['text_name'] = $parame[$k]['column']['1'];
+					}else{
+						$parame_data[$k]['column']['name'] = $v1;
+					}
+					if(strpos($v1,',') > 0){
+						$parame_data[$k]['vals'] = explode(',',$v1);
+					}
 				}
-				if(strpos($v1,',') > 0){
-					$parame[$k]['vals'] = explode(',',$v1);
-				}
-				unset($parame[$k][$k1]);
 			}
+			$data['parame'] = serialize($parame_data);
 		}
-		//$data['parame'] = json_encode($parame);
-		$data['parame'] = serialize($parame);
 		
         if($data){
             $result=$driectivemodel->add($data);            
@@ -72,6 +72,7 @@ class DirectiveController extends AdminbaseController {
 				$data['parame'][$k] = $data['parame'][$k]['column'];
 			}
 		}
+		
 		$data['parame'] = implode($data['parame'],'|');
 		
 		$this->assign('data',$data);
@@ -82,26 +83,26 @@ class DirectiveController extends AdminbaseController {
         $id=intval(I('id'));
 		$driectivemodel=D('instruct');
 		
-        $data=$driectivemodel->create();   
-		$parame = explode('|',$data['parame']);
-		foreach($parame as $k=>$v){
-			$parame[$k] = explode(':',$v);
-			foreach($parame[$k] as $k1=>$v1){
-				if(strpos($v1,'-') > 0){
-					$parame[$k]['column'] = explode('-',$v1);
-					$parame[$k]['column']['name'] = $parame[$k]['column']['0'];
-					$parame[$k]['column']['text_name'] = $parame[$k]['column']['1'];
-					unset($parame[$k]['column'][0]);
-					unset($parame[$k]['column'][1]);
+        $data=$driectivemodel->create();  
+		if($data['parame'] != ''){
+			$parame = explode('|',$data['parame']);
+			foreach($parame as $k=>$v){
+				$parame[$k] = explode(':',$v);
+				foreach($parame[$k] as $k1=>$v1){
+					if(strpos($v1,'-') > 0){
+						$parame[$k]['column'] = explode('-',$v1);
+						$parame_data[$k]['column']['name'] = $parame[$k]['column']['0'];
+						$parame_data[$k]['column']['text_name'] = $parame[$k]['column']['1'];
+					}else{
+						$parame_data[$k]['column']['name'] = $v1;
+					}
+					if(strpos($v1,',') > 0){
+						$parame_data[$k]['vals'] = explode(',',$v1);
+					}
 				}
-				if(strpos($v1,',') > 0){
-					$parame[$k]['vals'] = explode(',',$v1);
-				}
-				unset($parame[$k][$k1]);
 			}
+			$data['parame'] = serialize($parame_data);
 		}
-		//$data['parame'] = json_encode($parame);
-		$data['parame'] = serialize($parame);
 		
         if($data){
             $result=$driectivemodel->where('id=%d',array($id))->save($data);            
