@@ -179,7 +179,11 @@ class EquipmentController extends AdminbaseController {
                 $this->error('修改失败');
             }
         }
+		
         $list=D('runcode')->getfield('id,taskname',true);
+		$data = D('equictive')->where('id=%d',array($eqid))->find();
+		
+		$this->assign('data',$data);
         $this->assign('list',$list);
         $this->display();
     }
