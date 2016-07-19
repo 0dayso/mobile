@@ -26,6 +26,8 @@ class RuncodeController extends AdminbaseController {
 				$equictive_name = D('equictive')->where('id=%d',array($v['equiact_id']))->getfield('cdkey');
 				$list[$k]['equictive_name'] = $equictive_name;
 			}
+			$userinfo = $this->Getuserbyid($v['userid']);
+			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		
         $this->assign('list',$list);
