@@ -10,13 +10,18 @@ class MobileController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
-		$count=M('mobile')->where('status=0')->count();
+		$map['status'] = 0;
+		if(I('type') > 0){
+			$map['type'] = I('type');
+		}
+		
+		$count=M('mobile')->where($map)->count();
 		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
         $show = $Page->show();// 分页显示输出
 		
-		$data=M('mobile')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile',true);
+		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile',true);
 		
 		$this->assign('count',$count);
 		$this->assign('data',$data);
