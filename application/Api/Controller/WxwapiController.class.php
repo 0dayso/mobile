@@ -57,8 +57,8 @@ class WxwapiController extends Controller {
     }
 
     /**
- * Circle()
- * email
+ * 获取邮箱用户和密码
+ * email()
  */
     public function emailinfo(){
         $info = D('emailinfo')->field('id,email,pwd')->where('status=0')->limit(1)->find();
