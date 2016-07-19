@@ -216,6 +216,7 @@ class AdminbaseController extends AppframeController {
 			$config['saveName'] = '';
 			$config['subName'] = 'mobile';
 		}
+		//$config['saveName'] = iconv("utf-8", "utf-8", $config['saveName']);
 		$upload = new \Think\Upload($config);// 实例化上传类
 		$info   =   $upload->upload();
 		if(!$info) {// 上传错误提示错误信息       			  
