@@ -9,8 +9,9 @@
 						<!--<th width="80">{:L('SORT')}</th>-->
 						<th width="50">ID</th>
 						<th>任务名称</th>	
-						<th width="250">设备分类/设备序列号</th>			
+						<th width="250">设备分类/设备序列号</th>		
 						<th width="80">{:L('STATUS')}</th>
+						<th width="80">发布人</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</thead>
@@ -28,6 +29,7 @@
 							</if>
 						</td>		
 						<td>{$vo.status}</td>
+						<td>{$vo.username}</td>
 						<td><a href="{:U('Runcode/info',array('id'=>$vo['id']))}" >指定设备执行</a></td>
 					</tr>
 					</volist>
@@ -39,6 +41,7 @@
 						<th>任务名称</th>
 						<th width="250">设备分类/设备序列号</th>		
 						<th width="80">{:L('STATUS')}</th>
+						<th>发布人</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</tfoot>

@@ -22,7 +22,8 @@
 						<th>切换微信</th>
 						<th>进入方式</th>
 						<th>必须操作事项</th>
-						<th>混合选择</th>
+						<!--<th>混合选择</th>-->
+						<th>发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="80">{:L('ACTIONS')}</th>
 					</tr>
@@ -61,9 +62,11 @@
 						<td><foreach name="vo['mustt']" item="v" key='k' >
 							{$data[$v]}&nbsp;&nbsp;
 						</foreach></td>
+						<!--
 						<td><foreach name="vo['mingle']" item="v" key='k' >
 							{$data[$v]}&nbsp;&nbsp;
-						</foreach></td>
+						</foreach></td>-->
+						<td>{$vo.username}</td>
 					<!--	<td></td>-->
 						<td>
 							<a href="{:U('Admin/Task/edit',array('id'=>$vo['id']))}">修改</a>&nbsp;&nbsp;&nbsp;
@@ -81,7 +84,8 @@
 						<th>切换微信</th>
 						<th>进入方式</th>
 						<th>必须操作事项</th>
-						<th>混合选择</th>
+						<!--<th>混合选择</th>-->
+						<th>发布人</th>
 					<!--	<th width="80">{:L('STATUS')}</th>-->
 						<th width="80">{:L('ACTIONS')}</th>
 					</tr>

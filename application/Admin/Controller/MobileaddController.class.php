@@ -10,16 +10,20 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
+		$GLOBALS['z']=$GLOBALS['z']+1;
 		
+		$count=M('mobile')->where('status=0 and type=2')->count();            
 
-		$count=M('mobile')->where('status=0')->count();            
         $nub=rand(1,$count);
+        // if($count>$GLOBALS['z']){
+        // 	$GLOBALS['z']=1;
+        // }
 
         if($count<$nub+5){
         	$nub=$count;
         }
 		
-		$data=M('mobile')->where('status=0')->limit($nub,5)->getfield('id,mobile',true);
+		$data=M('mobile')->where('status=0 and type=2')->limit($nub,5)->getfield('id,mobile',true);
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
@@ -41,9 +45,11 @@ class MobileaddController extends AdminbaseController{
 		if($data1){
 			$data['status']=1;	
 			$this->ajaxreturn($data);
+			exit();
 		}
 		$data['status']=0;	
 		$this->ajaxreturn($data);
+		exit();
 	}
 
 	public function fileinfo($path){
