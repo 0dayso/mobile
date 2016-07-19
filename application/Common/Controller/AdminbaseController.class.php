@@ -355,4 +355,9 @@ class AdminbaseController extends AppframeController {
 		echo "数据备份成功";
 	}
 	
+	protected function Getuserbyid($id){
+		$userinfo = D('users')->field('id,user_login,user_nicename')->where('id=%d',array($id))->find();
+		return $userinfo;
+	}
+	
 }
