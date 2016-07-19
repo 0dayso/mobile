@@ -10,14 +10,14 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
-		$count=M('mobile')->where('status=0')->count();            
+		$count=M('mobile')->where('status=0 and type=2')->count();            
         $nub=rand(1,$count);
 
         if($count<$nub+5){
         	$nub=$count;
         }
 		
-		$data=M('mobile')->where('status=0')->limit($nub,5)->getfield('id,mobile',true);
+		$data=M('mobile')->where('status=0 and type=2')->limit($nub,5)->getfield('id,mobile',true);
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
