@@ -20,7 +20,40 @@
 			<a class="btn btn-primary" href="{:U('Mobile/backups')}">备份所有手机号</a>
 			<a class="btn btn-primary" href="{:U('Mobile/backups',array('status'=>-1))}">备份未操作手机号</a>
 		</form>	
-		
+		<table class="table table-hover table-bordered table-list">
+				<!---<thead>
+					<tr>
+						<th width="50">序号</th>
+						<th>已上传文件名称</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>
+				<tbody>-->
+				<foreach name="fileinfo" item="vo" key="k">
+					<tr class="trclick" >
+						<!---<td style="width:4px;" >{$k}</td>-->
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
+							{$vo.filename}
+						</td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
+							{$vo.filepath}
+						</td>
+					<!--	<td id="vl{$k}" style="width:4px">未</td>
+					 	<td>返回</td> -->
+					</tr>
+				</foreach>
+				</tbody>
+<!-- 
+				<tfoot>
+					<tr>				
+						<th width="50">ID</th>
+						<th>手机号码</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</tfoot> -->
+			</table>	
 	</div>	
 </body>
 </html>

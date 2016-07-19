@@ -48,8 +48,25 @@ class MobileController extends AdminbaseController{
 	public function add(){
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
-		$this->assign('cq',count($data));
+		$filesnames = scandir('./public/uploads/mobile',1);
+		foreach($filesnames as $k=>$v){
+			if($v == '..' || $v == '.'){
+				unset($filesnames[$k]);
+				unset($v);
+			}
 			
+		}
+		
+		foreach($filesnames as $k=>$v){
+			$files_names['filename'] = $v;
+			
+			$modifytime = filemtime('./public/uploads/mobile/'.$v);
+			$files_names['filepath'] = date('Y-m-d H:i:s',$modifytime);
+			$fileinfo[] = $files_names;
+		}
+		
+		$this->assign('cq',count($data));
+		$this->assign('fileinfo',$fileinfo);
 		$this->display();
 	}
 	
