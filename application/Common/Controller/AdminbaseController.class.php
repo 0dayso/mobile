@@ -211,12 +211,22 @@ class AdminbaseController extends AppframeController {
 			'autoSub'    =>    true,    
 			'subName'    =>    array('date','Ymd'),
 		);
+		
+		if($table == 'mobile'){
+			$config['saveName'] = '';
+			$config['subName'] = 'mobile';
+		}
 		$upload = new \Think\Upload($config);// 实例化上传类
 		$info   =   $upload->upload();
 		if(!$info) {// 上传错误提示错误信息       			  
 			$this->error($upload->getError());    
-		}else{// 上传成功        
-			$path=$info['file']['savepath'].$info['file']['savename'];
+		}else{// 上传成功   
+			if($table == 'mobile'){
+				$path=$info['file']['savepath'].$info['file']['name'];
+			}else{
+				$path=$info['file']['savepath'].$info['file']['savename'];
+			}
+			
 			$data=$this->fileinfo($path);
 			$rul=$this->fileaddall($table,$data,$column);
 			$this->success('上传成功！');    			
