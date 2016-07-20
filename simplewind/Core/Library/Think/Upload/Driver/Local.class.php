@@ -74,8 +74,8 @@ class Local{
         $filename = $this->rootPath . $file['savepath'] . $file['savename'];
 
         /* 不覆盖同名文件 */ 
-        if (!$replace && is_file($filename)) {
-            $this->error = '存在同名文件' . $file['savename'];
+        if (!$replace && is_file(iconv('utf-8','gb2312',$filename))) {
+            $this->error = '存在同名文件：' . $file['savename'];
             return false;
         }
 
