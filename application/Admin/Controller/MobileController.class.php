@@ -63,7 +63,12 @@ class MobileController extends AdminbaseController{
 		}
 		
 		foreach($filesnames as $k=>$v){
-			$files_names['filename'] = iconv('gb2312','utf-8',$v);
+			$encode = $this->check_utf8($v);
+			if(!$encode){
+				$files_names['filename'] = iconv('gb2312','utf-8',$v);
+			}else{
+				$files_names['filename'] = $v;
+			}
 			
 			$modifytime = filemtime('./public/uploads/mobile/'.$v);
 			$files_names['filepath'] = date('Y-m-d H:i:s',$modifytime);
