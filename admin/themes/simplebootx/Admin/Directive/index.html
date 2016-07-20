@@ -16,6 +16,7 @@
 						<th>方法名</th>
 						<th>文件名称</th>
 						<th width="80">{:L('STATUS')}</th>
+						<th width="80">发布人</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</thead>
@@ -34,6 +35,7 @@
 							隐藏
 							</if>
 						</td>
+						<td>{$vo.username}</td>
 						<td>
 							<a href="{:U('Admin/Directive/edit',array('id'=>$vo['id']))}">修改</a>&nbsp;&nbsp;&nbsp;
 							<a class="js-ajax-delete" href="/index.php?g=&m=Directive&a=delete&id={$vo.id}">删除</a>
@@ -49,6 +51,7 @@
 						<th>方法名</th>
 						<th>文件名称</th>
 						<th width="80">{:L('STATUS')}</th>
+						<th width="80">发布人</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</tfoot>

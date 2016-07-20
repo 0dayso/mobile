@@ -22,6 +22,10 @@ class DirectiveController extends AdminbaseController {
 		$show = $Page->show();// 分页显示输出
 		
 		$list=D('instruct')->limit($Page->firstRow.','.$Page->listRows)->select();
+		foreach($list as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$list[$k]['username'] = $userinfo['user_login'];
+		}
         $this->assign('list',$list);
 		$this->assign('page',$show);
         $this->display('index');
@@ -52,7 +56,7 @@ class DirectiveController extends AdminbaseController {
 			}
 			$data['parame'] = serialize($parame_data);
 		}
-		
+		$data['authorid'] = session("ADMIN_ID");
         if($data){
             $result=$driectivemodel->add($data);            
 
@@ -110,7 +114,7 @@ class DirectiveController extends AdminbaseController {
 			}
 			$data['parame'] = serialize($parame_data);
 		}
-		
+		$data['authorid'] = session("ADMIN_ID");
         if($data){
             $result=$driectivemodel->where('id=%d',array($id))->save($data);            
 
