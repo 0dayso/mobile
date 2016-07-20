@@ -12,7 +12,8 @@
 					<tr>
 						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>					
-						<th>分类名称</th>		
+						<th>分类名称</th>	
+						<th width="80">发布人</th>	
 						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
@@ -23,6 +24,7 @@
 						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
 						<td>{$vo.id}</td>				
 						<td><a href="{:U('Equipment/actinfo',array('id'=>$vo['id']))}">{$vo.cate_name}</a></td>
+						<td>{$vo.username}</td>	
 						<!--<td>{$vo.status}</td>-->
 						<td>
 							<a href="{:U('Equipment/actedit',array('id'=>$vo['id']))}">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -35,7 +37,8 @@
 					<tr>
 						<th width="80">{:L('SORT')}</th>
 						<th width="50">ID</th>					
-						<th>分类名称</th>		
+						<th>分类名称</th>
+						<th width="80">发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>

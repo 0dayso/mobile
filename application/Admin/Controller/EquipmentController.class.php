@@ -112,6 +112,10 @@ class EquipmentController extends AdminbaseController {
 
     public function act(){        
         $data = D('equiact')->select();
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['userid']);
+			$data[$k]['username'] = $userinfo['user_login'];
+		}
 		
 		$this->assign('list',$data);
         $this->display();
@@ -143,8 +147,10 @@ class EquipmentController extends AdminbaseController {
 	public function savedata(){
 		$id = I('id');
 		$data=array(
-					'cate_name'=>I('cate_name')
+					'cate_name'=>I('cate_name'),
+					'userid' => session("ADMIN_ID")
 					);
+		
 		if($id > 0){
 			$data['createtime'] = time();
 			$result=D('equiact')->where('id=%d',array($id))->save($data);
