@@ -26,7 +26,9 @@ class MobileController extends AdminbaseController{
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
 		}
+		$countlist = M('mobile')->group('type')->getField('type,count(*)');
 		
+		$this->assign('countlist',$countlist);
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->assign('page',$show);
