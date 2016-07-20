@@ -235,11 +235,16 @@ class AdminbaseController extends AppframeController {
 	}
 	
 	protected function fileinfo($path){
+		if($this->check_utf8($path)){
+			$path = iconv("utf-8", "gb2312", $path);
+		}
+		
 		$path=getcwd().str_replace('/','\\',$path);
 		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
 		if(!file_exists($path)){
 			return '文件路径错误';
 		}
+		
 		$handle = @fopen($path, "r");
 		$arydata=array();
 		if ($handle) {
