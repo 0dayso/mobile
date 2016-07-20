@@ -250,6 +250,8 @@ class AdminbaseController extends AppframeController {
 		if ($handle) {
 		    while (!feof($handle)) {
 		        $buffer = fgets($handle, 4096);
+				$buffer = trim($buffer);
+				$buffer = str_replace(' ','',$buffer);
 		        $arydata[]=$buffer;
 		    }
 		    fclose($handle);
@@ -264,15 +266,19 @@ class AdminbaseController extends AppframeController {
 		foreach ($data as $k => $v) {
 			if(!empty($v)){
 				if(is_array($column)){
-					if(strpos($v,',') > 0){
-						$v = explode(',',$v);
-					}
+					$v = explode(',',$v);
 					foreach($column as $k1=>$v1){
+						if($table == 'Sign'){
+							$v[0] = substr($v[0],0,60);
+						}
 						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);
 						$one_da['authorid'] = session("ADMIN_ID");
 					}
 					$ary[] = $one_da;
 				}else{
+					if($table == 'Sign'){
+						$v = substr($v,0,60);
+					}
 					$t[$column]=iconv("gb2312","utf-8",$v);
 					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
@@ -281,7 +287,6 @@ class AdminbaseController extends AppframeController {
 				}
 			}
 		}
-		
 		$result=M($table)->addAll($ary);
 		return $result;
 	}
