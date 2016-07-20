@@ -18,9 +18,7 @@ class SignController extends AdminbaseController {
      */
     public function index() {
 		$count=M('Sign')->where('status=0')->count();
-		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
-		$Page->setConfig('prev','上一页');
-		$Page->setConfig('next','下一页');
+		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出

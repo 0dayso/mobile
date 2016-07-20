@@ -10,13 +10,20 @@ class DirectiveController extends AdminbaseController {
     *指令列表
     **/
     public function index(){
-        $list=D('instruct')->select();
+		$list=D('instruct')->select();
         $this->assign('list',$list);
         $this->display();
     }
     public function directivelist(){
-        $list=D('instruct')->select();
+        $count=M('instruct')->count();
+		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+		
+		$list=D('instruct')->limit($Page->firstRow.','.$Page->listRows)->select();
         $this->assign('list',$list);
+		$this->assign('page',$show);
         $this->display('index');
     }
     public function add(){
