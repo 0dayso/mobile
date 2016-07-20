@@ -28,7 +28,7 @@
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
-				</foreach>
+				</foreach>	
 				</tbody>
 <!-- 
 				<tfoot>
@@ -43,11 +43,9 @@
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
-					共有{$allcount}条信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					未检测有{$countlist[0]|default=0}条记录&nbsp;&nbsp;&nbsp;&nbsp;
-					异常有{$countlist[1]|default=0}条记录&nbsp;&nbsp;&nbsp;&nbsp;
-					正常有{$countlist[2]|default=0}条记录&nbsp;&nbsp;&nbsp;&nbsp;
-					性别为女的有{$countlist[3]|default=0}条记录
+				
+					总{$allcount|default=0}条，未检测{$countlist[0]|default=0}条，已检测{$countlist[1]+$countlist[2]+$countlist[3]}条，
+					未使用{$uselist[0]|default=0}条，已使用{$uselist[1]|default=0}条，女粉{$countlist[3]|default=0}条
 				</span>	
 				<div class="page" style="margin-top:10px;">
 				{$page}

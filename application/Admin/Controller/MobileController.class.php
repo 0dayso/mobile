@@ -27,9 +27,11 @@ class MobileController extends AdminbaseController{
 			$data[$k]['username'] = $userinfo['user_login'];
 		}
 		$countlist = M('mobile')->group('type')->getField('type,count(*)',true);
+		$uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
 		$allcount=M('mobile')->count();
 		
 		$this->assign('countlist',$countlist);
+		$this->assign('uselist',$uselist);
 		$this->assign('count',$count);
 		$this->assign('allcount',$allcount);
 		$this->assign('data',$data);
