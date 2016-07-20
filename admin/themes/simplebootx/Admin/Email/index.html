@@ -14,6 +14,7 @@
 						<th width="50">ID</th>
 						<th>邮箱</th>
 						<th>密码</th>
+						<th width="80">发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>-->
 					</tr>
@@ -25,6 +26,7 @@
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.email}</td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" >{$vo.pwd}</td>
+						<td>{$vo.username}</td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
@@ -36,6 +38,7 @@
 						<th width="50">ID</th>
 						<th>邮箱</th>
 						<th>密码</th>
+						<th width="80">发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>-->
 					</tr>

@@ -23,8 +23,11 @@ class EmailController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$data=M('Emailinfo')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd',true);
-
+		$data=M('Emailinfo')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid',true);
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$data[$k]['username'] = $userinfo['user_login'];
+		}
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->assign('page',$show);
