@@ -13,6 +13,7 @@
 					<tr>
 						<th width="50">ID</th>
 						<th>微信名称</th>
+						<th>发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>-->
 					</tr>
@@ -22,7 +23,8 @@
 				<foreach name="data" item="vo" key="k">
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.weixiname}</td>
+						<td width="80">{$vo.username}</td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
