@@ -17,7 +17,13 @@ class RuncodeController extends AdminbaseController {
      * 后台框架首页
      */
     public function index() {
-        $list=D('Runcode')->select();
+        $count=D('runcode')->count();
+		$Page = new \Think\Page($count,17,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+		$list=D('Runcode')->limit($Page->firstRow.','.$Page->listRows)->select();
+		
 		foreach($list as $k=>$v){
 			if($v['checkequ'] == 1){
 				$equiact_name = D('equiact')->where('id=%d',array($v['equiact_id']))->getfield('cate_name');
@@ -26,11 +32,12 @@ class RuncodeController extends AdminbaseController {
 				$equictive_name = D('equictive')->where('id=%d',array($v['equiact_id']))->getfield('cdkey');
 				$list[$k]['equictive_name'] = $equictive_name;
 			}
-			$userinfo = $this->Getuserbyid($v['userid']);
+			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		
         $this->assign('list',$list);
+		$this->assign('page',$show);
        	$this->display();
         
     }

@@ -40,7 +40,7 @@ class EquipmentController extends AdminbaseController {
 		}
 		
 		$count=D('equictive')->where($map)->count();
-		$Page = new \Think\Page($count,13,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page = new \Think\Page($count,7,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
@@ -53,6 +53,8 @@ class EquipmentController extends AdminbaseController {
 			$weiximap['cdkey'] = $v['cdkey'];
 			$numb = D('weixi')->where($weiximap)->count('cdkey');
 			$list[$k]['numb'] = $numb;
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		$aryi=D('runcode')->getField('id,taskname',true);
 		
@@ -110,6 +112,10 @@ class EquipmentController extends AdminbaseController {
 
     public function act(){        
         $data = D('equiact')->select();
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$data[$k]['username'] = $userinfo['user_login'];
+		}
 		
 		$this->assign('list',$data);
         $this->display();
@@ -141,8 +147,10 @@ class EquipmentController extends AdminbaseController {
 	public function savedata(){
 		$id = I('id');
 		$data=array(
-					'cate_name'=>I('cate_name')
+					'cate_name'=>I('cate_name'),
+					'authorid' => session("ADMIN_ID")
 					);
+		
 		if($id > 0){
 			$data['createtime'] = time();
 			$result=D('equiact')->where('id=%d',array($id))->save($data);

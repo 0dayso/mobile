@@ -23,11 +23,12 @@
 				<foreach name="data" item="vo" key="k">
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.mobile}</td>
+						<td width="80">{$vo.username}</td>
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
-				</foreach>
+				</foreach>	
 				</tbody>
 <!-- 
 				<tfoot>
@@ -42,7 +43,9 @@
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
-					还有{$count}条未操作信息
+				
+					总{$allcount|default=0}条，未检测{$countlist[0]|default=0}条，已检测{$countlist[1]+$countlist[2]+$countlist[3]}条，
+					未使用{$uselist[0]|default=0}条，已使用{$uselist[1]|default=0}条，女粉{$countlist[3]|default=0}条
 				</span>	
 				<div class="page" style="margin-top:10px;">
 				{$page}

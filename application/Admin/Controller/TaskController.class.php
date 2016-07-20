@@ -29,7 +29,7 @@ class TaskController extends AdminbaseController{
 			$list[$k]['mustt'] = $mustt_names;
 			$mingle_names = unserialize($v['mingle']);
 			$list[$k]['mingle'] = $mingle_names;
-			$userinfo = $this->Getuserbyid($v['userid']);
+			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		$this->assign('data',$data);
@@ -111,7 +111,7 @@ class TaskController extends AdminbaseController{
 		$parame['mingle_column'] = substr($parame['mingle_column'],0,-1);
 		$data['parame']=serialize($parame);
 		
-		$data['userid'] = session("ADMIN_ID");
+		$data['authorid'] = session("ADMIN_ID");
 
 		$runcode=D('runcode');			
 		$data=$runcode->create($data);
@@ -165,7 +165,7 @@ class TaskController extends AdminbaseController{
 			//$parame['nickename']=$_POST['nickename'];
 
 			$data['parame']=serialize($parame);
-			$data['userid'] = session("ADMIN_ID");
+			$data['authorid'] = session("ADMIN_ID");
 
 			$runcode=D('runcode');			
 			$data=$runcode->create($data);

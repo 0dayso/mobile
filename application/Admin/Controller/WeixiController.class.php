@@ -28,13 +28,16 @@ class WeixiController extends AdminbaseController {
 		}
 		
 		$count=D('weixi')->where($map)->count();
-		$Page = new \Think\Page($count,13,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page = new \Think\Page($count,10,$parameters);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
     	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
-		
+		foreach($list as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$list[$k]['username'] = $userinfo['user_login'];
+		}
     	$this->assign('list',$list);
 		$this->assign('parameters',$parameters);
 		$this->assign('page',$show);

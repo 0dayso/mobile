@@ -28,7 +28,8 @@
 						<th width="180">别名</th>								
 						<th>微信个数</th>
 						<th>设备分类</th>
-						<th>执行指令</th>		
+						<th>执行指令</th>	
+						<th width="80">发布人</th>	
 						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
@@ -44,6 +45,7 @@
 						<td>{$vo.cate_name}</td>
 						<td><a href="{:U('Task/taskinfo',array('id'=>$vo['runcodeid']))}">{$aryi[$vo['runcodeid']]}</a></td>
 						<!--<td>{$vo.status}</td>-->
+						<td>{$vo.username}</td>	
 						<td>
 							<a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a>
 							<a href="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">设置设备分类</a>
@@ -59,7 +61,8 @@
 						<th width="180">别名</th>								
 						<th>微信个数</th>
 						<th>设备分类</th>
-						<th>执行指令</th>		
+						<th>执行指令</th>
+						<th>分布人</th>						
 						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>

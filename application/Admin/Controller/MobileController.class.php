@@ -21,9 +21,19 @@ class MobileController extends AdminbaseController{
 		$Page->setConfig('last','末页');
         $show = $Page->show();// 分页显示输出
 		
-		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile',true);
+		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile,authorid',true);
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$data[$k]['username'] = $userinfo['user_login'];
+		}
+		$countlist = M('mobile')->group('type')->getField('type,count(*)',true);
+		$uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
+		$allcount=M('mobile')->count();
 		
+		$this->assign('countlist',$countlist);
+		$this->assign('uselist',$uselist);
 		$this->assign('count',$count);
+		$this->assign('allcount',$allcount);
 		$this->assign('data',$data);
 		$this->assign('page',$show);
 		$this->display();
@@ -63,7 +73,12 @@ class MobileController extends AdminbaseController{
 		}
 		
 		foreach($filesnames as $k=>$v){
-			$files_names['filename'] = iconv('gb2312','utf-8',$v);
+			$encode = $this->check_utf8($v);
+			if(!$encode){
+				$files_names['filename'] = iconv('gb2312','utf-8',$v);
+			}else{
+				$files_names['filename'] = $v;
+			}
 			
 			$modifytime = filemtime('./public/uploads/mobile/'.$v);
 			$files_names['filepath'] = date('Y-m-d H:i:s',$modifytime);

@@ -235,11 +235,16 @@ class AdminbaseController extends AppframeController {
 	}
 	
 	protected function fileinfo($path){
+		if($this->check_utf8($path)){
+			$path = iconv("utf-8", "gb2312", $path);
+		}
+		
 		$path=getcwd().str_replace('/','\\',$path);
 		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
 		if(!file_exists($path)){
 			return '文件路径错误';
 		}
+		
 		$handle = @fopen($path, "r");
 		$arydata=array();
 		if ($handle) {
@@ -263,11 +268,13 @@ class AdminbaseController extends AppframeController {
 						$v = explode(',',$v);
 					}
 					foreach($column as $k1=>$v1){
-						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);;
+						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);
+						$one_da['authorid'] = session("ADMIN_ID");
 					}
 					$ary[] = $one_da;
 				}else{
 					$t[$column]=iconv("gb2312","utf-8",$v);
+					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
 					$t['creaetetime']=time();
 					$ary[]=$t;
@@ -361,4 +368,28 @@ class AdminbaseController extends AppframeController {
 		return $userinfo;
 	}
 	
+	/*
+	 *检测utf8编码
+	 */
+	protected function check_utf8($str){  
+		$len = strlen($str);  
+		for($i = 0; $i < $len; $i++){  
+			$c = ord($str[$i]);  
+			if ($c > 128) {  
+				if (($c > 247)) return false;  
+				elseif ($c > 239) $bytes = 4;  
+				elseif ($c > 223) $bytes = 3;  
+				elseif ($c > 191) $bytes = 2;  
+				else return false;  
+				if (($i + $bytes) > $len) return false;  
+				while ($bytes > 1) {  
+					$i++;  
+					$b = ord($str[$i]);  
+					if ($b < 128 || $b > 191) return false;  
+					$bytes--;  
+				}  
+			}  
+		}  
+		return true;  
+	}
 }

@@ -4,7 +4,8 @@
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li ><a href="{:U('Equipment/act')}">分类列表</a></li>
-			<li class="active"><a href="{:U('Equipment/add')}">增加分类</a></li>
+			<li><a href="{:U('Equipment/actadd')}">添加分类</a></li>
+			<li class="active"><a href="{:U('Equipment/actedit')}">修改分类</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Equipment/savedata')}">
 			<input type="hidden" name="id" value="{$data.id}"/>
@@ -18,7 +19,7 @@
 				</div>
 			</fieldset>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
 				<a class="btn" href="{:U('Equipment/act')}">{:L('BACK')}</a>
 			</div>
 		</form>
