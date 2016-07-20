@@ -53,7 +53,7 @@ class EquipmentController extends AdminbaseController {
 			$weiximap['cdkey'] = $v['cdkey'];
 			$numb = D('weixi')->where($weiximap)->count('cdkey');
 			$list[$k]['numb'] = $numb;
-			$userinfo = $this->Getuserbyid($v['userid']);
+			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		$aryi=D('runcode')->getField('id,taskname',true);
@@ -113,7 +113,7 @@ class EquipmentController extends AdminbaseController {
     public function act(){        
         $data = D('equiact')->select();
 		foreach($data as $k=>$v){
-			$userinfo = $this->Getuserbyid($v['userid']);
+			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
 		}
 		
@@ -148,7 +148,7 @@ class EquipmentController extends AdminbaseController {
 		$id = I('id');
 		$data=array(
 					'cate_name'=>I('cate_name'),
-					'userid' => session("ADMIN_ID")
+					'authorid' => session("ADMIN_ID")
 					);
 		
 		if($id > 0){

@@ -23,7 +23,8 @@
 				<foreach name="data" item="vo" key="k">
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.mobile}</td>
+						<td>{$vo.username}</td>
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>

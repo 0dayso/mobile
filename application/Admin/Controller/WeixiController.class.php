@@ -35,7 +35,7 @@ class WeixiController extends AdminbaseController {
 		
     	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
 		foreach($list as $k=>$v){
-			$userinfo = $this->Getuserbyid($v['userid']);
+			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
     	$this->assign('list',$list);
