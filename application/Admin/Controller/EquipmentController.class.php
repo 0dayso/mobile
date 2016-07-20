@@ -53,6 +53,8 @@ class EquipmentController extends AdminbaseController {
 			$weiximap['cdkey'] = $v['cdkey'];
 			$numb = D('weixi')->where($weiximap)->count('cdkey');
 			$list[$k]['numb'] = $numb;
+			$userinfo = $this->Getuserbyid($v['userid']);
+			$list[$k]['username'] = $userinfo['user_login'];
 		}
 		$aryi=D('runcode')->getField('id,taskname',true);
 		

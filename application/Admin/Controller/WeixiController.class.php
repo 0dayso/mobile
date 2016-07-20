@@ -34,7 +34,10 @@ class WeixiController extends AdminbaseController {
 		$show = $Page->show();// 分页显示输出
 		
     	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
-		
+		foreach($list as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['userid']);
+			$list[$k]['username'] = $userinfo['user_login'];
+		}
     	$this->assign('list',$list);
 		$this->assign('parameters',$parameters);
 		$this->assign('page',$show);

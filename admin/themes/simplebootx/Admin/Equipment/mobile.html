@@ -45,7 +45,7 @@
 						<td>{$vo.cate_name}</td>
 						<td><a href="{:U('Task/taskinfo',array('id'=>$vo['runcodeid']))}">{$aryi[$vo['runcodeid']]}</a></td>
 						<!--<td>{$vo.status}</td>-->
-						<td></td>	
+						<td>{$vo.username}</td>	
 						<td>
 							<a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a>
 							<a href="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">设置设备分类</a>
