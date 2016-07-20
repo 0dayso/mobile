@@ -263,11 +263,13 @@ class AdminbaseController extends AppframeController {
 						$v = explode(',',$v);
 					}
 					foreach($column as $k1=>$v1){
-						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);;
+						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);
+						$one_da['authorid'] = session("ADMIN_ID");
 					}
 					$ary[] = $one_da;
 				}else{
 					$t[$column]=iconv("gb2312","utf-8",$v);
+					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
 					$t['creaetetime']=time();
 					$ary[]=$t;
