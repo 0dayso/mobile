@@ -98,11 +98,6 @@ class MobilecateController extends AdminbaseController{
 		echo json_encode($roleuser);
 	}
 	
-	protected function GetUserById($userid){
-		$data = D('users')->field('id,user_login')->where('id=%d',array($userid))->find();
-		return $data;
-	}
-	
 	public function saveaccredit(){
 		$id = I('id');
 		$accredit = I('accredit');
