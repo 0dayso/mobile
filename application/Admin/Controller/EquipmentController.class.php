@@ -152,10 +152,10 @@ class EquipmentController extends AdminbaseController {
 					);
 		
 		if($id > 0){
-			$data['createtime'] = time();
+			$data['modifytime'] = time();
 			$result=D('equiact')->where('id=%d',array($id))->save($data);
 		}else{
-			$data['modifytime'] = time();
+			$data['createtime'] = time();
 			$result=D('equiact')->add($data);
 		}
 		if($result){
