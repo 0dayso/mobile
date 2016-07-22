@@ -133,5 +133,22 @@ class WxwapiController extends Controller {
 
 
 
+
+    /*
+    *随机生成微信号
+     */
+    public function whacthao(length = 6){
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+        $wxhao='';
+            for ( $i = 0; $i < $length; $i++ ) {  
+                
+                $wxhao .= $chars[ mt_rand(0, strlen($chars) - 1) ];  
+            }  
+            return $wxhao;  
+            } 
+    }
+    
+    
+
 }
 
