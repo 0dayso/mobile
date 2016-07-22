@@ -15,11 +15,20 @@ class UserController extends AdminbaseController{
 
 		$users = $this->users_model->alias("ul")
 		->field('*,count')
-		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
+		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE status=1 and userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
 		->where(array("user_type"=>1))
 		->order("create_time DESC")
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
+		
+		foreach($users as $k=>$v){
+			$ucounts = $this->GetOperateCount(4,$v['id']);
+			$users[$k]['ucounts'] = $ucounts;
+		}
+		
+		$allcountlist['allcounts'] = $this->GetOperateCount();
+		$allcountlist['todaycounts'] = $this->GetOperateCount(2);
+		$allcountlist['machcounts'] = $this->GetOperateCount(3);
 		
 		$roles_src=$this->role_model->select();
 		$roles=array();
@@ -27,12 +36,33 @@ class UserController extends AdminbaseController{
 			$roleid=$r['id'];
 			$roles["$roleid"]=$r;
 		}
+		
+		$this->assign("allcountlist",$allcountlist);
 		$this->assign("page", $page->show('Admin'));
 		$this->assign("roles",$roles);
 		$this->assign("users",$users);
 		$this->display();
 	}
-	
+	/**
+	 *获取操作个数
+	 *$type:1-默认所有,2-今天所有,3-机器操作所有,4-用户所有
+	 *$userid:用户id
+	 */
+	protected function GetOperateCount($type='1',$userid){
+		$map['status'] = 1;
+		if($type == 2){
+			$map["updatetime"] = array('gt',strtotime(date("Y-m-d",time())));
+			$map2["updatetime"] = array('elt',strtotime(date("Y-m-d 23:59:59",time())));
+			$map['_complex'] = $map2;
+			
+		}else if($type == 3){
+			$map['userid'] = 0;
+		}else if($type == 4 && $userid > 0){
+			$map['userid'] = $userid;
+		}
+		$operatecounts = D('mobile')->where($map)->count();
+		return $operatecounts;
+	}
 	
 	function add(){
 		$roles=$this->role_model->where("status=1")->order("id desc")->select();

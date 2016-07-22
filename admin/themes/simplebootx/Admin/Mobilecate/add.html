@@ -3,10 +3,10 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li ><a href="{:U('Equipment/act')}">分类列表</a></li>
-			<li class="active"><a href="{:U('Equipment/actadd')}">增加分类</a></li>
+			<li ><a href="{:U('Mobilecate/index')}">分类列表</a></li>
+			<li class="active"><a href="{:U('Mobilecate/add')}">增加分类</a></li>
 		</ul>
-		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Equipment/savedata')}">
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Mobilecate/savedata')}">
 			<fieldset>
 				<div class="control-group">
 					<label class="control-label">分类名称:</label>
@@ -18,7 +18,7 @@
 			</fieldset>
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
-				<a class="btn" href="{:U('Equipment/act')}">{:L('BACK')}</a>
+				<a class="btn" href="{:U('Mobilecate/index')}">{:L('BACK')}</a>
 			</div>
 		</form>
 	</div>

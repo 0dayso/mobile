@@ -1,0 +1,100 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Mobilecate/index')}">分类列表</a></li>
+			<li><a href="{:U('Mobilecate/add')}">增加分类</a></li>
+			<li class="active"><a href="{:U('Mobilecate/accredit',array('id'=>$data['id']))}">授权设置</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Mobilecate/saveaccredit')}">
+			<input type="hidden" name="id" value="{$data.id}"/>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">分类名称:</label>
+					<div class="controls" style="padding-top:5px;">
+						{$data.cate_name}
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">角色筛选:</label>
+					<div class="controls" style="padding-top:5px;">
+						<select class="select_2" name="roleid" onchange="getuserbyrole(this);">
+							<option value="0">全部</option>
+							<foreach name="roleslist" item="val">
+							<option value="{$val.id}">{$val.name}</option>
+							</foreach>
+						</select>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"><span class="form-required">*</span>授权用户:</label>
+					<div class="controls" id="accredit" accredit="{$data.accredit}">	
+						<table width="100%" id="accredit_table">
+							<foreach name="userslist" item="val" key="k">
+								<if condition="$k%5 == 0">
+								<tr>
+								</if>
+									<td>
+										<label><input class="accredit" type="checkbox" value="{$val.id}" name="accredit[]">&nbsp;&nbsp;{$val.user_login}</label>
+									</td>
+								<if condition="$k != 0 && ($k-4)%5 == 0">
+								</tr>
+								</if>
+							</foreach>
+						</table>
+					</div>
+				</div>
+			</fieldset>
+			
+				
+			
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="{:U('Mobilecate/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$(function(){
+			delfault_checked('accredit');
+		})
+		
+		function delfault_checked(idname){
+			$('#'+idname+' .'+idname).each(function(){
+				var cur_val = $('#'+idname).attr(idname);
+				var val = $(this).val();
+				var str_index = cur_val.indexOf(val);
+				if(str_index >= 0){
+					$(this).attr('checked','checked');
+				}else{
+					$(this).removeAttr('checked');
+				}
+			})
+		}
+		
+		function getuserbyrole(obj){
+			var roleid = $(obj).val();
+			var url = "{:U('Mobilecate/GetUserByRole')}";
+			$.post(url,{roleid:roleid},function(data){
+				var data = eval('('+data+')');
+				var html = '';
+				for(i=0;i<data.length;i++){
+					if(i%5 == 0){
+						html += '<tr>';
+					}
+					html += '<td>\
+								<label><input class="accredit" type="checkbox" value="'+data[i].user_id+'" name="accredit[]">&nbsp;&nbsp;'+data[i].user_login+'</label>\
+							</td>';
+					if((i-4)%5 == 0){
+						html += '</tr>';
+					}
+				}
+				$('#accredit_table').html(html);
+				delfault_checked('accredit');
+			})
+		}
+	</script>
+</body>
+</html>

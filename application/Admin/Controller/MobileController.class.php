@@ -21,8 +21,10 @@ class MobileController extends AdminbaseController{
 		$Page->setConfig('last','末页');
         $show = $Page->show();// 分页显示输出
 		
-		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile,authorid',true);
+		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile,cate_id,authorid',true);
 		foreach($data as $k=>$v){
+			$cateinfo = $this->GetCatebyid($v['cate_id']);
+			$data[$k]['cate_name'] = $cateinfo['cate_name'];
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
 		}
@@ -38,7 +40,12 @@ class MobileController extends AdminbaseController{
 		$this->assign('page',$show);
 		$this->display();
 	}
-
+	
+	protected function GetCatebyid($id){
+		$cateinfo = D('Mobilecate')->field('id,cate_name')->where('id=%d',array($id))->find();
+		return $cateinfo;
+	}
+	
 	public function update(){
 		$id=I('id');
 
@@ -88,6 +95,32 @@ class MobileController extends AdminbaseController{
 		$this->assign('cq',count($data));
 		$this->assign('fileinfo',$fileinfo);
 		$this->display();
+	}
+	/*
+	 *设置手机分类
+	 */
+	public function mobilecate(){
+		$id = I('id');
+		$data = D('mobile')->where('id=%d',array($id))->field('id,mobile,cate_id')->find();
+		$catelist=D('mobilecate')->field('id,cate_name')->select();
+		
+		$this->assign('data',$data);
+		$this->assign('catelist',$catelist);
+		$this->display();
+	}
+	/*
+	 *设置手机分类保存
+	 */
+	public function savemobilecate(){
+		$id = I('id');
+		$cate_id = I('cate_id');
+		$data['cate_id'] = $cate_id;
+		$result = D('mobile')->where('id=%d',array($id))->save($data);
+		if($result){
+			$this->success('设置成功',U('Mobile/index'));
+		}else{
+			$this->error('设置失败');
+		}
 	}
 	
 	public function uploadmobile(){

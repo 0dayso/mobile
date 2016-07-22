@@ -6,6 +6,7 @@
 			<li class="active"><a href="{:U('mobile/index')}">手机号码管理</a></li>
 			<li><a href="{:U('mobile/add')}">添加手机号码</a></li>
 			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
+			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
 		</ul>
 		<form class="js-ajax-form" action="{:U('Mobile/index')}" method="post">
 
@@ -24,7 +25,9 @@
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.mobile}</td>
+						<td width="80">{$vo.cate_name}</td>
 						<td width="80">{$vo.username}</td>
+						<td width="80"><a href="{:U('Admin/Mobile/mobilecate',array('id'=>$vo['id']))}">设置分类</a></td>
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
