@@ -15,7 +15,7 @@ class UserController extends AdminbaseController{
 
 		$users = $this->users_model->alias("ul")
 		->field('*,count')
-		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
+		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE status=1 and userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
 		->where(array("user_type"=>1))
 		->order("create_time DESC")
 		->limit($page->firstRow . ',' . $page->listRows)
