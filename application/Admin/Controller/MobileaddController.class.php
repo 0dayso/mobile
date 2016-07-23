@@ -11,19 +11,34 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		$GLOBALS['z']=$GLOBALS['z']+1;
-		
+
+		M()->startTrans();
 		$count=M('mobile')->where('status=0 and type=2')->count();            
 
         $nub=rand(1,$count);
         // if($count>$GLOBALS['z']){
         // 	$GLOBALS['z']=1;
         // }
-
         if($count<$nub+5){
         	$nub=$count;
         }
-		
-		$data=M('mobile')->where('status=0 and type=2')->limit($nub,5)->getfield('id,mobile',true);
+        $isallsave=true;
+        $nub=1;
+
+		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);
+		foreach ($data as $key => $value) {
+			$t=M('mobile')->where("id=%d",array($key))->setField('isshow',1);	
+			if(!$t){
+			    $isallsave=false;
+			}
+		}
+		M()->commit();
+
+		if(!$isallsave){
+			M()->rollback();
+			$data='';
+		}
+
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
