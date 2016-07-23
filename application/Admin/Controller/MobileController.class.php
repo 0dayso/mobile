@@ -89,8 +89,13 @@ class MobileController extends AdminbaseController{
 			
 			$modifytime = filemtime('./public/uploads/mobile/'.$v);
 			$files_names['filepath'] = date('Y-m-d H:i:s',$modifytime);
-			$fileinfo[] = $files_names;
+			$fileinfo[$modifytime] = $files_names;
 		}
+		
+		foreach($fileinfo as $k=>$v){
+			$sort[$k] = $k;
+		}
+		array_multisort($sort,SORT_DESC,SORT_NUMERIC,$fileinfo);
 		
 		$this->assign('cq',count($data));
 		$this->assign('fileinfo',$fileinfo);
