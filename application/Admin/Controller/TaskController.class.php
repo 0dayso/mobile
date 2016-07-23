@@ -61,8 +61,8 @@ class TaskController extends AdminbaseController{
 		foreach($instruct as $k=>$v){
 			$instruct[$k]['parame'] = unserialize($v['parame']);
 			foreach($instruct[$k]['parame'] as $k1=>$v1){
-				$mustts_column[$k] = 'mustt_'.$v1['column']['name'];
-				$mingle_column[$k] = 'mingle_'.$v1['column']['name'];
+				$mustts_column[$k][$k1] = 'mustt_'.$v1['column']['name'];
+				$mingle_column[$k][$k1] = 'mingle_'.$v1['column']['name'];
 			}
 		}
 		
