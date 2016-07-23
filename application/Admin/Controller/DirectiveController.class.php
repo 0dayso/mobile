@@ -42,18 +42,18 @@ class DirectiveController extends AdminbaseController {
 			foreach($parame as $k=>$v){
 				$parame[$k] = explode(':',$v);
 				foreach($parame[$k] as $k1=>$v1){
-					if(strpos($v1,'-') > 0){
+					if($k1 == 0 && strpos($v1,'-') > 0){
 						$parame[$k]['column'] = explode('-',$v1);
 						$parame_data[$k]['column']['name'] = $parame[$k]['column']['0'];
 						$parame_data[$k]['column']['text_name'] = $parame[$k]['column']['1'];
-					}else{
+					}else if($k1 == 0 && (strpos($v1,'-') < 0 || strpos($v1,'-') == '')){
 						$parame_data[$k]['column']['name'] = $v1;
-					}
-					if(strpos($v1,',') > 0){
+					}else if($k1 == 1 && strpos($v1,',') > 0){
 						$parame_data[$k]['vals'] = explode(',',$v1);
 					}
 				}
 			}
+			
 			$data['parame'] = serialize($parame_data);
 		}
 		$data['authorid'] = session("ADMIN_ID");
@@ -100,18 +100,18 @@ class DirectiveController extends AdminbaseController {
 			foreach($parame as $k=>$v){
 				$parame[$k] = explode(':',$v);
 				foreach($parame[$k] as $k1=>$v1){
-					if(strpos($v1,'-') > 0){
+					if($k1 == 0 && strpos($v1,'-') > 0){
 						$parame[$k]['column'] = explode('-',$v1);
 						$parame_data[$k]['column']['name'] = $parame[$k]['column']['0'];
 						$parame_data[$k]['column']['text_name'] = $parame[$k]['column']['1'];
-					}else{
+					}else if($k1 == 0 && (strpos($v1,'-') < 0 || strpos($v1,'-') == '')){
 						$parame_data[$k]['column']['name'] = $v1;
-					}
-					if(strpos($v1,',') > 0){
+					}else if($k1 == 1 && strpos($v1,',') > 0){
 						$parame_data[$k]['vals'] = explode(',',$v1);
 					}
 				}
 			}
+			
 			$data['parame'] = serialize($parame_data);
 		}
 		$data['authorid'] = session("ADMIN_ID");
