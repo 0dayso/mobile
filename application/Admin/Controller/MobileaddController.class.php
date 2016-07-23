@@ -34,22 +34,24 @@ class MobileaddController extends AdminbaseController{
 
 	public function update(){
 		$id=I('id');
-
+		
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
 			$this->ajaxreturn($data);
 		}
+		M()->startTrans();
 		$data['status']=1;		
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
-
 		$data1=M('mobile')->where('id='.$id)->save($data);
 		if($data1){
+			M()->commit();
 			$data['status']=1;	
 			$this->ajaxreturn($data);
 			exit();
 		}
+		M()->rollback();
 		$data['status']=0;	
 		$this->ajaxreturn($data);
 		exit();
