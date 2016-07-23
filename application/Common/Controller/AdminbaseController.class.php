@@ -243,12 +243,18 @@ class AdminbaseController extends AppframeController {
 				if(count($datas) > 20000){
 					for($i=1;$i<=count($datas);$i++){
 						$tary[]=$datas[$i-1];
+						
 						if($i%20000==0 OR $i==count($datas)){
-							
 							//分文件
-							//找分文件再保存，3份就执行3份
+							$index = ceil($i/20000);
+							$tary = implode("\r\n",$tary);
+							$ff_filepath = '.'.$info['file']['savepath'].$index.$info['file']['name'];
+							$this->leadin($tary,$ff_filepath);
 							
-							$rul=$this->fileaddall($table,$tary,$column);	
+							//找分文件再保存，有3份就执行3份
+							$data_ff = $this->fileinfo($ff_filepath);
+							$rul=$this->fileaddall($table,$data_ff,$column);	
+							
 							unset($tary);
 						}
 					}
