@@ -253,14 +253,14 @@ class AdminbaseController extends AppframeController {
 						}
 					}
 				}else{
-					$rul=$this->fileaddall($table,$tary,$column);	
+					$rul=$this->fileaddall($table,$datas,$column);	
 				}
 				
 				$errordatas = implode("\r\n",$errordata);
 				$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
 				$this->leadin($errordatas,$filepath);
 			}else{
-				$rul=$this->fileaddall($table,$data,$column);	
+				$rul=$this->fileaddall($table,$datas,$column);	
 			}
 			
 			if($rul){
