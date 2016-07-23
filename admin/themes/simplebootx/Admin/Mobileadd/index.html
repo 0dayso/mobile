@@ -139,10 +139,9 @@
 				var id=$(this).find('.keyinfo').val();
 				$.post(url,{'id':id},function(data){	
 					if(data.status=="1"){						
-						$("#vl"+id).html('已');
-					
+						$("#vl"+id).html('已');					
 					}else{
-						$("#vl"+id).html('已');
+						$("#vl"+id).html('未');
 					}				
 				});
 			});
