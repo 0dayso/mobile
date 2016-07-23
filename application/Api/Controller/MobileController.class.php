@@ -8,20 +8,16 @@ use Think\Controller;
 class MobileController extends Controller {
 	//显示之前就修改状态
     public function index() {
-        $count=M('mobile')->where('status=0 and type=2')->count();            
-        $nub=rand(1,$count);
-    	$data=M('mobile')->field('id,mobile')->where('status=%d and type=2',0)->limit($nub,1)->select();
-    	if($data){
-    		$info['status']=1;
-    		$result=M('mobile')->where('id=%d',$data[0]['id'])->save($info);
-    		if($result){
-    			echo $data[0]['mobile'];
-    		}else{
-    			echo 0;
-    		}
-    		exit();
-    	}    	
-    	echo 0;
+        M()->startTrans();        
+    	$data=M('mobile')->field('id,mobile')->where('status=%d and type=2 and isshow=0',0)->lock(true)->find();
+        $t=M('mobile')->where("id=%d",$data['id'])->setField('isshow',1); 
+        M()->commit();
+        if(!$t){
+            M()->rollback();
+            echo 0;
+            exit();
+        }
+        echo $data['mobile'];
         exit();
     }
     //显示一个手机号码
