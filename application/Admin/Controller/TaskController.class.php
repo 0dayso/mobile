@@ -60,14 +60,16 @@ class TaskController extends AdminbaseController{
 		$instruct=D('instruct')->select();
 		foreach($instruct as $k=>$v){
 			$instruct[$k]['parame'] = unserialize($v['parame']);
+			foreach($instruct[$k]['parame'] as $k1=>$v1){
+				$mustts_column[$k] = 'mustt_'.$v1['column']['name'];
+				$mingle_column[$k] = 'mingle_'.$v1['column']['name'];
+			}
 		}
-		$mustts_column = explode(',',$data['parame']['mustts_column']);
-		$mingle_column = explode(',',$data['parame']['mingle_column']);
 		
         $this->assign('instruct',$instruct);	
 		$this->assign('data',$data);
 		$this->assign('mustts_column',$mustts_column);	
-		$this->assign('mingle_column',$mingle_column);			
+		$this->assign('mingle_column',$mingle_column);				
 		$this->display();
 	}
 	
