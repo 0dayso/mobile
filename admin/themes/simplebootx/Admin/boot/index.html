@@ -53,13 +53,25 @@ var GV = {
 							$menu_name=L($menu['lang']);
 							$menu_name=$menu['lang']==$menu_name?$menu['name']:$menu_name;
 						</php>
-						<php>if(empty($menu['items'])){</php>
-							<a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu_name}',true);">
-								<i class="fa fa-{$menu.icon|default='desktop'}"></i>
-								<span class="menu-text">
-									{$menu_name}
-								</span>
-							</a>
+						<php>if(empty($menu['items'])){</php>					
+							<php>if($menu['id']==177){</php>
+								<a href="{$menu.url}">
+									<i class="fa fa-{$menu.icon|default='desktop'}"></i>
+									<span class="menu-text">
+										{$menu_name}
+									</span>
+								</a>
+							<php>}else{</php>
+								<a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu_name}',true);">
+									<i class="fa fa-{$menu.icon|default='desktop'}"></i>
+									<span class="menu-text">
+										{$menu_name}
+									</span>
+								</a>
+							<php>}</php>
+
+
+							
 						<php>}else{</php>
 							<a href="#" class="dropdown-toggle">
 								<i class="fa fa-{$menu.icon|default='desktop'} normal"></i>
@@ -191,6 +203,7 @@ right: initial !important;}
 							</if>
 							<span class="user-info">
 								{:L('WELCOME_USER',array('username'=>empty($admin['user_nicename'])?$admin['user_login']:$admin['user_nicename']))}
+
 							</span>
 							<i class="fa fa-caret-down"></i>
 						</a>
@@ -216,7 +229,7 @@ right: initial !important;}
 			</div> -->
 			<div id="nav_wraper">
 			<ul class="nav nav-list">
-				{:getsubmenu($submenus)}
+				{:getsubmenu($submenus)}				
 			</ul>
 			</div>
 			
