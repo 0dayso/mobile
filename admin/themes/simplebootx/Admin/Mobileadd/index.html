@@ -44,6 +44,41 @@
 <body>
 
 <div class="navbar">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a href="{:U('index/index')}" class="brand"> <small> 
+				<img src="__TMPL__Public/assets/images/logo-18.png">
+						ThinkCMF {:L('ADMIN_CENTER')}
+				</small>
+				</a>
+				<ul class="nav simplewind-nav pull-right">
+					<li class="light-blue">
+						<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+    						<if condition="$admin['avatar']">
+								<img class="nav-user-photo" width="30" height="30" src="{:sp_get_user_avatar_url($admin['avatar'])}" alt="{$admin.user_login}">
+							<else />
+								<img class="nav-user-photo" width="30" height="30" src="__TMPL__Public/assets/images/logo-18.png" alt="{$admin.user_login}">
+							</if>
+							<span class="user-info">
+								{:L('WELCOME_USER',array('username'=>empty($admin['user_nicename'])?$admin['user_login']:$admin['user_nicename']))}
+							</span>
+							<i class="fa fa-caret-down"></i>
+						</a>
+						<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+							<if condition="sp_auth_check(sp_get_current_admin_id(),'admin/setting/site')">
+								<li><a href="javascript:openapp('{:U('setting/site')}','index_site','{:L('ADMIN_SETTING_SITE')}');"><i class="fa fa-cog"></i> {:L('ADMIN_SETTING_SITE')}</a></li>
+							</if>
+							<if condition="sp_auth_check(sp_get_current_admin_id(),'admin/user/userinfo')">
+								<li><a href="javascript:openapp('{:U('user/userinfo')}','index_userinfo','{:L('ADMIN_USER_USERINFO')}');"><i class="fa fa-user"></i> {:L('ADMIN_USER_USERINFO')}</a></li>
+							</if>
+							<li><a href="{:U('Public/logout')}"><i class="fa fa-sign-out"></i> {:L('LOGOUT')}</a></li>
+							<li>{$count}</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>	
 	<div class="wrap js-check-wrap">
 
 		<form class="js-ajax-form" action="{:U('Mobileadd/index')}" method="post">
