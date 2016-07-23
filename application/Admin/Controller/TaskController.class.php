@@ -100,17 +100,15 @@ class TaskController extends AdminbaseController{
 		foreach($parame_mustts as $k=>$v){
 			if(isset($parame_mustts[$k]) && $v !=''){
 				$parame[$k] = $v;
-				$parame['mustts_column'] .= $k.',';
 			}
 		}
-		$parame['mustts_column'] = substr($parame['mustts_column'],0,-1);
+		
 		foreach($parame_mingle as $k=>$v){
 			if(isset($parame_mingle[$k]) && $v !=''){
 				$parame[$k] = $v;
-				$parame['mingle_column'] .= $k.',';
 			}
 		}	
-		$parame['mingle_column'] = substr($parame['mingle_column'],0,-1);
+		
 		$data['parame']=serialize($parame);
 		
 		$data['authorid'] = session("ADMIN_ID");
@@ -154,18 +152,16 @@ class TaskController extends AdminbaseController{
 			$parame_mustts = $this->coldata('mustt');
 			$parame_mingle = $this->coldata('mingle');
 			foreach($parame_mustts as $k=>$v){
-				if(isset($parame_mustts[$k]) && $v !='' && $v != 0){
+				if(isset($parame_mustts[$k]) && $v !=''){
 					$parame[$k] = $v;
 				}
 			}
 			foreach($parame_mingle as $k=>$v){
-				if(isset($parame_mingle[$k]) && $v !='' && $v != 0){
+				if(isset($parame_mingle[$k]) && $v !=''){
 					$parame[$k] = $v;
 				}
 			}
 			
-			//$parame['nickename']=$_POST['nickename'];
-
 			$data['parame']=serialize($parame);
 			$data['authorid'] = session("ADMIN_ID");
 
