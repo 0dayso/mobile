@@ -60,14 +60,16 @@ class TaskController extends AdminbaseController{
 		$instruct=D('instruct')->select();
 		foreach($instruct as $k=>$v){
 			$instruct[$k]['parame'] = unserialize($v['parame']);
+			foreach($instruct[$k]['parame'] as $k1=>$v1){
+				$mustts_column[$k][$k1] = 'mustt_'.$v1['column']['name'];
+				$mingle_column[$k][$k1] = 'mingle_'.$v1['column']['name'];
+			}
 		}
-		$mustts_column = explode(',',$data['parame']['mustts_column']);
-		$mingle_column = explode(',',$data['parame']['mingle_column']);
 		
         $this->assign('instruct',$instruct);	
 		$this->assign('data',$data);
 		$this->assign('mustts_column',$mustts_column);	
-		$this->assign('mingle_column',$mingle_column);			
+		$this->assign('mingle_column',$mingle_column);				
 		$this->display();
 	}
 	
@@ -98,17 +100,15 @@ class TaskController extends AdminbaseController{
 		foreach($parame_mustts as $k=>$v){
 			if(isset($parame_mustts[$k]) && $v !=''){
 				$parame[$k] = $v;
-				$parame['mustts_column'] .= $k.',';
 			}
 		}
-		$parame['mustts_column'] = substr($parame['mustts_column'],0,-1);
+		
 		foreach($parame_mingle as $k=>$v){
 			if(isset($parame_mingle[$k]) && $v !=''){
 				$parame[$k] = $v;
-				$parame['mingle_column'] .= $k.',';
 			}
 		}	
-		$parame['mingle_column'] = substr($parame['mingle_column'],0,-1);
+		
 		$data['parame']=serialize($parame);
 		
 		$data['authorid'] = session("ADMIN_ID");
@@ -152,18 +152,16 @@ class TaskController extends AdminbaseController{
 			$parame_mustts = $this->coldata('mustt');
 			$parame_mingle = $this->coldata('mingle');
 			foreach($parame_mustts as $k=>$v){
-				if(isset($parame_mustts[$k]) && $v !='' && $v != 0){
+				if(isset($parame_mustts[$k]) && $v !=''){
 					$parame[$k] = $v;
 				}
 			}
 			foreach($parame_mingle as $k=>$v){
-				if(isset($parame_mingle[$k]) && $v !='' && $v != 0){
+				if(isset($parame_mingle[$k]) && $v !=''){
 					$parame[$k] = $v;
 				}
 			}
 			
-			//$parame['nickename']=$_POST['nickename'];
-
 			$data['parame']=serialize($parame);
 			$data['authorid'] = session("ADMIN_ID");
 

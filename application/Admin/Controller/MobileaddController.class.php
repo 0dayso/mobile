@@ -11,19 +11,23 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		$GLOBALS['z']=$GLOBALS['z']+1;
-		
-		$count=M('mobile')->where('status=0 and type=2')->count();            
+		M()->startTrans();
+		$count=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
+        $isallsave=true;  
+		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);
+		foreach ($data as $key => $value) {
+			$t=M('mobile')->where("id=%d",array($key))->setField('isshow',1);	
+			if(!$t){
+			    $isallsave=false;
+			}
+		}
+		M()->commit();
 
-        $nub=rand(1,$count);
-        // if($count>$GLOBALS['z']){
-        // 	$GLOBALS['z']=1;
-        // }
+		if(!$isallsave){
+			M()->rollback();
+			$data='';
+		}
 
-        if($count<$nub+5){
-        	$nub=$count;
-        }
-		
-		$data=M('mobile')->where('status=0 and type=2')->limit($nub,5)->getfield('id,mobile',true);
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
@@ -31,22 +35,24 @@ class MobileaddController extends AdminbaseController{
 
 	public function update(){
 		$id=I('id');
-
+		
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
 			$this->ajaxreturn($data);
 		}
+		M()->startTrans();
 		$data['status']=1;		
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
-
 		$data1=M('mobile')->where('id='.$id)->save($data);
 		if($data1){
+			M()->commit();
 			$data['status']=1;	
 			$this->ajaxreturn($data);
 			exit();
 		}
+		M()->rollback();
 		$data['status']=0;	
 		$this->ajaxreturn($data);
 		exit();

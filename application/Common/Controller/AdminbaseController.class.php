@@ -203,7 +203,7 @@ class AdminbaseController extends AppframeController {
 	 */
 	protected function upload_weixin_resourse($table,$column){
 		$config = array(    
-			'maxSize'    =>    3145728, 	
+			'maxSize'    =>    200*1024*1024, 	
 			'rootPath'	 =>		'.',
 			'savePath'   =>    '/public/uploads/',    
 			'saveName'   =>    array('uniqid',''),    
@@ -229,9 +229,60 @@ class AdminbaseController extends AppframeController {
 			}
 			
 			$data=$this->fileinfo($path);
-			$rul=$this->fileaddall($table,$data,$column);
-			$this->success('上传成功！');    			
+			if($table == 'mobile'){
+				$taryt=array();
+				
+				foreach($data as $k=>$v){
+					if(strlen($v) <11 || strlen($v) > 11){
+						$errordata[] = $v;
+					}else{
+						$datas[] = $v;
+					}
+				}
+				
+				if(count($datas) > 20000){
+					for($i=1;$i<=count($datas);$i++){
+						$tary[]=$datas[$i-1];
+						
+						if($i%20000==0 OR $i==count($datas)){
+							//分文件
+							$index = ceil($i/20000);
+							$tary = implode("\r\n",$tary);
+							$ff_filepath = '.'.$info['file']['savepath'].$index.$info['file']['name'];
+							$this->leadin($tary,$ff_filepath);
+							
+							//找分文件再保存，有3份就执行3份
+							$data_ff = $this->fileinfo($ff_filepath);
+							$rul=$this->fileaddall($table,$data_ff,$column);	
+							
+							unset($tary);
+						}
+					}
+				}else{
+					$rul=$this->fileaddall($table,$datas,$column);	
+				}
+				if(!empty($errordatas) || $errordatas != ''){
+					$errordatas = implode("\r\n",$errordata);
+					$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
+					$this->leadin($errordatas,$filepath);
+				}
+			}else{
+				$rul=$this->fileaddall($table,$data,$column);	
+			}
+			
+			if($rul){
+				$this->success('上传成功！'); 
+			}
+			   			
 		}
+	}
+	/*
+	 *生成txt文件
+	 */
+	protected function leadin($errordatas,$filepath){
+		$file = @fopen($filepath,'w');
+		$result = fwrite($file,$errordatas);
+		fclose($file);
 	}
 	
 	protected function fileinfo($path){
@@ -240,7 +291,6 @@ class AdminbaseController extends AppframeController {
 		}
 		
 		$path=getcwd().str_replace('/','\\',$path);
-		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
 		if(!file_exists($path)){
 			return '文件路径错误';
 		}
@@ -287,6 +337,7 @@ class AdminbaseController extends AppframeController {
 				}
 			}
 		}
+		
 		$result=M($table)->addAll($ary);
 		return $result;
 	}
@@ -369,7 +420,7 @@ class AdminbaseController extends AppframeController {
 	}
 	
 	protected function Getuserbyid($id){
-		$userinfo = D('users')->field('id,user_login,user_nicename')->where('id=%d',array($id))->find();
+		$userinfo = D('users')->field('id,user_login,user_nicename,last_login_time,user_status')->where('id=%d',array($id))->find();
 		return $userinfo;
 	}
 	

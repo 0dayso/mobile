@@ -70,25 +70,25 @@
 								<div class="control-group">
 									<label class="control-label">必须操事情</label>
 									<div class="controls" id="mustt_val" mustt_val="{$data.mustt}">
-										<volist name="instruct" id="vo">
+										<foreach name="instruct" item="vo" key="ky">
 										<label class="checkbox inline"><input class="mustt_val" type="checkbox" name="mustt[]" value="{$vo.code}" >{$vo.name}</label>
 											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											<foreach name="vo.parame" item="val" key="key">
+											<foreach name="vo.parame" item="val" key="k1">
 											<input type='hidden' name="mustt_colname_{$vo.code}[]" value="{$val.column.name}" />
 											<label class="checkbox inline">{$val.column.text_name}&nbsp;</label>
 											<if condition="$val.vals == ''">
-											<input type='text' name="mustt_{$val.column.name}_{$vo.code}" value="{$data['parame'][$mustts_column[$key]]}"/>&nbsp;&nbsp;&nbsp;
+											<input type='text' name="mustt_{$val.column.name}_{$vo.code}" value="{$data['parame'][$mustts_column[$ky][$k1]]}"/>&nbsp;&nbsp;&nbsp;
 											<else/>
 											<select name="mustt_{$val.column.name}_{$vo.code}" style="width:100px">
 												<foreach name="val.vals" item="v" key="k">
-												<option value="{$k+1}" <if condition="$data['parame'][$mustts_column[$key]] == $k+1">selected="selected"</if>>{$v}</option>
+												<option value="{$k+1}" <if condition="$data['parame'][$mustts_column[$ky][$k1]] == $k+1">selected="selected"</if>>{$v}</option>
 												</foreach>
 											</select>
 											</if>
 											</foreach>
 											<br/>
 										
-										</volist>
+										</foreach>
 									</div>
 								</div>
 								<!--
