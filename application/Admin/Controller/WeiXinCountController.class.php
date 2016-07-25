@@ -113,9 +113,11 @@ class WeiXinCountController extends AdminbaseController{
 		$data = $model->create();
 		
 		if($id>0){
+			$data['status'] = 2;
 			$data['modifytime'] = time();
 			$result = $model->where('id=%d',array($id))->save($data);
 		}else{
+			$data['status'] = 1;
 			$data['createtime'] = time();
 			$result = $model->add($data);
 		}
