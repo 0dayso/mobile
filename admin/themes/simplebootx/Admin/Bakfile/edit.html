@@ -5,7 +5,7 @@
 		<ul class="nav nav-tabs">
 			<li><a href="{:U('Bakfile/index')}">bak文件管理</a></li>
 			<li><a href="{:U('Bakfile/add')}">添加bak文件</a></li>
-			<li class="active"><a href="{:U('Bakfile/edit')}">修改bak文件信息</a></li>
+			<li class="active"><a href="{:U('Bakfile/edit',array('id'=>$data['id']))}">修改bak文件信息</a></li>
 		</ul>
 		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Bakfile/SaveData')}" enctype="multipart/form-data" >
 			<fieldset>
