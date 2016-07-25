@@ -3,9 +3,9 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
+			<li><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
 			<li><a href="{:U('WeiXinCount/add')}">添加统计</a></li>
-			<li><a href="{:U('WeiXinCount/countinfo',array('id'=>$data['id']))}">添加统计</a></li>
+			<li class="active"><a href="{:U('WeiXinCount/countinfo',array('userid'=>$param['userid']))}">统计详情</a></li>
 		</ul>
 		
 		<div class="well" >

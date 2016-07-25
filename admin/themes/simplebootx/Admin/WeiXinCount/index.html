@@ -17,9 +17,9 @@
 				<tr>
 					<th width="50">ID</th>
 					<th>用户名</th>
-					<th>微信通过数</th>
+					<th>通过数</th>
 					<th>通过率</th>
-					<th>微信推送数</th>
+					<th>推送数</th>
 					<th>推送率</th>
 					<th>今天操作个数</th>
 					<th>历史操作个数</th>
@@ -73,7 +73,7 @@
 			$.post("__URL__/Changedata",{userid:userid,name:name,val:val},function(data){
 				if(data.result == 1){
 					$(obj).val(val);
-					var pre = parseFloat(val/count).toFixed(2)*100;
+					var pre = parseFloat(parseFloat(val/count).toFixed(2))*100;
 					if(name == 'pass_num'){
 						$(obj).parents('.datatr').find('.pass_pre').text(pre+'%');
 					}else if(name == 'push_num'){
@@ -81,7 +81,7 @@
 						if(pass_num == ''){
 							pass_num = 0;
 						}
-						pre = parseFloat(val/pass_num).toFixed(2)*100;
+						pre = parseFloat(parseFloat(val/pass_num).toFixed(2))*100;
 						$(obj).parents('.datatr').find('.push_pre').text(pre+'%');
 					}
 					

@@ -155,9 +155,7 @@ class WeiXinCountController extends AdminbaseController{
 		$param['push_sum'] = $push_sum;
 		$param['pass_avg'] = round($pass_sum/$count,2);
 		$param['push_avg'] = round($push_sum/$count,2);
-		
-		
-		
+		$param['userid'] = $userid;
 		
 		$this->assign("page", $page->show('Admin'));
 		$this->assign("list",$list);
