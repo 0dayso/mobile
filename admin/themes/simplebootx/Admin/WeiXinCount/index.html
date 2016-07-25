@@ -1,0 +1,107 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
+			<li><a href="{:U('WeiXinCount/add')}">添加统计</a></li>
+		</ul>
+		<!--
+		<div class="well" >
+			今天操作个数&nbsp;{$allcountlist.todaycounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			历史操作个数&nbsp;{$allcountlist.allcounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			机器操作个数&nbsp;{$allcountlist.machcounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>-->
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>用户名</th>
+					<th>微信通过数</th>
+					<th>通过率</th>
+					<th>微信推送数</th>
+					<th>推送率</th>
+					<th>今天操作个数</th>
+					<th>历史操作个数</th>
+					<th>{:L('STATUS')}</th>
+					<th>最后登录时间</th>
+					<!--<th width="120">{:L('ACTIONS')}</th>-->
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr class="datatr">
+					<td>{$vo.id}</td>
+					<td>{$vo.user_login}</td>
+					<td><input type="text" name="pass_num" value="{$vo.pass_num}" onchange="changedata(this,{$vo.id})"/></td>
+					<td class="pass_pre">{$vo.pass_pre}</td>
+					<td><input type="text" name="push_num" value="{$vo.push_num}" onchange="changedata(this,{$vo.id})"/></td>
+					<td class="push_pre">{$vo.push_pre}</td>
+					<td class="to_count">{$vo.count}</td>
+					<td>{$vo.ucounts}</td>
+					<td>
+						<if condition="$vo.user_status eq 1">
+						正常
+						<elseif condition="$vo.user_status eq 2"/>
+						未验证
+						<else/>
+						已拉黑
+						</if>
+					</td>
+					<td>
+						<if condition="$vo['last_login_time'] eq 0">
+							{:L('USER_HAVENOT_LOGIN')}
+						<else />
+							{$vo.last_login_time}
+						</if>
+					</td>
+	   			    <!--
+					<td>
+						<if condition="$vo['id'] eq 1">
+						<font color="#cccccc">{:L('EDIT')}</font> | <font color="#cccccc">{:L('DELETE')}</font> |
+							<if condition="$vo['user_status'] eq 1">
+								<font color="#cccccc">{:L('BLOCK_USER')}</font>
+							<else />
+								<font color="#cccccc">{:L('ACTIVATE_USER')}</font>
+							</if>
+						<else />
+							<a href='{:U("user/edit",array("id"=>$vo["id"]))}'>{:L('EDIT')}</a> | 
+							<a class="js-ajax-delete" href="{:U('user/delete',array('id'=>$vo['id']))}">{:L('DELETE')}</a> | 
+							<if condition="$vo['user_status'] eq 1">
+								<a href="{:U('user/ban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="{:L('BLOCK_USER_CONFIRM_MESSAGE')}">{:L('BLOCK_USER')}</a>
+							<else />
+								<a href="{:U('user/cancelban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="{:L('ACTIVATE_USER_CONFIRM_MESSAGE')}">{:L('ACTIVATE_USER')}</a>
+							</if>
+						</if>
+					</td>-->
+				</tr>	
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		function changedata(obj,userid){
+			var name = $(obj).attr('name');
+			var val = $(obj).val();
+			var count = $(obj).parents('.datatr').find('.to_count').text();
+			$.post("__URL__/Changedata",{userid:userid,name:name,val:val},function(data){
+				if(data.result == 1){
+					$(obj).val(val);
+					var pre = parseFloat(val/count).toFixed(2);
+					if(name == 'pass_num'){
+						$(obj).parents('.datatr').find('.pass_pre').text(pre);
+					}else if(name == 'push_num'){
+						$(obj).parents('.datatr').find('.push_pre').text(pre);
+					}
+					
+				}else{
+					alert('设置失败');
+				}
+			})
+			
+		}
+	</script>
+</body>
+</html>
