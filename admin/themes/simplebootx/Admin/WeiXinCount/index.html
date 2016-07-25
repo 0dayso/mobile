@@ -25,7 +25,7 @@
 					<th>历史操作个数</th>
 					<th>{:L('STATUS')}</th>
 					<th>最后登录时间</th>
-					<!--<th width="120">{:L('ACTIONS')}</th>-->
+					<th width="120">{:L('ACTIONS')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -55,25 +55,9 @@
 							{$vo.last_login_time}
 						</if>
 					</td>
-	   			    <!--
 					<td>
-						<if condition="$vo['id'] eq 1">
-						<font color="#cccccc">{:L('EDIT')}</font> | <font color="#cccccc">{:L('DELETE')}</font> |
-							<if condition="$vo['user_status'] eq 1">
-								<font color="#cccccc">{:L('BLOCK_USER')}</font>
-							<else />
-								<font color="#cccccc">{:L('ACTIVATE_USER')}</font>
-							</if>
-						<else />
-							<a href='{:U("user/edit",array("id"=>$vo["id"]))}'>{:L('EDIT')}</a> | 
-							<a class="js-ajax-delete" href="{:U('user/delete',array('id'=>$vo['id']))}">{:L('DELETE')}</a> | 
-							<if condition="$vo['user_status'] eq 1">
-								<a href="{:U('user/ban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="{:L('BLOCK_USER_CONFIRM_MESSAGE')}">{:L('BLOCK_USER')}</a>
-							<else />
-								<a href="{:U('user/cancelban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="{:L('ACTIVATE_USER_CONFIRM_MESSAGE')}">{:L('ACTIVATE_USER')}</a>
-							</if>
-						</if>
-					</td>-->
+						<a href="{:U('WeiXinCount/countinfo',array('userid'=>$vo['id']))}">统计详情</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
 				</tr>	
 				</foreach>
 			</tbody>
@@ -89,11 +73,16 @@
 			$.post("__URL__/Changedata",{userid:userid,name:name,val:val},function(data){
 				if(data.result == 1){
 					$(obj).val(val);
-					var pre = parseFloat(val/count).toFixed(2);
+					var pre = parseFloat(val/count).toFixed(2)*100;
 					if(name == 'pass_num'){
-						$(obj).parents('.datatr').find('.pass_pre').text(pre);
+						$(obj).parents('.datatr').find('.pass_pre').text(pre+'%');
 					}else if(name == 'push_num'){
-						$(obj).parents('.datatr').find('.push_pre').text(pre);
+						var pass_num = $(obj).parents('.datatr').find("input[name='pass_num']").val();
+						if(pass_num == ''){
+							pass_num = 0;
+						}
+						pre = parseFloat(val/pass_num).toFixed(2)*100;
+						$(obj).parents('.datatr').find('.push_pre').text(pre+'%');
 					}
 					
 				}else{

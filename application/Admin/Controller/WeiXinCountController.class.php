@@ -15,16 +15,18 @@ class WeiXinCountController extends AdminbaseController{
 
 		$list = $this->users_model->limit($page->firstRow . ',' . $page->listRows)->order("create_time DESC")->select();
 		foreach($list as $k=>$v){
-			$count = $this->GetOperateCount(2,$v['userid']);
+			$count = $this->GetOperateCount(2,$v['id']);
 			$list[$k]['count'] = $count;
-			$ucounts = $this->GetOperateCount(4,$v['userid']);
+			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$list[$k]['ucounts'] = $ucounts;
 			
 			$weixincount = D('weixincount')->where('userid=%d',array($v['id']))->order('createtime desc')->find();
 			$list[$k]['pass_num'] = $weixincount['pass_num'];
 			$list[$k]['push_num'] = $weixincount['push_num'];
-			$pass_pre = round($weixincount['pass_num']/$count,2);
-			$push_pre = round($weixincount['push_num']/$count,2);
+			$pass_pre = round($weixincount['pass_num']/$count,2)*100;
+			$pass_pre .= '%';
+			$push_pre = round($weixincount['push_num']/$weixincount['pass_num'],2)*100;
+			$push_pre .= '%';
 			$list[$k]['pass_pre'] = $pass_pre;
 			$list[$k]['push_pre'] = $push_pre;
 		}
@@ -130,5 +132,43 @@ class WeiXinCountController extends AdminbaseController{
 		
 	}
 	
+	public function countinfo(){
+		$userid = I('userid');
+		$map['userid'] = $userid;
+		$count = D('weixincount')->where($map)->count();
+		$page = $this->page($count, 10);
+
+		$list = D('weixincount')->where($map)->limit($page->firstRow . ',' . $page->listRows)->order("createtime DESC")->select();
+		foreach($list as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['userid']);
+			$list[$k]['username'] = $userinfo['user_login'];
+		}
+		$ucounts = $this->GetOperateCount(4,$userid);
+		$param['ucounts'] = $ucounts;
+		$operatedays = D('mobile')->field("mobile,FROM_UNIXTIME(updatetime,'%Y-%m-%d') modifytime")->where('status=1 and userid='.$userid)->group("FROM_UNIXTIME(updatetime,'%Y-%m-%d')")->select();
+		$days = count($operatedays);
+		$param['ucounts_avg'] = round($ucounts/$days,2);
+		
+		$pass_sum = $this->getsum($userid,'pass_num');
+		$push_sum = $this->getsum($userid,'push_num');
+		$param['pass_sum'] = $pass_sum;
+		$param['push_sum'] = $push_sum;
+		$param['pass_avg'] = round($pass_sum/$count,2);
+		$param['push_avg'] = round($push_sum/$count,2);
+		
+		
+		
+		
+		$this->assign("page", $page->show('Admin'));
+		$this->assign("list",$list);
+		$this->assign("param",$param);
+		$this->display();
+	}
+	
+	
+	protected function getsum($userid,$colname){
+		$sum = D('weixincount')->where('userid=%d',array($userid))->getField('SUM('.$colname.')');
+		return $sum;
+	}
 	
 }
