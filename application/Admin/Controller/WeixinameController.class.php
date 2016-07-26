@@ -42,6 +42,27 @@ class WeixinameController extends AdminbaseController {
 		$this->display();
 	}
 	
+	public function addweixin(){
+		$this->display();
+	}
+	
+	public function saveaddweixin(){
+		$weixiname = I('weixiname');
+		$weixinamedata = explode(',',$weixiname);
+		foreach($weixinamedata as $k=>$v){
+			$weixinamedatas[$k]['weixiname'] = $v;
+			$weixinamedatas[$k]['authorid'] = session("ADMIN_ID");
+		}
+		
+		$result=M('weixiname')->addAll($weixinamedatas);
+		
+		if($result){
+			$this->success('保存成功',U('Weixiname/index'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
+	
 	public function uploadweixin(){
 		$this->upload_weixin_resourse('weixiname','weixiname');
 	}
