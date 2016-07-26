@@ -261,7 +261,8 @@ class AdminbaseController extends AppframeController {
 				}else{
 					$rul=$this->fileaddall($table,$datas,$column);	
 				}
-				if(!empty($errordatas) || $errordatas != ''){
+				
+				if(!empty($errordata) || $errordata != ''){
 					$errordatas = implode("\r\n",$errordata);
 					$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
 					$this->leadin($errordatas,$filepath);

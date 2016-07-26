@@ -1,0 +1,63 @@
+<admintpl file="header" />
+<style>
+	.trback{background: #999; color: #666;}
+	#mobile_inputs input{margin-bottom:10px;}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Mobile/index')}">手机号码管理</a></li>
+			<li><a href="{:U('Mobile/add')}">添加手机号码</a></li>
+			<li><a href="{:U('Mobile/index',array('type'=>3))}">使用人(女)</a></li>
+			<li class="active"><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
+		</ul>
+		<form class="form-horizontal js-ajax-form" enctype="multipart/form-data" action="{:U('Mobile/saveaddmobile')}" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">请输入手机号码</label>
+					<div class="controls">
+						<textarea name="mobile" style="width:800px;height:500px;text-align:left;"></textarea><!--13511111111,13522222222,13533333333-->
+						<!--
+						<div id="mobile_inputs">
+							<input type="text" name="mobile[]" /><br/>
+						</div>
+						<div class="btn btn-primary" onclick="addinput(1)">添加新号码</div>
+						<div class="btn btn-primary del_imput" onclick="addinput(-1)">删除一个号码</div>
+						<div class="cerror"></div>-->
+					</div>
+					
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="{:U('Mobile/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+		
+	</div>	
+	<script src="__PUBLIC__/js/common.js"></script>
+	<!--
+	<script>
+		function addinput(type){
+			var input_html = '<input type="text" name="mobile[]" /><br/>';
+			$('.del_imput').next('.cerror').text('');
+			if(type == 1){
+				$('#mobile_inputs').append(input_html);
+			}else{
+				var input_num = $('#mobile_inputs').find('input').length;
+				if(input_num > 1){
+					$('#mobile_inputs').find('input:last').remove();
+					$('#mobile_inputs').find('br:last').remove();
+				}else{
+					$('.del_imput').next('.cerror').text('已经没得删了');
+					setTimeout = (function(){
+						$('.del_imput').next('.cerror').hide();
+					} ,600);
+				}
+			}
+			
+		}
+	</script>-->
+</body>
+</html>

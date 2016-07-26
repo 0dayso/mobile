@@ -101,6 +101,25 @@ class MobileController extends AdminbaseController{
 		$this->assign('fileinfo',$fileinfo);
 		$this->display();
 	}
+	public function addmobile(){
+		$this->display();
+	}
+	
+	public function saveaddmobile(){
+		$mobile = I('mobile');
+		$mobiledata = explode(',',$mobile);
+		foreach($mobiledata as $k=>$v){
+			$mobiledatas[$k]['mobile'] = $v;
+		}
+		
+		$result=M('mobile')->addAll($mobiledatas);
+		
+		if($result){
+			$this->success('保存成功',U('Mobile/index'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
 	/*
 	 *设置手机分类
 	 */
