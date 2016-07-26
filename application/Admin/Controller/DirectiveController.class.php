@@ -21,7 +21,7 @@ class DirectiveController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$list=D('instruct')->limit($Page->firstRow.','.$Page->listRows)->select();
+		$list=D('instruct')->limit($Page->firstRow.','.$Page->listRows)->order("listorder ASC")->select();
 		foreach($list as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
@@ -30,6 +30,18 @@ class DirectiveController extends AdminbaseController {
 		$this->assign('page',$show);
         $this->display('index');
     }
+	
+	//排序
+    public function listorders() {
+        $model = D('instruct');
+		$status = parent::_listorders($model);
+        if ($status) {
+            $this->success("排序更新成功！");
+        } else {
+            $this->error("排序更新失败！");
+        }
+    }
+	
     public function add(){
         if(!IS_POST){
             $this->display();
