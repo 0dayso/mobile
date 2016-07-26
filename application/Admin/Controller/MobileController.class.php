@@ -110,6 +110,7 @@ class MobileController extends AdminbaseController{
 		$mobiledata = explode(',',$mobile);
 		foreach($mobiledata as $k=>$v){
 			$mobiledatas[$k]['mobile'] = $v;
+			$mobiledatas[$k]['authorid'] = session("ADMIN_ID");
 		}
 		
 		$result=M('mobile')->addAll($mobiledatas);
