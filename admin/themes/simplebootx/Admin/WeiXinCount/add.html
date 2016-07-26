@@ -1,0 +1,43 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
+			<li class="active"><a href="{:U('WeiXinCount/add')}">添加统计</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('WeiXinCount/SaveData')}">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">用户</label>
+					<div class="controls">
+						<select class="select_2" name="userid">
+							<option value='0'>请选择用户</option>
+							<foreach name="users" item="val">
+								<option value="{$val.id}" >{$val.user_login}</option>
+							</foreach>
+						</select> 
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">微信通过数</label>
+					<div class="controls">
+						<input type="text" name="pass_num">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">微信推送数</label>
+					<div class="controls">
+						<input type="text" name="push_num">
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<a class="btn" href="{:U('WeiXinCount/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

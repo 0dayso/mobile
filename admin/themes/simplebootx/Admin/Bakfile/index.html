@@ -1,0 +1,61 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Bakfile/index')}">bak文件管理</a></li>
+			<li><a href="{:U('Bakfile/add')}">添加bak文件</a></li>
+		</ul>
+		<!--
+		<div class="well" >
+			今天操作个数&nbsp;{$allcountlist.todaycounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			历史操作个数&nbsp;{$allcountlist.allcounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			机器操作个数&nbsp;{$allcountlist.machcounts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>-->
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>文件名称</th>
+					<th>文件大小(字节)</th>
+					<th>使用账户</th>
+					<th>设备</th>
+					<th>发布人</th>
+					<th width="150">添加时间</th>
+					<th width="150">修改时间</th>
+					<!--<th>{:L('STATUS')}</th>-->
+					<th width="120">{:L('ACTIONS')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr class="datatr">
+					<td>{$vo.id}</td>
+					<td>{$vo.name}</td>
+					<td>{$vo.filesize}</td>
+					<td>{$vo.username}</td>
+					<td>{$vo.cdkey}</td>
+					<td>{$vo.authorname}</td>
+					<!--<td>
+						<if condition="$vo.status eq 1">
+						正常
+						<else/>
+						已拉黑
+						</if>
+					</td>-->
+	   			    <td><if condition="$vo.createtime != 0">{$vo.createtime|date='Y-m-d H:i:s',###}</if></td>
+					<td><if condition="$vo.updatetime != 0">{$vo.updatetime|date='Y-m-d H:i:s',###}</if></td>
+					<td>
+						<a href="{:U('Bakfile/edit',array('id'=>$vo['id']))}">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<a class="js-ajax-delete" href="{:U('Bakfile/delete',array('id'=>$vo['id']))}">删除</a>
+					</td>
+				</tr>	
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	
+</body>
+</html>

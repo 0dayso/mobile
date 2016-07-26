@@ -261,7 +261,8 @@ class AdminbaseController extends AppframeController {
 				}else{
 					$rul=$this->fileaddall($table,$datas,$column);	
 				}
-				if(!empty($errordatas) || $errordatas != ''){
+				
+				if(!empty($errordata) || $errordata != ''){
 					$errordatas = implode("\r\n",$errordata);
 					$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
 					$this->leadin($errordatas,$filepath);
@@ -332,7 +333,7 @@ class AdminbaseController extends AppframeController {
 					$t[$column]=iconv("gb2312","utf-8",$v);
 					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
-					$t['creaetetime']=time();
+					$t['createtime']=time();
 					$ary[]=$t;
 				}
 			}

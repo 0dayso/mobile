@@ -42,6 +42,28 @@ class FriendsController extends AdminbaseController {
 		$this->display();
 	}
 	
+	public function addfriends(){
+		$this->display();
+	}
+	
+	public function saveaddfriends(){
+		$friendtext = I('friendtext');
+		$frienddata = explode(',',$friendtext);
+		foreach($frienddata as $k=>$v){
+			$frienddatas[$k]['friendtext'] = $v;
+			$frienddatas[$k]['authorid'] = session("ADMIN_ID");
+			$frienddatas[$k]['createtime'] = time();
+		}
+		
+		$result=M('Friends')->addAll($frienddatas);
+		
+		if($result){
+			$this->success('保存成功',U('Friends/index'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
+	
 	public function uploaddata(){
 		$this->upload_weixin_resourse('Friends','friendtext');
 	}
