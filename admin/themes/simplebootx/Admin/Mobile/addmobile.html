@@ -7,9 +7,10 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('Mobile/index')}">手机号码管理</a></li>
-			<li><a href="{:U('Mobile/add')}">添加手机号码</a></li>
-			<li><a href="{:U('Mobile/index',array('type'=>3))}">使用人(女)</a></li>
+			<li><a href="{:U('mobile/index')}">手机号码管理</a></li>
+			<li><a href="{:U('mobile/add')}">添加手机号码(上传文件)</a></li>
+			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
+			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
 			<li class="active"><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
 		</ul>
 		<form class="form-horizontal js-ajax-form" enctype="multipart/form-data" action="{:U('Mobile/saveaddmobile')}" method="post">

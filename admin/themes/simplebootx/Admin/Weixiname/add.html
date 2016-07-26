@@ -6,8 +6,9 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li><a href="{:U('Weixiname/index')}">微信名称管理</a></li>
-			<li class="active"><a href="{:U('Weixiname/add')}">添加微信名称</a></li>
+			<li><a href="{:U('Weixiname/index')}">微信名称</a></li>			
+			<li class="active"><a href="{:U('Weixiname/add')}">微信名称添加</a></li>	
+			<li><a href="{:U('Weixiname/addweixin')}">添加微信名称(手动添加)</a></li>	
 		</ul>
 		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Weixiname/uploadweixin')}" method="post">
 			<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />

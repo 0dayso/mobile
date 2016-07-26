@@ -53,6 +53,7 @@ class SignController extends AdminbaseController {
 		foreach($signdata as $k=>$v){
 			$signdatas[$k]['signname'] = $v;
 			$signdatas[$k]['authorid'] = session("ADMIN_ID");
+			$signdatas[$k]['createtime'] = time();
 		}
 		
 		$result=M('Sign')->addAll($signdatas);

@@ -52,6 +52,7 @@ class WeixinameController extends AdminbaseController {
 		foreach($weixinamedata as $k=>$v){
 			$weixinamedatas[$k]['weixiname'] = $v;
 			$weixinamedatas[$k]['authorid'] = session("ADMIN_ID");
+			$weixinamedatas[$k]['createtime'] = time();
 		}
 		
 		$result=M('weixiname')->addAll($weixinamedatas);

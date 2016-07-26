@@ -111,6 +111,7 @@ class MobileController extends AdminbaseController{
 		foreach($mobiledata as $k=>$v){
 			$mobiledatas[$k]['mobile'] = $v;
 			$mobiledatas[$k]['authorid'] = session("ADMIN_ID");
+			$mobiledatas[$k]['createtime'] = time();
 		}
 		
 		$result=M('mobile')->addAll($mobiledatas);
