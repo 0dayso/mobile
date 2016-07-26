@@ -42,6 +42,36 @@ class EmailController extends AdminbaseController {
 		$this->display();
 	}
 	
+	public function addemail(){
+		$this->display();
+	}
+	
+	public function saveaddemail(){
+		$emailtext = I('emailtext');
+		$emaildata = explode(',',$emailtext);
+		
+		foreach($emaildata as $k=>$v){
+			$v = explode('-',$v);
+			$emaildatas[$k]['email'] = $v[0];
+			$emaildatas[$k]['pwd'] = $v[1];
+			$emaildatas[$k]['authorid'] = session("ADMIN_ID");
+			$emaildatas[$k]['createtime'] = time();
+			if($v[1] == ''){
+				$msg = '账号密码不许为空';
+			}
+		}
+		if($msg != ''){
+			$this->error($msg);
+		}
+		$result=M('Emailinfo')->addAll($emaildatas);
+		
+		if($result){
+			$this->success('保存成功',U('Email/index'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
+	
 	public function uploademail(){
 		$columns[] = 'email';
 		$columns[] = 'pwd';
