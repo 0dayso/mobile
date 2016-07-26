@@ -43,6 +43,27 @@ class SignController extends AdminbaseController {
 		$this->display();
 	}
 	
+	public function addsign(){
+		$this->display();
+	}
+	
+	public function saveaddsign(){
+		$signname = I('signname');
+		$signdata = explode(',',$signname);
+		foreach($signdata as $k=>$v){
+			$signdatas[$k]['signname'] = $v;
+			$signdatas[$k]['authorid'] = session("ADMIN_ID");
+		}
+		
+		$result=M('Sign')->addAll($signdatas);
+		
+		if($result){
+			$this->success('保存成功',U('Sign/index'));
+		}else{
+			$this->error('保存失败');
+		}
+	}
+	
 	public function uploadsign(){
 		$this->upload_weixin_resourse('Sign','signname');
 	}

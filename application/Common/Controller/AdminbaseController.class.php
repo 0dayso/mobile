@@ -333,7 +333,7 @@ class AdminbaseController extends AppframeController {
 					$t[$column]=iconv("gb2312","utf-8",$v);
 					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
-					$t['creaetetime']=time();
+					$t['createtime']=time();
 					$ary[]=$t;
 				}
 			}
