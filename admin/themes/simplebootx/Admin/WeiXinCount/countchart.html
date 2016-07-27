@@ -1,0 +1,330 @@
+<admintpl file="header" />
+</head>
+<style>
+	.clr{min-width:220px;
+		text-align:left;
+		border:1px solid #cbcbcb; 
+		}
+	.clrlist ul li{cursor:pointer;padding:0 0 0 25px;list-style:none;}
+    .clr b{font-weight: 400; line-height: 24px;}
+	.scroll{
+			height:446px;
+			overflow: scroll; 
+			scrollbar-face-color:#70807d; 
+			scrollbar-arrow-color:#ffffff; 
+			scrollbar-highlight-color:#ffffff; 
+			scrollbar-3dlight-color:#70807d; 
+			scrollbar-shadow-color:#ffffff; 
+			scrollbar-darkshadow-color:#70807d; 
+			scrollbar-track-color:#ffffff"
+		}
+</style>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
+			<li><a href="{:U('WeiXinCount/add')}">添加统计</a></li>
+			<li class="active"><a href="{:U('WeiXinCount/countchart',array('userid'=>$param['userid']))}">统计详情</a></li>
+		</ul>
+		
+		<div class="well" >
+			操作总个数&nbsp;{$param.ucounts} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			平均每天操作个数&nbsp;{$param.ucounts_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+			通过总数&nbsp;{$param.pass_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			通过平均数&nbsp;{$param.pass_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			推送总数&nbsp;{$param.push_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+			推送平均数&nbsp;{$param.push_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="hidden" id="param_userid" value="{$param.userid}" username="{$param.username}" />
+		</div>
+		
+		<div class="clearfix">
+			<div style="float:left;">
+				<select class="select_2" name="year" id="yearlist">
+					<foreach name="years" item="val">
+						<option value="{$val}"><b>{$val}年</b></option>
+					</foreach>
+				</select>
+				<div class="clr scroll" >
+					<div class="clrlist">
+						<ul id="permenu_list" style="margin:0 0 10px 0;">
+							<li value="1"><b>1月</b></li>
+							<li value="2"><b>2月</b></li>
+							<li value="3"><b>3月</b></li>
+							<li value="4"><b>4月</b></li>
+							<li value="5"><b>5月</b></li>
+							<li value="6"><b>6月</b></li>
+							<li value="7"><b>7月</b></li>
+							<li value="8"><b>8月</b></li>
+							<li value="9"><b>9月</b></li>
+							<li value="10"><b>10月</b></li>
+							<li value="11"><b>11月</b></li>
+							<li value="12"><b>12月</b></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div style="width:950px;float:left;margin-left:50px;">
+				<div id="chartjs-tooltip"></div>
+				<div style="width:1100px;">
+					<canvas id="canvas"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="tablelist">
+			<table id="perinfo" cellpadding="0" cellspacing="0"  class="table table-hover table-bordered">
+			
+			</table>
+		</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script src="__PUBLIC__/simpleboot/themes/Chart.js-master/dist/Chart.bundle.js"></script>
+	<script>
+		
+		var MONTHS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];
+        var randomScalingFactor = function() {
+            return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
+        };
+        var randomColorFactor = function() {
+            return Math.round(Math.random() * 255);
+        };
+        var randomColor = function(opacity) {
+            return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '.3') + ')';
+        };
+
+        var config = {
+            type: 'line',
+            data: {
+                labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+				datasets: [{
+                    label: "通过数",
+                    data: [20, 90, 50, 70, 80, 100, 60, 50, 40, 60, 80, 90],
+                    fill: false,
+                },{
+                    label: "推送数",
+                    data: [10, 50, 60, 50, 70, 90, 100, 60, 70, 90, 85, 95],
+                    fill: false,
+                }]
+			   /* datasets: [{
+                    label: "My First dataset",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    fill: false,
+                    borderDash: [5, 5],
+                }, {
+                    label: "My Second dataset",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    fill: false,
+                    borderDash: [5, 5],
+                }, {
+                    label: "My Third dataset - No bezier",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    lineTension: 0,
+                    fill: false,
+                }, {
+                    label: "My Fourth dataset",
+                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
+                    fill: false,
+                }]*/
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                },
+                hover: {
+                    mode: 'label'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '月份/日期'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '通过/推送数值'
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: '微信统计曲线图'
+                }
+            }
+        };
+		 $.each(config.data.datasets, function(i, dataset) {
+            var background = randomColor(0.5);
+            dataset.borderColor = background;
+            dataset.backgroundColor = background;
+            dataset.pointBorderColor = background;
+            dataset.pointBackgroundColor = background;
+            dataset.pointBorderWidth = 1;
+        });
+		
+		var userid = $('#param_userid').val();
+		var username = $('#param_userid').attr('username');
+		weixin_num(userid,username);
+		
+		$('#yearlist').change(function(){
+			var permenu_id = $(this).attr('value');
+			$('#permenu_list li').css('background','#fff');
+			
+			weixin_num(userid,username,permenu_id);
+		})
+		
+		$('#permenu_list li').click(function() {
+			var year_val  = $('#yearlist').val();
+			var permenu_id = year_val+'-'+$(this).attr('value');
+			var permenu_name = year_val+'年'+$(this).find('b').text();
+			$('#permenu_list li').css('background','#fff');
+			$(this).css('background','#48b9e5');
+			var month = $(this).attr('value');
+			var months = "1,3,5,7,8,10,12";
+			var label_length = 30;
+			var str = months.indexOf(month);
+			
+			if(month == 2){
+				label_length = 29;
+			}else{
+				if(str >= 0 ){
+					label_length = 31;
+				}
+			}
+			weixin_num(userid,username,permenu_id,1,label_length);
+		});
+		
+		
+		function weixin_num(userid,username,permenu_id,sum_ruleid,label_length){
+			$('#perinfo').html('');
+			$('#perinfo2').remove();
+			var url="{:U('WeiXinCount/Getchart')}";
+			$.get(url,{userid:userid,permenu_id:permenu_id,sum_ruleid:sum_ruleid},function(data){
+				update_config(data,username,label_length);
+			})
+		}
+		
+		function update_config(datalist,username,label_length){
+			var background = randomColor(0.5);
+			var backgroundb = randomColor(0.5);
+			var newDataset = {
+				label: username+'通过数',
+				borderColor: background,
+				backgroundColor: background,
+				pointBorderColor: background,
+				pointBackgroundColor: background,
+				pointBorderWidth: 1,
+				fill: false,
+				data: [],
+			};
+			var newDatasetb = {
+				label: username+'推送数',
+				borderColor: backgroundb,
+				backgroundColor: backgroundb,
+				pointBorderColor: backgroundb,
+				pointBackgroundColor: backgroundb,
+				pointBorderWidth: 1,
+				fill: false,
+				data: [],
+			};
+			
+			var html_th = '<thead><tr>';
+			var html_th_b = '<thead><tr>';
+			var html_val = '<tbody><tr>';
+			
+			var labelset = [];
+			var str = '月';
+			var labels_length = 12;
+			if(datalist['sum_ruleid'] == 1){
+				str = '日';
+				labels_length = label_length;
+			}
+			
+			if(labels_length > 15){
+				var html_table2 = '<table id="perinfo2" cellpadding="0" cellspacing="0"  class="table table-hover table-bordered">';
+				var html_th2 = '<thead><tr>';
+				var html_th_b2 = '<thead><tr>';
+				var html_val2 = '<tbody><tr>';
+			}
+			
+			var mydate = new Date();
+			var year = mydate.getFullYear();
+			
+			for (var index = 1; index <= labels_length; ++index) {
+				var index_col = index;
+				
+				if(!datalist['list']){
+					datalist['list'] = [] ;
+					datalist['list'][index_col] = [] ;
+					datalist['list'][index_col]['year'] = 0;
+					datalist['list'][index_col]['pass_sum'] = 0;
+					datalist['list'][index_col]['push_sum'] = 0;
+				}
+				if(!datalist['list'][index_col]){
+					datalist['list'][index_col] = [] ;
+					datalist['list'][index_col]['year'] = 0;
+					datalist['list'][index_col]['pass_sum'] = 0;
+					datalist['list'][index_col]['push_sum'] = 0;
+				}
+				
+				var pass_sum = datalist['list'][index_col]['pass_sum'];
+				var push_sum = datalist['list'][index_col]['push_sum'];
+				var strstr = index_col+str;
+				
+				labelset.push(strstr);
+				newDataset.data.push(pass_sum);
+				newDatasetb.data.push(push_sum);
+				if(index > 15){
+					html_th2 += '<th style="text-align:center;" colspan="2">'+strstr+'</th>';
+					html_th_b2 += '<th style="text-align:center;padding:8px 5px;" >通过数</th><th style="text-align:center;padding:8px 5px;">推送数</th>';
+					html_val2 += '<td align="center">'+pass_sum+'</td><td align="center">'+push_sum+'</td>';
+				}else{
+					html_th += '<th style="text-align:center;" colspan="2">'+strstr+'</th>';
+					html_th_b += '<th style="text-align:center;padding:8px 5px;">通过数</th><th style="text-align:center;padding:8px 5px;">推送数</th>';
+					html_val += '<td align="center">'+pass_sum+'</td><td align="center">'+push_sum+'</td>';
+				}
+				
+			}
+			
+			html_th += '</tr></thead>';
+			html_th_b += '</tr></thead>';
+			html_val += '</tr></tbody>';
+			
+			$('#perinfo').append(html_th);
+			$('#perinfo').append(html_th_b);
+			$('#perinfo').append(html_val);
+
+			if(labels_length > 15){
+				html_th2 += '</tr></thead>';
+				html_th_b2 += '</tr></thead>';
+				html_val2 += '</tr></tbody>';
+				html_table2 += '</table>';
+				
+				$('.tablelist').append(html_table2);
+				$('#perinfo2').append(html_th2);
+				$('#perinfo2').append(html_th_b2);
+				$('#perinfo2').append(html_val2);
+			}else{
+				$('#perinfo2').remove();
+			}
+			
+			
+			config.data.labels =labelset;
+			config.data.datasets.pop();
+			config.data.datasets.pop();
+			config.data.datasets.push(newDataset);
+			config.data.datasets.push(newDatasetb);
+			
+			window.myLine.update();
+		}
+    </script>
+	<script>
+    window.onload = function() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myLine = new Chart(ctx, config);
+    }; 
+    </script>
+</body>
+</html>
