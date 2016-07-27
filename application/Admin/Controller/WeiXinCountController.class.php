@@ -143,6 +143,15 @@ class WeiXinCountController extends AdminbaseController{
 			$userinfo = $this->Getuserbyid($v['userid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
+		$param = $this->getcountparam($userid,$count);
+		
+		$this->assign("page", $page->show('Admin'));
+		$this->assign("list",$list);
+		$this->assign("param",$param);
+		$this->display();
+	}
+	
+	protected function getcountparam($userid,$count){
 		$ucounts = $this->GetOperateCount(4,$userid);
 		$param['ucounts'] = $ucounts;
 		$operatedays = D('mobile')->field("mobile,FROM_UNIXTIME(updatetime,'%Y-%m-%d') modifytime")->where('status=1 and userid='.$userid)->group("FROM_UNIXTIME(updatetime,'%Y-%m-%d')")->select();
@@ -156,13 +165,90 @@ class WeiXinCountController extends AdminbaseController{
 		$param['pass_avg'] = round($pass_sum/$count,2);
 		$param['push_avg'] = round($push_sum/$count,2);
 		$param['userid'] = $userid;
+		$paramuserinfo = $this->Getuserbyid($userid);
+		$param['username'] = $paramuserinfo['user_login'];
+		return $param;
+	}
+	
+	public function countchart(){
+		$userid = I('userid');
+		$map['userid'] = $userid;
+		$count = D('weixincount')->where($map)->count();
 		
-		$this->assign("page", $page->show('Admin'));
-		$this->assign("list",$list);
+		$param = $this->getcountparam($userid,$count);
+		$years = $this->getyears();
+		
+		$this->assign("years",$years);
 		$this->assign("param",$param);
 		$this->display();
 	}
 	
+	/**
+	*获取报表
+	*/
+	public function Getchart(){
+		$userid = I('userid');
+		$sum_ruleid = I('sum_ruleid');
+		$cur_time = I('permenu_id');
+        $data = $this->Getsumgroup($userid,$sum_ruleid,$year_num,$cur_time);
+		
+		$this->ajaxReturn($data);
+	}
+	
+	
+	/**
+	 *根据用户id获取每月通过数/推送数
+	 *$userid:用户id
+	 *$sum_ruleid:筛选条件-1按天，2按月
+	 *$year_num:统计年数，默认最近3年
+	 *$cur_year：统计年份，默认当前年份
+	 */
+	protected function Getsumgroup($userid,$sum_ruleid=2,$year_num,$cur_time){
+		if(!$cur_time){
+			$cur_time = date('Y',time());
+		}
+		if($sum_ruleid == 1 && $cur_time != ''){
+			$cur_time = date('Y-m',strtotime($cur_time));
+		}
+		
+		$map['userid'] = $userid;
+		if($sum_ruleid == 1){
+			$group = "FROM_UNIXTIME(createtime,'%Y-%m-%d')";
+			$map2["FROM_UNIXTIME(createtime,'%Y-%m')"] = $cur_time;
+			$map2['_logic'] = 'and';
+			$map['_complex'] = $map2;
+			$date_rule = 'j';
+		}else{
+			$group = "FROM_UNIXTIME(createtime,'%Y-%m')";
+			$map2["FROM_UNIXTIME(createtime,'%Y')"] = $cur_time;
+			$map2['_logic'] = 'and';
+			$map['_complex'] = $map2;
+			$date_rule = 'n';
+		}
+		
+		$field = "createtime,sum(pass_num) pass_sum,sum(push_num) push_sum";
+		$data = D('weixincount')->where($map)->group($group)->getField($field,true);
+		
+		foreach($data as $k=>$v){
+			if(isset($v['createtime'])){
+				$data[$k]['createtime'] = date('Y-m-d H:i:s',$v['createtime']);
+			}
+			$datas[date($date_rule,$k)] = $data[$k];
+		}
+		
+		$datalist['sum_ruleid'] = $sum_ruleid;
+		$datalist['list'] = $datas;
+		return $datalist;
+	}
+	
+	protected function getyears(){
+		$year_num = 10;
+		$cur_year = date('Y',time());
+		for($i=0;$i<$year_num;$i++){
+		   $year[] = $cur_year-$i; 
+		}
+		return $year;
+	}
 	
 	protected function getsum($userid,$colname){
 		$sum = D('weixincount')->where('userid=%d',array($userid))->getField('SUM('.$colname.')');
