@@ -250,7 +250,7 @@
 			}
 			
 			var mydate = new Date();
-			var year = mydate.getFullYear();
+			//var year = mydate.getFullYear();
 			
 			for (var index = 1; index <= labels_length; ++index) {
 				var index_col = index;
@@ -258,13 +258,13 @@
 				if(!datalist['list']){
 					datalist['list'] = [] ;
 					datalist['list'][index_col] = [] ;
-					datalist['list'][index_col]['year'] = 0;
+					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
 					datalist['list'][index_col]['push_sum'] = 0;
 				}
 				if(!datalist['list'][index_col]){
 					datalist['list'][index_col] = [] ;
-					datalist['list'][index_col]['year'] = 0;
+					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
 					datalist['list'][index_col]['push_sum'] = 0;
 				}
