@@ -143,21 +143,7 @@ class WeiXinCountController extends AdminbaseController{
 			$userinfo = $this->Getuserbyid($v['userid']);
 			$list[$k]['username'] = $userinfo['user_login'];
 		}
-		$ucounts = $this->GetOperateCount(4,$userid);
-		$param['ucounts'] = $ucounts;
-		$operatedays = D('mobile')->field("mobile,FROM_UNIXTIME(updatetime,'%Y-%m-%d') modifytime")->where('status=1 and userid='.$userid)->group("FROM_UNIXTIME(updatetime,'%Y-%m-%d')")->select();
-		$days = count($operatedays);
-		$param['ucounts_avg'] = round($ucounts/$days,2);
-		
-		$pass_sum = $this->getsum($userid,'pass_num');
-		$push_sum = $this->getsum($userid,'push_num');
-		$param['pass_sum'] = $pass_sum;
-		$param['push_sum'] = $push_sum;
-		$param['pass_avg'] = round($pass_sum/$count,2);
-		$param['push_avg'] = round($push_sum/$count,2);
-		$param['userid'] = $userid;
-		$paramuserinfo = $this->Getuserbyid($userid);
-		$param['username'] = $paramuserinfo['user_login'];
+		$param = $this->getcountparam($userid,$count);
 		
 		$this->assign("page", $page->show('Admin'));
 		$this->assign("list",$list);
@@ -165,17 +151,7 @@ class WeiXinCountController extends AdminbaseController{
 		$this->display();
 	}
 	
-	public function countchart(){
-		$userid = I('userid');
-		$map['userid'] = $userid;
-		$count = D('weixincount')->where($map)->count();
-		$page = $this->page($count, 10);
-
-		$list = D('weixincount')->where($map)->limit($page->firstRow . ',' . $page->listRows)->order("createtime DESC")->select();
-		foreach($list as $k=>$v){
-			$userinfo = $this->Getuserbyid($v['userid']);
-			$list[$k]['username'] = $userinfo['user_login'];
-		}
+	protected function getcountparam($userid,$count){
 		$ucounts = $this->GetOperateCount(4,$userid);
 		$param['ucounts'] = $ucounts;
 		$operatedays = D('mobile')->field("mobile,FROM_UNIXTIME(updatetime,'%Y-%m-%d') modifytime")->where('status=1 and userid='.$userid)->group("FROM_UNIXTIME(updatetime,'%Y-%m-%d')")->select();
@@ -191,11 +167,18 @@ class WeiXinCountController extends AdminbaseController{
 		$param['userid'] = $userid;
 		$paramuserinfo = $this->Getuserbyid($userid);
 		$param['username'] = $paramuserinfo['user_login'];
+		return $param;
+	}
+	
+	public function countchart(){
+		$userid = I('userid');
+		$map['userid'] = $userid;
+		$count = D('weixincount')->where($map)->count();
+		
+		$param = $this->getcountparam($userid,$count);
 		$years = $this->getyears();
 		
 		$this->assign("years",$years);
-		$this->assign("page", $page->show('Admin'));
-		$this->assign("list",$list);
 		$this->assign("param",$param);
 		$this->display();
 	}
@@ -216,7 +199,7 @@ class WeiXinCountController extends AdminbaseController{
 	/**
 	 *根据用户id获取每月通过数/推送数
 	 *$userid:用户id
-	 *$sum_ruleid:筛选条件-1按天，2按月，3按年
+	 *$sum_ruleid:筛选条件-1按天，2按月
 	 *$year_num:统计年数，默认最近3年
 	 *$cur_year：统计年份，默认当前年份
 	 */
