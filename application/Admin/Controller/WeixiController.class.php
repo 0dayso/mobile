@@ -43,7 +43,20 @@ class WeixiController extends AdminbaseController {
 		$this->assign('page',$show);
        	$this->display();        
     }
-
+	
+	public function savemobileajax(){
+		$id = I('id');
+		$data['alias'] = I('alias');
+		if($id > 0){
+			$result=D('weixi')->where('id=%d',array($id))->save($data);
+		}
+		
+		if($result){
+			$this->ajaxReturn(array('result'=>1));
+		}else{
+			$this->ajaxReturn(array('result'=>0));
+		}
+	}
 
 }
 
