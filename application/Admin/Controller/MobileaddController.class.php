@@ -11,18 +11,23 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		$GLOBALS['z']=$GLOBALS['z']+1;
-		M()->startTrans();
+		
 		$count=M('mobile')->where('status=0 and type=2 ')->count();
-		$counts=M('mobile')->where('status=0 and type=2 and isshow%2=0')->count();
-		if($counts==0){
-			$nmb=1;
-		}else{
-			$nmb=0;
-		}		
-        $isallsave=true;  
-		$data=M('mobile')->where('status=0 and type=2 and isshow%2='.$nmb)->limit(5)->lock(true)->getfield('id,mobile',true);
+		$counts=M('mobile')->where('status=0 and type=2 and isshow='.session('ADMIN_ID'))->count();		
+		if($counts>0){			
+			$data=M('mobile')->where('status=0 and type=2 and isshow='.session('ADMIN_ID'))->limit(5)->lock(true)->getfield('id,mobile',true);
+			$this->assign('count',$count);
+			$this->assign('data',$data);
+			$this->display();
+			exit();
+		}
+
+
+		M()->startTrans();		
+        $isallsave=true;                  
+		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);
 		foreach ($data as $key => $value) {
-			$t=M('mobile')->where("id=%d",array($key))->setInc('isshow');	
+			$t=M('mobile')->where("id=%d",array($key))->setField('isshow',session('ADMIN_ID'));	
 			if(!$t){
 			    $isallsave=false;
 			}
@@ -206,6 +211,10 @@ class MobileaddController extends AdminbaseController{
 
 		fclose($myfile);
 		
+    }
+
+    public function cancel(){
+
     }
 
 
