@@ -114,7 +114,9 @@
 				</tfoot> -->
 			</table>	
 			<div class="form-actions">
-				<button type="button" id="zuofei" class="btn btn-primary js-ajax-submit">作废</button>	
+				<button type="button" id="zuofei" class="btn btn-primary js-ajax-submit">作废</button>
+				<input type="hidden" id="aryid"   value="{$aryid}" />	
+				
 				<input type="hidden" id="zuofeiv"  value="0" />
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
@@ -148,7 +150,8 @@
 			$("#zuofei").click(function(){
 				
 				var url="{:U('Admin/Mobileadd/mobilecancel')}";
-				$.get(url,function(data){	
+				var aryid=$('#aryid').val();
+				$.post(url,{'aryid':aryid},function(data){	
 					if(data.status=="1"){						
 						alert("已处理了数据请示重新刷新");	
 					}else{
