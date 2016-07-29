@@ -212,9 +212,23 @@ class MobileaddController extends AdminbaseController{
 		fclose($myfile);
 		
     }
-
-    public function cancel(){
-
+    //作已经加入处理
+    public function mobilecancel(){
+		M()->startTrans();
+		$data['status']=1;		
+		$data['updatetime']=time();
+		$data['userid']=session('ADMIN_ID');
+		$data1=M('mobile')->where('isshow='.$data['userid'])->save($data);
+		if($data1){
+			M()->commit();
+			$data['status']=1;	
+			$this->ajaxreturn($data);
+			exit();
+		}
+		M()->rollback();
+		$data['status']=0;	
+		$this->ajaxreturn($data);
+		exit();
     }
 
 
