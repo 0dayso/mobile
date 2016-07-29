@@ -114,6 +114,8 @@
 				</tfoot> -->
 			</table>	
 			<div class="form-actions">
+				<button type="button" id="zuofei" class="btn btn-primary js-ajax-submit">作废</button>	
+				<input type="hidden" id="zuofeiv"  value="0" />
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
 					还有{$count}条未操作信息
@@ -123,16 +125,13 @@
 	</div>
 	
 	<script>
-	    function t(){
-	    	alert("df");
-	    }
+		
 		$(function() {
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
 			});
 
 			$(".trclick").on('touchstart ',function(){	
-
 				$(this).addClass("trback");	
 				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
@@ -146,6 +145,18 @@
 				});
 			});
 
+			$("#zuofei").click(function(){
+				$(this).addClass("trback");	
+				var url="{:U('Admin/Mobileadd/mobilecancel')}";
+				$.post(url,{'id':id},function(data){	
+					if(data.status=="1"){						
+						alert("已处理了数据请示重新刷新");	
+					}else{
+						alert("请重新点击按钮");
+					}				
+				});
+				$("#zuofeiv").val('1');
+			})
 
 		});
 		
