@@ -77,7 +77,6 @@ class EquictiveController extends Controller {
 
     }
 
-    
 
 }
 
