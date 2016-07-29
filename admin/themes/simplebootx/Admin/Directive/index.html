@@ -6,7 +6,7 @@
 			<li class="active"><a href="{:U('Directive/directivelist')}">指令列表</a></li>
 			<li><a href="{:U('Directive/add')}">增加指令</a></li>
 		</ul>
-		<form class="js-ajax-form" action="{:U('Menu/listorders')}" method="post">			
+		<form class="js-ajax-form" action="{:U('Directive/listorders')}" method="post">			
 			<table class="table table-hover table-bordered table-list" id="menus-table">
 				<thead>
 					<tr>
@@ -23,7 +23,7 @@
 				<tbody>
 					<volist name="list" id='vo'>
 					<tr>					
-						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
+						<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.listorder|default=0}" class="input input-order"></td>
 						<td>{$vo.code}</td>
 						<td>{$vo.name}</td>
 						<td>{$vo.funname}</td>
@@ -56,6 +56,9 @@
 					</tr>
 				</tfoot>
 			</table>	
+			<div class="table-actions">
+				<button class="btn btn-primary btn-small js-ajax-submit" type="submit">{:L('SORT')}</button>
+			</div>
 		</form>
 		<div class="page">
 			{$page}

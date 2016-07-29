@@ -31,6 +31,19 @@ class WxwapiController extends Controller {
         exit();
         //$this->ajaxReturn($data,'xml');
     }
+    
+    public function getip(){
+        if(getenv('HTTP_CLIENT_IP')) {
+            $onlineip = getenv('HTTP_CLIENT_IP');
+        } elseif(getenv('HTTP_X_FORWARDED_FOR')) {
+            $onlineip = getenv('HTTP_X_FORWARDED_FOR');
+        } elseif(getenv('REMOTE_ADDR')) {
+            $onlineip = getenv('REMOTE_ADDR');
+        } else {
+            $onlineip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
+        }
+        echo $onlineip;
+    }
 
 
 
@@ -132,6 +145,21 @@ class WxwapiController extends Controller {
     }
 
 
+
+
+    /*
+    *随机生成微信号
+     */
+    public function whacthao($length = 6){
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $wxhao='';
+        for ( $i = 0; $i < $length; $i++ ) {              
+            $wxhao .= $chars[ mt_rand(0, strlen($chars) - 1) ];                        
+        } 
+        return $wxhao;  
+    }
+    
+    
 
 }
 

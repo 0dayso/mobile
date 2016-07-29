@@ -1,0 +1,60 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('WeiXinCount/index')}">微信统计</a></li>
+			<li><a href="{:U('WeiXinCount/add')}">添加统计</a></li>
+			<li class="active"><a href="{:U('WeiXinCount/countinfo',array('userid'=>$param['userid']))}">统计详情</a></li>
+		</ul>
+		
+		<div class="well" >
+			操作总个数&nbsp;{$param.ucounts} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			平均每天操作个数&nbsp;{$param.ucounts_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+			通过总数&nbsp;{$param.pass_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			通过平均数&nbsp;{$param.pass_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			推送总数&nbsp;{$param.push_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+			推送平均数&nbsp;{$param.push_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</div>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>用户名</th>
+					<th>通过数</th>
+					<th>推送数</th>
+					<th width="150">创建时间</th>
+					<th width="150">修改时间</th>
+					<!--<th>{:L('STATUS')}</th>
+					<th width="120">{:L('ACTIONS')}</th>-->
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="list" item="vo">
+				<tr class="datatr">
+					<td>{$vo.id}</td>
+					<td>{$vo.username}</td>
+					<td>{$vo.pass_num}</td>
+					<td>{$vo.push_num}</td>
+					<td><if condition="$vo.createtime != 0">{$vo.createtime|date='Y-m-d H:i:s',###}</if></td>
+					<td><if condition="$vo.modifytime != 0">{$vo.modifytime|date='Y-m-d H:i:s',###}</if></td>
+					<!--
+					<td>
+						<if condition="$vo.user_status eq 1">
+						正常
+						<elseif condition="$vo.user_status eq 2"/>
+						未验证
+						<else/>
+						已拉黑
+						</if>
+					</td>-->
+				</tr>	
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	
+</body>
+</html>

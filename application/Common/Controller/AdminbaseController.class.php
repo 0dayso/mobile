@@ -262,11 +262,13 @@ class AdminbaseController extends AppframeController {
 					$rul=$this->fileaddall($table,$datas,$column);	
 				}
 				
-				$errordatas = implode("\r\n",$errordata);
-				$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
-				$this->leadin($errordatas,$filepath);
+				if(!empty($errordata) || $errordata != ''){
+					$errordatas = implode("\r\n",$errordata);
+					$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
+					$this->leadin($errordatas,$filepath);
+				}
 			}else{
-				$rul=$this->fileaddall($table,$datas,$column);	
+				$rul=$this->fileaddall($table,$data,$column);	
 			}
 			
 			if($rul){
@@ -331,7 +333,7 @@ class AdminbaseController extends AppframeController {
 					$t[$column]=iconv("gb2312","utf-8",$v);
 					$t['authorid'] = session("ADMIN_ID");
 					$t['updatetime']=time();
-					$t['creaetetime']=time();
+					$t['createtime']=time();
 					$ary[]=$t;
 				}
 			}
@@ -419,7 +421,7 @@ class AdminbaseController extends AppframeController {
 	}
 	
 	protected function Getuserbyid($id){
-		$userinfo = D('users')->field('id,user_login,user_nicename')->where('id=%d',array($id))->find();
+		$userinfo = D('users')->field('id,user_login,user_nicename,last_login_time,user_status')->where('id=%d',array($id))->find();
 		return $userinfo;
 	}
 	

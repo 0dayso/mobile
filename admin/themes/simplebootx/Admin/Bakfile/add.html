@@ -1,0 +1,48 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Bakfile/index')}">bak文件管理</a></li>
+			<li class="active"><a href="{:U('Bakfile/add')}">添加bak文件</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Bakfile/SaveData')}" enctype="multipart/form-data" >
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">使用账号</label>
+					<div class="controls">
+						<select class="select_2" name="userid">
+							<option value='0'>请选择用户</option>
+							<foreach name="users" item="val">
+								<option value="{$val.id}" >{$val.user_login}</option>
+							</foreach>
+						</select> 
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">设备</label>
+					<div class="controls">
+						<select class="select_2" name="equictiveid">
+							<option value='0'>请选择设备</option>
+							<foreach name="equictive" item="val">
+								<option value="{$val.id}" >{$val.cdkey}</option>
+							</foreach>
+						</select> 
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">请选择上传文件：</label>
+					<div class="controls">
+						<input type="file" name="file"  id="fileupdata" />
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<a class="btn" href="{:U('Bakfile/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

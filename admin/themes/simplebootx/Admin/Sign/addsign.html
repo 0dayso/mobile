@@ -1,0 +1,34 @@
+<admintpl file="header" />
+<style>
+	.trback{background: #999; color: #666;}
+	#mobile_inputs input{margin-bottom:10px;}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Sign/index')}">个性签名</a></li>			
+			<li><a href="{:U('Sign/add')}">个性签名添加</a></li>
+			<li class="active"><a href="{:U('Sign/addsign')}">添加个性签名(手动添加)</a></li>	
+		</ul>
+		<form class="form-horizontal js-ajax-form" enctype="multipart/form-data" action="{:U('Sign/saveaddsign')}" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" style="width:190px;margin-right:10px;">请输入个性签名<br/>(多个签名之间英文标点','隔开)</label>
+					<div class="controls">
+						<textarea name="signname" style="width:800px;height:500px;text-align:left;"></textarea><!--13511111111,13522222222,13533333333-->
+						
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="{:U('Sign/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+		
+	</div>	
+	<script src="__PUBLIC__/js/common.js"></script>
+	
+</body>
+</html>
