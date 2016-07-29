@@ -24,6 +24,17 @@ class UserController extends AdminbaseController{
 		foreach($users as $k=>$v){
 			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$users[$k]['ucounts'] = $ucounts;
+			
+			$role_user_model=M("RoleUser");
+			$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
+			$role_ids = implode(',',$role_ids);
+			if($v['id'] != 1 && $role_ids != ''){
+				$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);;
+				$cur_roles = implode(',',$cur_roles);
+				$users[$k]['cur_roles'] = $cur_roles;
+			}else if($v['id'] == 1){
+				$users[$k]['cur_roles'] = '超级管理员';
+			}
 		}
 		
 		$allcountlist['allcounts'] = $this->GetOperateCount();
