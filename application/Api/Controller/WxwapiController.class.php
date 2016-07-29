@@ -51,11 +51,12 @@ class WxwapiController extends Controller {
             echo 0;
             exit();
         }
-        $info = D('record_ip')->field('id,last_login_ip')->where('status=0')->find();
+        $info = D('record_ip')->field('id,last_login_ip')->where('last_login_ip='.$onlineip.' and status=0')->find();
        if(!$info){
            $parame['status']=1;
            $parame['updatetime']=time();
            $parame['number']=array('exp','number+1');
+           $parame['last_login_ip']=$onlineip;
            $result=D('record_ip')->add($parame);
            if($result){
                echo $info['last_login_ip'];
