@@ -1,0 +1,93 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('rbac/index')}">{:L('ADMIN_RBAC_INDEX')}</a></li>
+			<li><a href="{:U('rbac/roleadd')}">{:L('ADMIN_RBAC_ROLEADD')}</a></li>
+			<li class="active"><a href="{:U('rbac/rbacinfo',array('id'=>$data['id']))}">角色详情</a></li>
+		</ul>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">角色名称:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$data.name}</label>
+					<!--<div class="controls">
+						<input type="text" name="cate_name" value="{$data.cate_name}"/>
+						<span class="form-required">*</span>
+					</div>-->
+				</div>
+			</fieldset>
+			<div style="width:100%;height:1px;margin:10px 0;border-top:1px #ddd solid;"></div>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">用户列表</label>
+					<!--<div class="controls">
+						<input type="text" name="cate_name" value="{$data.cate_name}"/>
+						<span class="form-required">*</span>
+					</div>-->
+				</div>
+			</fieldset>
+			<table class="table table-hover table-bordered table-list" id="menus-table">
+				<thead>
+					<tr>
+						<!--<th width="80">{:L('SORT')}</th>-->
+						<th width="50">ID</th>
+						<th>账号</th>						
+						<th>最后登录时间</th>	
+						<th width="80">{:L('STATUS')}</th>
+						<!--<th width="180">{:L('ACTIONS')}</th>-->
+					</tr>
+				</thead>
+				<tbody>
+					<volist name="userlist" id='vo'>
+					<tr>					
+						<!--<td><input name="listorders[{$vo.id}]" type="text" size="3" value="{$vo.sort|default=0}" class="input input-order"></td>
+						-->
+						<td>{$vo.id}</td>
+						<td>{$vo.user_login}</td>						
+						<td>{$vo.last_login_time}</td>
+						<td>
+							<if condition="$vo.user_status == 1">
+							正常
+							<elseif condition="$vo.user_status == 2" />
+							未验证
+							<else/>
+							禁用
+							</if>
+						</td>
+						<!--<td><a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a></td>-->
+					</tr>
+					</volist>
+				</tbody>
+				<tfoot>
+					<tr>
+						<!--<th width="80">{:L('SORT')}</th>-->
+						<th width="50">ID</th>
+						<th>账号</th>						
+						<th>最后登录时间</th>		
+						<th width="80">{:L('STATUS')}</th>
+						<!--<th width="180">{:L('ACTIONS')}</th>-->
+					</tr>
+				</tfoot>
+			</table>	
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$(document).ready(function() {
+			Wind.css('treeTable');
+			Wind.use('treeTable', function() {
+				$("#menus-table").treeTable({
+					indent : 20
+				});
+			});
+		});
+
+		setInterval(function() {
+			var refersh_time = getCookie('refersh_time_admin_menu_index');
+			if (refersh_time == 1) {
+				reloadPage(window);
+			}
+		}, 1000);
+		setCookie('refersh_time_admin_menu_index', 0);
+	</script>
+</body>
+</html>

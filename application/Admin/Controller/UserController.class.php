@@ -10,13 +10,32 @@ class UserController extends AdminbaseController{
 		$this->role_model = D("Common/Role");
 	}
 	function index(){
-		$count=$this->users_model->where(array("user_type"=>1))->count();
-		$page = $this->page($count, 20);
+		$username = I('keyword');
+		$role_id = I('role_id');
+		$map['user_type'] = 1;
+		
+		if($username != ''){
+			$map['user_login'] = array('like','%'.$username.'%');
+			$parameters['keyword'] = $username;
+		}
+		if($role_id != '' && $role_id != 0){
+			$user_ids = M("RoleUser")->where(array("role_id"=>$role_id))->getField("user_id",true);
+			if($role_id == 1){
+				$user_ids[] = 1;
+			}
+			$user_ids = implode(',',$user_ids);
+			$map['id'] = array('in',$user_ids);
+			
+			$parameters['role_id'] = $role_id;
+		}
+		
+		$count=$this->users_model->where($map)->count();
+		$page = $this->page($count, 20,$parameters);
 
 		$users = $this->users_model->alias("ul")
 		->field('*,count')
 		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE status=1 and userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
-		->where(array("user_type"=>1))
+		->where($map)
 		->order("create_time DESC")
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
@@ -24,6 +43,17 @@ class UserController extends AdminbaseController{
 		foreach($users as $k=>$v){
 			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$users[$k]['ucounts'] = $ucounts;
+			
+			$role_user_model=M("RoleUser");
+			$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
+			$role_ids = implode(',',$role_ids);
+			if($v['id'] != 1 && $role_ids != ''){
+				$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);;
+				$cur_roles = implode(',',$cur_roles);
+				$users[$k]['cur_roles'] = $cur_roles;
+			}else if($v['id'] == 1){
+				$users[$k]['cur_roles'] = '超级管理员';
+			}
 		}
 		
 		$allcountlist['allcounts'] = $this->GetOperateCount();
@@ -37,6 +67,7 @@ class UserController extends AdminbaseController{
 			$roles["$roleid"]=$r;
 		}
 		
+		$this->assign("parameters",$parameters);
 		$this->assign("allcountlist",$allcountlist);
 		$this->assign("page", $page->show('Admin'));
 		$this->assign("roles",$roles);
