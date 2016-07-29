@@ -46,7 +46,7 @@ class MobileController extends Controller {
                 }
                 
             }
-            $info['show']=time();
+            $info['showtime']=time();
             $result=M('mobile')->where("mobile='%s'",$mobile)->save($info);               
             if($result){
                 echo 1;
