@@ -21,7 +21,7 @@
 					<foreach name="roles" item="vo">
 					<tr>
 						<td>{$vo.id}</td>
-						<td>{$vo.name}</td>
+						<td><a href="{:U('Rbac/rbacinfo',array('id'=>$vo['id']))}">{$vo.name}</a></td>
 						<td>{$vo.remark}</td>
 						<td>
 							<if condition="$vo['status'] eq 1">

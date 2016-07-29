@@ -69,7 +69,23 @@ class RbacController extends AdminbaseController {
         }
         
     }
-
+	/**
+	 *角色详情
+	 */
+	public function rbacinfo(){
+		$id = I('id');
+		$data = $this->role_model->where(array("id" => $id))->find();
+		$user_ids = M("RoleUser")->where(array("role_id"=>$id))->getField("user_id",true);
+		$user_ids = implode(',',$user_ids);
+		
+		$userlist = M('Users')->where('id in ('.$user_ids.')')->select();
+		
+		//print_r($userlist);exit;
+		$this->assign("userlist", $userlist);
+		$this->assign("data", $data);
+		$this->display();
+	}
+	
     /**
      * 编辑角色
      */

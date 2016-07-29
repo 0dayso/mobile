@@ -10,19 +10,23 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
-		$GLOBALS['z']=$GLOBALS['z']+1;
-		M()->startTrans();
+		
 		$count=M('mobile')->where('status=0 and type=2 ')->count();
-		$counts=M('mobile')->where('status=0 and type=2 and isshow%2=0')->count();
-		if($counts==0){
-			$nmb=1;
-		}else{
-			$nmb=0;
-		}		
-        $isallsave=true;  
-		$data=M('mobile')->where('status=0 and type=2 and isshow%2='.$nmb)->limit(5)->lock(true)->getfield('id,mobile',true);
+		$counts=M('mobile')->where('status=0 and type=2 and ffid='.session('ADMIN_ID'))->count();		
+		if($counts>0){			
+			$data=M('mobile')->where('status=0 and type=2 and ffid='.session('ADMIN_ID'))->lock(true)->getfield('id,mobile',true);
+			$this->assign('count',$count);
+			$this->assign('data',$data);
+			$this->display();
+			exit();
+		}
+
+
+		M()->startTrans();		
+        $isallsave=true;                  
+		$data=M('mobile')->where('status=0 and type=2 and ffid=0')->limit(5)->lock(true)->getfield('id,mobile',true);
 		foreach ($data as $key => $value) {
-			$t=M('mobile')->where("id=%d",array($key))->setInc('isshow');	
+			$t=M('mobile')->where("id=%d",array($key))->setField('ffid',session('ADMIN_ID'));	
 			if(!$t){
 			    $isallsave=false;
 			}
@@ -206,6 +210,24 @@ class MobileaddController extends AdminbaseController{
 
 		fclose($myfile);
 		
+    }
+    //作已经加入处理
+    public function mobilecancel(){
+		M()->startTrans();
+		$data['status']=1;		
+		$data['updatetime']=time();
+		$data['userid']=session('ADMIN_ID');
+		$data1=M('mobile')->where('isshow='.$data['userid'])->save($data);
+		if($data1){
+			M()->commit();
+			$data['status']=1;	
+			$this->ajaxreturn($data);
+			exit();
+		}
+		M()->rollback();
+		$data['status']=0;	
+		$this->ajaxreturn($data);
+		exit();
     }
 
 
