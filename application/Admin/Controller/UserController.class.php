@@ -10,13 +10,32 @@ class UserController extends AdminbaseController{
 		$this->role_model = D("Common/Role");
 	}
 	function index(){
-		$count=$this->users_model->where(array("user_type"=>1))->count();
-		$page = $this->page($count, 20);
+		$username = I('keyword');
+		$role_id = I('role_id');
+		$map['user_type'] = 1;
+		
+		if($username != ''){
+			$map['user_login'] = array('like','%'.$username.'%');
+			$parameters['keyword'] = $username;
+		}
+		if($role_id != '' && $role_id != 0){
+			$user_ids = M("RoleUser")->where(array("role_id"=>$role_id))->getField("user_id",true);
+			if($role_id == 1){
+				$user_ids[] = 1;
+			}
+			$user_ids = implode(',',$user_ids);
+			$map['id'] = array('in',$user_ids);
+			
+			$parameters['role_id'] = $role_id;
+		}
+		
+		$count=$this->users_model->where($map)->count();
+		$page = $this->page($count, 20,$parameters);
 
 		$users = $this->users_model->alias("ul")
 		->field('*,count')
 		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE status=1 and userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
-		->where(array("user_type"=>1))
+		->where($map)
 		->order("create_time DESC")
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
@@ -48,6 +67,7 @@ class UserController extends AdminbaseController{
 			$roles["$roleid"]=$r;
 		}
 		
+		$this->assign("parameters",$parameters);
 		$this->assign("allcountlist",$allcountlist);
 		$this->assign("page", $page->show('Admin'));
 		$this->assign("roles",$roles);
