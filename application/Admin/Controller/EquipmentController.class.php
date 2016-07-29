@@ -209,12 +209,7 @@ class EquipmentController extends AdminbaseController {
     		}
     	}
     }
-    
-    public function recoip(){
-        $this->display();
-    }
-        
-    
+       
 
 }
 
