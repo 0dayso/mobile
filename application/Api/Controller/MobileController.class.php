@@ -22,7 +22,6 @@ class MobileController extends Controller {
     }
     //显示一个手机号码
     public function mboile(){
-
     	$data=M('mobile')->field('id,mobile')->where('status=%d',0)->find();
     	if($data){
     		echo $data['mobile'];
@@ -47,6 +46,7 @@ class MobileController extends Controller {
                 }
                 
             }
+            $info['show']=time();
             $result=M('mobile')->where("mobile='%s'",$mobile)->save($info);               
             if($result){
                 echo 1;
