@@ -209,6 +209,7 @@ class EquipmentController extends AdminbaseController {
     		}
     	}
     }
+       
 
 }
 

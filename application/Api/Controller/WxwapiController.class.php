@@ -32,6 +32,11 @@ class WxwapiController extends Controller {
         //$this->ajaxReturn($data,'xml');
     }
     
+ /**
+  * getip()
+  * 获取IP地址
+  */ 
+    
     public function getip(){
         if(getenv('HTTP_CLIENT_IP')) {
             $onlineip = getenv('HTTP_CLIENT_IP');
@@ -42,9 +47,28 @@ class WxwapiController extends Controller {
         } else {
             $onlineip = $HTTP_SERVER_VARS['REMOTE_ADDR'];
         }
-        echo $onlineip;
+        if(!$onlineip){
+            echo 0;
+            exit();
+        }
+        $info = D('record_ip')->field('id,last_login_ip')->where('last_login_ip='.$onlineip.' and status=0')->find();
+       if(!$info){
+           $parame['status']=1;
+           $parame['updatetime']=time();
+           $parame['number']=array('exp','number+1');
+           $parame['last_login_ip']=$onlineip;
+           $result=D('record_ip')->add($parame);
+           if($result){
+               echo $info['last_login_ip'];
+           }else{
+               echo 0;
+           }
+       }else{
+           echo 0;
+       }
+       exit();
+        
     }
-
 
 
 /**
