@@ -11,10 +11,10 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		M()->startTrans();		
-		$count=M('mobile')->where('status=0 and type=2 and twotime>0 ')->count();
-		$counts=M('mobile')->where('status=0 and type=2 and twotime>0 and isshow=0')->count();
+		$count=M('mobile')->where('status=0 and type=2  ')->count();
+		$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
 		if($counts==0){
-			$t=M('mobile')->where("status=0 and type=2 and twotime>0 and isshow=1")->setField('isshow',0);	
+			$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
 		}
         $isallsave=true;                  
 		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);
