@@ -152,7 +152,7 @@
 				var url="{:U('Admin/Mobileadd/mobilecancel')}";
 				var aryid=$('#aryid').val();
 				$.post(url,{'aryid':aryid},function(data){	
-					if(data.status=="1"){						
+					if(data.status==1){						
 						alert("已处理了数据请示重新刷新");	
 					}else{
 						alert("请重新点击按钮");
