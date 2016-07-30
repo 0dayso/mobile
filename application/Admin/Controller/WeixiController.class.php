@@ -37,7 +37,11 @@ class WeixiController extends AdminbaseController {
 		foreach($list as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
+			$where['cdkey'] = $v['cdkey'];
+			$alias = D('equictive')->where($where)->getField('alias');
+			$list[$k]['alias'] = $alias;
 		}
+		
     	$this->assign('list',$list);
 		$this->assign('parameters',$parameters);
 		$this->assign('page',$show);
