@@ -216,7 +216,7 @@ class MobileaddController extends AdminbaseController{
     public function mobilecancel(){
 
     	$id=I('aryid');	
-    	echo $id;	
+    
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
