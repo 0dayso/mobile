@@ -107,7 +107,7 @@ class MobileController extends AdminbaseController{
 	
 	public function saveaddmobile(){
 		$mobile = I('mobile');
-		$mobiledata = explode("\r\n",$mobile);
+		$mobiledata = explode(PHP_EOL,$mobile);
 		
 		foreach($mobiledata as $k=>$v){
 			$mobiledatas[$k]['mobile'] = $v;
