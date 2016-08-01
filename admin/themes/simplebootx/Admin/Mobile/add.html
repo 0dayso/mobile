@@ -31,13 +31,13 @@
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
-				</thead>
-				<tbody>-->
+				</thead>-->
+				<tbody>
 				<foreach name="fileinfo" item="vo" key="k">
 					<tr class="trclick" >
 						<!---<td style="width:4px;" >{$k}</td>-->
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
-							{$vo.filename}
+							<a href="{:U('Mobile/downloadtxt',array('path'=>$vo['path']))}">{$vo.filename}</a>
 						</td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
 							{$vo.filepath}

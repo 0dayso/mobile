@@ -89,6 +89,7 @@ class MobileController extends AdminbaseController{
 			
 			$modifytime = filemtime('./public/uploads/mobile/'.$v);
 			$files_names['filepath'] = date('Y-m-d H:i:s',$modifytime);
+			$files_names['path'] = './public/uploads/mobile/'.$v;
 			$fileinfo[$modifytime] = $files_names;
 		}
 		
@@ -152,6 +153,15 @@ class MobileController extends AdminbaseController{
 	
 	public function uploadmobile(){
 		$this->upload_weixin_resourse('mobile','mobile');
+	}
+	
+	public function downloadtxt(){
+		$filepath = I('path');
+		header("Content-Type: application/force-download");
+		header("Content-Disposition: attachment; filename=".basename($filepath));  
+		
+		readfile($filepath);
+		exit();
 	}
 	
 	public function Cleardata(){
