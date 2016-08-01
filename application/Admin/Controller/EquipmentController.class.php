@@ -195,6 +195,14 @@ class EquipmentController extends AdminbaseController {
         $this->assign('list',$list);
         $this->display();
     }
+	
+	public function getinfo(){
+		$eqid=I('id');
+		$data['list'] = D('runcode')->field('id,taskname')->select();
+		$data['runcodeid'] = D('equictive')->where('id=%d',array($eqid))->getField('runcodeid');
+		
+		echo json_encode($data);
+	}
     
     private function load_menu_lang(){
     	$apps=sp_scan_dir(SPAPP."*",GLOB_ONLYDIR);

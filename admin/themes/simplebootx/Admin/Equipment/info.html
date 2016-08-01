@@ -21,10 +21,18 @@
 			</fieldset>
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
-				<a class="btn" href="{:U('Equipment/mobile')}">{:L('BACK')}</a>
+				<a class="btn" href="javascript:;" data_url="{:U('Equipment/mobile')}" onclick="goback(this);">{:L('BACK')}</a>
 			</div>
 		</form>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		function goback(obj){
+			var data_url = $(obj).attr('data_url');
+			$.get(data_url,{type:1},function(){
+				$('html').remove();
+			})
+		}
+	</script>
 </body>
 </html>

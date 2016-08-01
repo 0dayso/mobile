@@ -47,7 +47,7 @@
 						<!--<td>{$vo.status}</td>-->
 						<td>{$vo.username}</td>	
 						<td>
-							<a href="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}">执行指令</a>
+							<a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}" onclick="open_dialog(this,{$vo['id']})">执行指令</a>
 							<a href="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">设置设备分类</a>
 						</td>
 					</tr>
@@ -73,8 +73,68 @@
 		<div class="page">
 			{$page}
 		</div>
+		
+		<div class="dialog" style="width:100%;height:100%;position:fixed;z-index:100px;top:30%;display:none;">
+			<div class="dialog_con" style="width:600px;height:300px;margin:0 auto;background:#fff;border:1px #ddd solid;">
+				<!--<iframe src="" style="width:100%;height:100%"></iframe>-->
+				<div class="wrap">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="{:U('Equipment/mobile')}">执行指令</a></li>
+					</ul>
+					<form method="post" class="form-horizontal js-ajax-form" action="{:U('Equipment/info')}">
+						<fieldset>
+							<div class="control-group">
+								<label class="control-label">指令</label>
+								<div class="controls">
+									<select name="runcode" id="rouncodelist">
+										
+									</select>
+									<input type="hidden" id="info_id" name="id" value="{:I('id')}" />
+								</div>
+							</div>
+						</fieldset>
+						<div class="form-actions">
+							<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+							<a class="btn" href="javascript:;" onclick="close_dialog();">取消</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		function close_dialog(){
+			$('.dialog').hide();
+		}
+		function open_dialog(obj,id){
+			var data_url = $(obj).attr('data_url');
+			$('#info_id').val(id);
+			$('.dialog').show();
+			//$('.dialog iframe').attr('src',data_url);
+			getruncode(id);
+		}
+		
+		function getruncode(id){
+			var data_url = "{:U('Equipment/getinfo')}";
+			
+			$.post(data_url,{id:id},function(data){
+				var data = eval('('+data+')');
+				var runcodeid = data['runcodeid'];
+				var op_html = '';
+				var list = data['list'];
+				for(var i=0;i<list.length;i++){
+					if(runcodeid == list[i]['id']){
+						op_html = '<option value="'+list[i]['id']+'" selected="selected">'+list[i]['taskname']+'</option>';
+					}else{
+						op_html = '<option value="'+list[i]['id']+'">'+list[i]['taskname']+'</option>';
+					}
+					$('#rouncodelist').append(op_html);				
+				}
+			})
+		}
+		
+	</script>
 	<script>
 		$(document).ready(function() {
 			Wind.css('treeTable');
