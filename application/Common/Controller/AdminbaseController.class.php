@@ -231,7 +231,7 @@ class AdminbaseController extends AppframeController {
 			$data=$this->fileinfo($path);
 			if($table == 'mobile'){
 				$taryt=array();
-				
+				/*
 				foreach($data as $k=>$v){
 					if(strlen($v) <11 || strlen($v) > 11){
 						$errordata[] = $v;
@@ -239,7 +239,8 @@ class AdminbaseController extends AppframeController {
 						$datas[] = $v;
 					}
 				}
-				
+				*/
+				$datas = $data;
 				if(count($datas) > 20000){
 					for($i=1;$i<=count($datas);$i++){
 						$tary[]=$datas[$i-1];
@@ -261,12 +262,13 @@ class AdminbaseController extends AppframeController {
 				}else{
 					$rul=$this->fileaddall($table,$datas,$column);	
 				}
-				
+				/*错误信息生成文件
 				if(!empty($errordata) || $errordata != ''){
 					$errordatas = implode("\r\n",$errordata);
 					$filepath = '.'.$info['file']['savepath']."error".$info['file']['name'];
 					$this->leadin($errordatas,$filepath);
 				}
+				*/
 			}else{
 				$rul=$this->fileaddall($table,$data,$column);	
 			}
