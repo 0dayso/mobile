@@ -13,6 +13,14 @@
 			position:relative;}
 .list_ul li input[type='text']{width:130px;margin-bottom:0;}
 .list_ul li hr{border-top:1px #ddd solid;}
+.list_ul li .s_status{display:block;float:left;}
+.list_ul li .nomorl{
+					width:70px;
+					height:20px;
+					background:#00CE00;}
+.list_ul li .nerror{width:80px;
+					height:20px;
+					background:#FE0100;}
 .list_ul li .error_pit{
 					position:absolute;
 					z-index:3;
@@ -117,7 +125,7 @@
 						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
 					</p>
 					<p>
-						运行状态：<if condition="$val.status == 1">正常<else/>异常</if>
+						<span class="s_status">运行状态：</span><if condition="$val.status == 1"><span class="s_status nomorl"></span><else/><span class="s_status nerror"></span></if>
 					</p>
 					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">×</a>
 				</div>
