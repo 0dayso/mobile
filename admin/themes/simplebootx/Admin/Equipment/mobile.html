@@ -1,25 +1,59 @@
 <admintpl file="header" />
 </head>
+<style>
+.list_ul{margin-bottom:36px;}
+.list_ul li{
+			min-width:200px;
+			width:auto;
+			margin:0 20px 20px 0;
+			list-style:none;
+			float:left;
+			padding:18px;
+			border:1px #ddd solid;
+			position:relative;}
+.list_ul li input[type='text']{width:130px;margin-bottom:0;}
+.list_ul li hr{border-top:1px #ddd solid;}
+.list_ul li .error_pit{
+					position:absolute;
+					z-index:3;
+					right:0;
+					top:0;
+					width:18px;
+					height:18px;
+					text-align:center;
+					line-height:15px;
+					font-size:25px;
+					text-decoration:none;
+					}
+.list_ul li .error_pit:hover{text-decoration:none;}
+.list_ul li .error_pit:visited{text-decoration:none;}
+</style>
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('Equipment/mobile')}">手机列表</a></li>
 			<li><a href="{:U('Equipment/verfly')}">验证手机指令</a></li>
+			<li style="position:relative;">
+				<form class="well form-search" method="post" action="{:U('Equipment/mobile')}" style="width:655px;position:absolute;z-index:2;top:-15px;margin:0;padding:8px 19px;">
+					分类： 
+					<select class="select_2" name="cate_id">
+						<option value='0'>全部</option>
+						<foreach name="equiact" item="val">
+							<option value="{$val.id}" <if condition="$val.id == $parameters['cate_id']">selected="selected"</if> >{$val.cate_name}</option>
+						</foreach>
+					</select> &nbsp;&nbsp;
+					关键字： 
+					<input type="text" name="keyword" style="width: 200px;" value="{$parameters.keyword}" placeholder="请输入序列号或别名">
+					<input type="submit" class="btn btn-primary" value="搜索" />
+				</form>
+			</li>
 		</ul>
-		<form class="well form-search" method="post" action="{:U('Equipment/mobile')}">
-			分类： 
-			<select class="select_2" name="cate_id">
-				<option value='0'>全部</option>
-				<foreach name="equiact" item="val">
-					<option value="{$val.id}" <if condition="$val.id == $parameters['cate_id']">selected="selected"</if> >{$val.cate_name}</option>
-				</foreach>
-			</select> &nbsp;&nbsp;
-			关键字： 
-			<input type="text" name="keyword" style="width: 200px;" value="{$parameters.keyword}" placeholder="请输入序列号或别名">
-			<input type="submit" class="btn btn-primary" value="搜索" />
-		</form>
+		
+		<!--
 		<form class="js-ajax-form" action="{:U('Menu/listorders')}" method="post">			
 			<table class="table table-hover table-bordered table-list" id="menus-table">
+				
+				
 				<thead>
 					<tr>
 						<th width="80">{:L('SORT')}</th>
@@ -30,7 +64,6 @@
 						<th>设备分类</th>
 						<th>执行指令</th>	
 						<th width="80">发布人</th>	
-						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</thead>
@@ -44,7 +77,6 @@
 						<td>{$vo.numb}</td>
 						<td>{$vo.cate_name}</td>
 						<td><a href="{:U('Task/taskinfo',array('id'=>$vo['runcodeid']))}">{$aryi[$vo['runcodeid']]}</a></td>
-						<!--<td>{$vo.status}</td>-->
 						<td>{$vo.username}</td>	
 						<td>
 							<a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$vo['id']))}" onclick="open_dialog(this,{$vo['id']})">执行指令</a>
@@ -63,13 +95,35 @@
 						<th>设备分类</th>
 						<th>执行指令</th>
 						<th>分布人</th>						
-						<!--<th width="80">{:L('STATUS')}</th>-->
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</tfoot>
 			</table>	
 			
-		</form>
+		</form>-->
+		<ul class="list_ul clearfix">
+			<foreach name="list" item='val'>
+			<li>
+				<div class="li_div">
+					<p>手机序列号：{$val.cdkey}</p>
+					<p>
+						<b>别名：<input type="text" class="alias" name="alias" value="{$val.alias}" onchange="changealias(this,{$val.id})"/></b>
+					</p>
+					<hr/>
+					<p>
+						设备分类：{$val.cate_name} <span style="float:right;">>><a href="{:U('Admin/Equipment/mobilecate',array('id'=>$val['id']))}">改</a></span>
+					</p>
+					<p>
+						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
+					</p>
+					<p>
+						运行状态：<if condition="$val.status == 1">正常<else/>异常</if>
+					</p>
+					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">×</a>
+				</div>
+			</li>
+			</foreach>
+		</ul>
 		<div class="page">
 			{$page}
 		</div>
