@@ -48,7 +48,7 @@ class EmailController extends AdminbaseController {
 	
 	public function saveaddemail(){
 		$emailtext = I('emailtext');
-		$emaildata = explode(',',$emailtext);
+		$emaildata = explode(PHP_EOL,$emailtext);
 		
 		foreach($emaildata as $k=>$v){
 			$v = explode('-',$v);

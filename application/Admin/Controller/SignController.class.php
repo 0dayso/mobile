@@ -49,7 +49,7 @@ class SignController extends AdminbaseController {
 	
 	public function saveaddsign(){
 		$signname = I('signname');
-		$signdata = explode(',',$signname);
+		$signdata = explode(PHP_EOL,$signname);
 		foreach($signdata as $k=>$v){
 			$signdatas[$k]['signname'] = $v;
 			$signdatas[$k]['authorid'] = session("ADMIN_ID");

@@ -48,7 +48,7 @@ class WeixinameController extends AdminbaseController {
 	
 	public function saveaddweixin(){
 		$weixiname = I('weixiname');
-		$weixinamedata = explode(',',$weixiname);
+		$weixinamedata = explode(PHP_EOL,$weixiname);
 		foreach($weixinamedata as $k=>$v){
 			$weixinamedatas[$k]['weixiname'] = $v;
 			$weixinamedatas[$k]['authorid'] = session("ADMIN_ID");

@@ -48,7 +48,7 @@ class FriendsController extends AdminbaseController {
 	
 	public function saveaddfriends(){
 		$friendtext = I('friendtext');
-		$frienddata = explode(',',$friendtext);
+		$frienddata = explode(PHP_EOL,$friendtext);
 		foreach($frienddata as $k=>$v){
 			$frienddatas[$k]['friendtext'] = $v;
 			$frienddatas[$k]['authorid'] = session("ADMIN_ID");
