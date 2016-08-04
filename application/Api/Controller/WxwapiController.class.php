@@ -184,6 +184,31 @@ class WxwapiController extends Controller {
         return $wxhao;  
     }
     
+
+       //设备运行状态
+    public function setmobsbzt(){
+        $cdkey=I('get.cdkey');
+        $type=I('get.st');
+        if($cdkey){
+            if($type==1){
+                $info['run']=2;
+            }else{
+                $info['run']=1;
+            }
+            $result=M('equictive')->where("cdkey='%s'",$cdkey)->save($info);               
+            if($result){
+                echo 1;
+            }else{
+                echo 0;
+            }   
+            
+        }else{
+            echo 0;
+        }
+        exit();
+    }
+    
+        
     
 
 }
