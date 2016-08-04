@@ -125,7 +125,7 @@
 						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
 					</p>
 					<p>
-						<span class="s_status">运行状态：</span><if condition="$val.status == 1"><span class="s_status nomorl"></span><else/><span class="s_status nerror"></span></if>
+						<span class="s_status">运行状态：</span><if condition="$val.run == 1"><span class="s_status nomorl"></span><else/><span class="s_status nerror"></span></if>
 					</p>
 					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/mobilecate',array('id'=>$vo['id']))}">×</a>
 				</div>
