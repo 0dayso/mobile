@@ -39,10 +39,10 @@
 <body>
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="{:U('Equipment/mobile')}">手机列表</a></li>
-			<li><a href="{:U('Equipment/verfly')}">验证手机指令</a></li>
+			<li class="active"><a href="{:U('Equipment/erecycle')}">设备回收站列表</a></li>
+			<!--<li><a href="{:U('Equipment/verfly')}">验证手机指令</a></li>-->
 			<li style="position:relative;">
-				<form class="well form-search" method="post" action="{:U('Equipment/mobile')}" style="width:655px;position:absolute;z-index:2;top:-15px;margin:0;padding:8px 19px;">
+				<form class="well form-search" method="post" action="{:U('Equipment/erecycle')}" style="width:655px;position:absolute;z-index:2;top:-15px;margin:0 0 0 20px;padding:8px 19px;">
 					分类： 
 					<select class="select_2" name="cate_id">
 						<option value='0'>全部</option>
@@ -115,19 +115,32 @@
 				<div class="li_div">
 					<p>手机序列号：{$val.cdkey}</p>
 					<p>
-						<b>别名：<input type="text" class="alias" name="alias" value="{$val.alias}" onchange="changealias(this,{$val.id})"/></b>
+						<b>别名：{$val.alias}
+						<!--
+						<input type="text" class="alias" name="alias" value="{$val.alias}" onchange="changealias(this,{$val.id})"/>-->
+						</b>
 					</p>
 					<hr/>
 					<p>
-						设备分类：{$val.cate_name} <span style="float:right;">>><a href="{:U('Admin/Equipment/mobilecate',array('id'=>$val['id']))}">改</a></span>
+						设备分类：{$val.cate_name} 
+						<!--
+						<span style="float:right;">>><a href="{:U('Admin/Equipment/mobilecate',array('id'=>$val['id']))}">改</a></span>
+						-->
 					</p>
 					<p>
-						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
+						当前指令：{$aryi[$val['runcodeid']]}
+						<!--
+						<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
+						-->
 					</p>
-					<p>
+					<p class="clearfix">
 						<span class="s_status">运行状态：</span><if condition="$val.run == 1"><span class="s_status nomorl"></span><else/><span class="s_status nerror"></span></if>
 					</p>
-					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/changeshow')}" onclick="changeshow(this,{$val.id})">×</a>
+					<p>
+						<a href="javascript:;" data_url="{:U('Admin/Equipment/changeshow')}" onclick="reduction(this,{$val.id})">还原</a>
+					</p>
+					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/delmobile')}" onclick="delmobile(this,{$val.id})">×</a>
+					
 				</div>
 			</li>
 			</foreach>
@@ -135,10 +148,9 @@
 		<div class="page">
 			{$page}
 		</div>
-		
+		<!--添加指令弹窗
 		<div class="dialog" style="width:100%;height:100%;position:fixed;z-index:100px;top:30%;display:none;">
 			<div class="dialog_con" style="width:600px;height:300px;margin:0 auto;background:#fff;border:1px #ddd solid;">
-				<!--<iframe src="" style="width:100%;height:100%"></iframe>-->
 				<div class="wrap">
 					<ul class="nav nav-tabs">
 						<li class="active"><a href="{:U('Equipment/mobile')}">执行指令</a></li>
@@ -162,7 +174,7 @@
 					</form>
 				</div>
 			</div>
-		</div>
+		</div>-->
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>
@@ -226,11 +238,24 @@
 			})
 			
 		}
-		
-		function changeshow(obj,id){
+		//还原
+		function reduction(obj,id){
 			var data_url = $(obj).attr('data_url');
-			if(confirm('确定删除吗')){
-				$.post(data_url,{id:id,is_show:0},function(data){
+			if(confirm('确定还原吗')){
+				$.post(data_url,{id:id,is_show:1},function(data){
+					alert(data.msg);
+					if(data.result == 1){
+						window.location.reload();
+					}
+				})
+			}
+			
+		}
+		//彻底删除
+		function delmobile(obj,id){
+			var data_url = $(obj).attr('data_url');
+			if(confirm('删除后不可恢复，确定删除吗')){
+				$.post(data_url,{id:id},function(data){
 					alert(data.msg);
 					if(data.result == 1){
 						window.location.reload();
