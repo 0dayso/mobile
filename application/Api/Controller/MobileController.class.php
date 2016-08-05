@@ -59,6 +59,9 @@ class MobileController extends Controller {
         }
         exit();
     }
+    
+    
+    
     //显示一个手机号码检查是否存在
     
     public function getmboiletype(){ 

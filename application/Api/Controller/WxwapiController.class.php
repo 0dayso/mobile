@@ -188,14 +188,12 @@ class WxwapiController extends Controller {
        //设备运行状态
     public function setmobsbzt(){
         $cdkey=I('get.cdkey');
-        $type=I('get.st');
+        $run=I('get.run');
+        $nmb=I('get.nmb');       
         if($cdkey){
-            if($type==1){
-                $info['run']=2;
-            }else{
-                $info['run']=1;
-            }
-            $result=M('equictive')->where("cdkey='%s'",$cdkey)->save($info);               
+            $data['run']=$run;
+            $data['nmb']=$nmb;      
+            $result=M('equictive')->where("cdkey='%s'",$cdkey)->save($data);               
             if($result){
                 echo 1;
             }else{
