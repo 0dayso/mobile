@@ -166,6 +166,10 @@
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>
+		$(function(){
+			setTimeout(function(){window.location.reload();},600*1000);
+		})
+		
 		function close_dialog(){
 			$('.dialog').hide();
 		}
