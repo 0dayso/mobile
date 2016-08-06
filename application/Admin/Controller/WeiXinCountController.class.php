@@ -20,7 +20,12 @@ class WeiXinCountController extends AdminbaseController{
 			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$list[$k]['ucounts'] = $ucounts;
 			
-			$weixincount = D('weixincount')->where('userid=%d',array($v['id']))->order('createtime desc')->find();
+			$cmap['userid'] = $v['id'];
+			$cmap["modifytime"] = array('gt',strtotime(date("Y-m-d",time())));
+			$cmap2["modifytime"] = array('elt',strtotime(date("Y-m-d 23:59:59",time())));
+			$cmap['_complex'] = $cmap2;
+			
+			$weixincount = D('weixincount')->where($cmap)->order('createtime desc')->find();
 			$list[$k]['pass_num'] = $weixincount['pass_num'];
 			$list[$k]['push_num'] = $weixincount['push_num'];
 			$pass_pre = round($weixincount['pass_num']/$count,2)*100;
