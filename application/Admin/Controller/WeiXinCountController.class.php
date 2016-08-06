@@ -11,12 +11,14 @@ class WeiXinCountController extends AdminbaseController{
 	}
 	function index(){
 		$count=$this->users_model->where(array("user_type"=>1))->count();
-		$page = $this->page($count, 10);
+		//$page = $this->page($count, 10);
 
-		$list = $this->users_model->limit($page->firstRow . ',' . $page->listRows)->order("create_time DESC")->select();
+		//$list = $this->users_model->limit($page->firstRow . ',' . $page->listRows)->order("create_time DESC")->select();
+		$list = $this->users_model->order("create_time DESC")->select();
+		
 		foreach($list as $k=>$v){
-			$count = $this->GetOperateCount(2,$v['id']);
-			$list[$k]['count'] = $count;
+			$ccount = $this->GetOperateCount(2,$v['id']);
+			$list[$k]['count'] = $ccount;
 			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$list[$k]['ucounts'] = $ucounts;
 			
@@ -28,7 +30,7 @@ class WeiXinCountController extends AdminbaseController{
 			$weixincount = D('weixincount')->where($cmap)->order('createtime desc')->find();
 			$list[$k]['pass_num'] = $weixincount['pass_num'];
 			$list[$k]['push_num'] = $weixincount['push_num'];
-			$pass_pre = round($weixincount['pass_num']/$count,2)*100;
+			$pass_pre = round($weixincount['pass_num']/$ccount,2)*100;
 			$pass_pre .= '%';
 			$push_pre = round($weixincount['push_num']/$weixincount['pass_num'],2)*100;
 			$push_pre .= '%';
@@ -41,7 +43,8 @@ class WeiXinCountController extends AdminbaseController{
 		$allcountlist['machcounts'] = $this->GetOperateCount(3);
 		
 		$this->assign("allcountlist",$allcountlist);
-		$this->assign("page", $page->show('Admin'));
+		//$this->assign("page", $page->show('Admin'));
+		$this->assign("count",$count);
 		$this->assign("list",$list);
 		$this->display();
 	}
