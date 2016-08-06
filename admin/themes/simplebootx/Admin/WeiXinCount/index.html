@@ -71,18 +71,34 @@
 			var name = $(obj).attr('name');
 			var val = $(obj).val();
 			var count = $(obj).parents('.datatr').find('.to_count').text();
+			var pass_num = $(obj).parents('.datatr').find("input[name='pass_num']").val();
+			if(pass_num == ''){
+				pass_num = 0;
+			}
+			if(name == 'pass_num' && val > count){
+				alert('通过数不能大于今天操作个数');
+				$(obj).val('');
+				return false;
+			}
+			if(name == 'push_num' && val > pass_num){
+				alert('推送数不能大于通过数');
+				$(obj).val('');
+				return false;
+			}
 			$.post("__URL__/Changedata",{userid:userid,name:name,val:val},function(data){
 				if(data.result == 1){
 					$(obj).val(val);
 					var pre = parseFloat(parseFloat(val/count).toFixed(2))*100;
+					if(val == 0){
+						pre = 0;
+					}
 					if(name == 'pass_num'){
 						$(obj).parents('.datatr').find('.pass_pre').text(pre+'%');
 					}else if(name == 'push_num'){
-						var pass_num = $(obj).parents('.datatr').find("input[name='pass_num']").val();
-						if(pass_num == ''){
-							pass_num = 0;
-						}
 						pre = parseFloat(parseFloat(val/pass_num).toFixed(2))*100;
+						if(val == 0){
+							pre = 0;
+						}
 						$(obj).parents('.datatr').find('.push_pre').text(pre+'%');
 					}
 					
