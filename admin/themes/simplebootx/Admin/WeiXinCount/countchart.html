@@ -38,10 +38,10 @@
 				<input type="hidden" id="param_userid" value="{$param.userid}" username="{$param.username}" />
 			</div>
 			<div id="labelslist" style="float:right;padding:13px 0;">
-				<button class="btn">通过数</button>
-				<button class="btn btn-primary">通过率</button>
-				<button class="btn btn-primary">推送数</button>
-				<button class="btn btn-primary">推送率</button>
+				<button class="btn selected" value="1">通过数</button>
+				<button class="btn btn-primary" value="2">通过率</button>
+				<button class="btn btn-primary" value="3">推送数</button>
+				<button class="btn btn-primary" value="4">推送率</button>
 			</div>
 		</div>
 		
@@ -177,17 +177,22 @@
 		
 		$('#yearlist').change(function(){
 			var permenu_id = $(this).attr('value');
+			$('#permenu_list li').removeClass('selected');
 			$('#permenu_list li').css('background','#fff');
+			var typeid = $('#labelslist').find('.selected').attr('value');
 			
-			weixin_num(userid,username,permenu_id);
+			weixin_num(userid,username,permenu_id,'','',typeid);
 		})
 		
 		$('#permenu_list li').click(function() {
+			$('#permenu_list li').removeClass('selected');
+			$('#permenu_list li').css('background','#fff');
+			$(this).css('background','#48b9e5');
+			$(this).addClass('selected');
 			var year_val  = $('#yearlist').val();
 			var permenu_id = year_val+'-'+$(this).attr('value');
 			var permenu_name = year_val+'年'+$(this).find('b').text();
-			$('#permenu_list li').css('background','#fff');
-			$(this).css('background','#48b9e5');
+			
 			var month = $(this).attr('value');
 			var months = "1,3,5,7,8,10,12";
 			var label_length = 30;
@@ -200,16 +205,64 @@
 					label_length = 31;
 				}
 			}
-			weixin_num(userid,username,permenu_id,1,label_length);
+			var typeid = $('#labelslist').find('.selected').attr('value');
+			
+			weixin_num(userid,username,permenu_id,1,label_length,typeid);
 		});
 		
+		$('#labelslist .btn').click(function(){
+			$('#labelslist .btn').addClass('btn-primary');
+			$('#labelslist .btn').removeClass('selected');
+			$(this).removeClass('btn-primary');
+			$(this).addClass('selected');
+			var typeid = $(this).attr('value');
+			
+			$('#permenu_list li').removeClass('selected');
+			$('#permenu_list li').css('background','#fff');
+			$('#yearlist option:first').attr('selected','selected');
+			
+			weixin_num(userid,username,'','','',typeid);
+		})
 		
-		function weixin_num(userid,username,permenu_id,sum_ruleid,label_length){
+		/*附带左边年月条件
+		$('#labelslist .btn').click(function(){
+			$('#labelslist .btn').addClass('btn-primary');
+			$('#labelslist .btn').removeClass('selected');
+			$(this).removeClass('btn-primary');
+			$(this).addClass('selected');
+			var typeid = $(this).attr('value');
+			
+			var year_val = $('#yearlist').val();
+			var month_val = $('#permenu_list').find('.selected').attr('value');
+			var permenu_id = year_val;
+			var sum_ruleid = '';
+			var label_length = '';
+			
+			if(month_val > 0){
+				permenu_id = year_val+'-'+month_val;
+				sum_ruleid = 1;
+				var months = "1,3,5,7,8,10,12";
+				var label_length = 30;
+				var str = months.indexOf(month_val);
+				
+				if(month_val == 2){
+					label_length = 29;
+				}else{
+					if(str >= 0 ){
+						label_length = 31;
+					}
+				}
+			}
+			
+			weixin_num(userid,username,permenu_id,sum_ruleid,label_length,typeid);
+		})
+		*/
+		function weixin_num(userid,username,permenu_id,sum_ruleid,label_length,typeid){
 			$('#perinfo').html('');
 			$('#perinfo2').remove();
 			var url="{:U('WeiXinCount/Getchart')}";
 			
-			$.get(url,{userid:userid,permenu_id:permenu_id,sum_ruleid:sum_ruleid},function(data){
+			$.get(url,{userid:userid,permenu_id:permenu_id,sum_ruleid:sum_ruleid,typeid:typeid},function(data){
 				update_config(data,username,label_length);
 			})
 		}
@@ -261,7 +314,7 @@
 			};
 			var html_th = '<thead><tr>';
 			var html_th_b = '<thead><tr>';
-			var html_val = '<tbody><tr>';
+			var html_val = '<tbody>';
 			
 			var labelset = [];
 			var str = '月';
@@ -271,6 +324,7 @@
 				labels_length = label_length;
 			}
 			var tr_num = Math.ceil(labels_length/5);
+			/*
 			if(labels_length > 5){
 				var html_table2 = '<table id="perinfo2" cellpadding="0" cellspacing="0"  class="table table-hover table-bordered">';
 				var html_th2 = '<thead><tr>';
@@ -278,7 +332,7 @@
 				var html_val2 = '<tbody><tr>';
 				
 			}
-			
+			*/
 			var mydate = new Date();
 			//var year = mydate.getFullYear();
 			
@@ -287,62 +341,117 @@
 				
 				if(!datalist['list']){
 					datalist['list'] = [] ;
-					datalist['list'][index_col] = [] ;
+					datalist['list'][index_col] = [];
 					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
 					datalist['list'][index_col]['pass_avg'] = 0;
+					datalist['list'][index_col]['pass_pre'] = 0;
+					datalist['list'][index_col]['pass_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['push_sum'] = 0;
 					datalist['list'][index_col]['push_avg'] = 0;
+					datalist['list'][index_col]['push_pre'] = 0;
+					datalist['list'][index_col]['push_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['allpass_avg'] = 0;
+					datalist['list'][index_col]['allpass_pre_avg'] = 0;
 					datalist['list'][index_col]['allpush_avg'] = 0;
+					datalist['list'][index_col]['allpush_pre_avg'] = 0;
 				}
 				if(!datalist['list'][index_col]){
-					datalist['list'][index_col] = [] ;
+					datalist['list'][index_col] = [];
 					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
 					datalist['list'][index_col]['pass_avg'] = 0;
+					datalist['list'][index_col]['pass_pre'] = 0;
+					datalist['list'][index_col]['pass_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['push_sum'] = 0;
 					datalist['list'][index_col]['push_avg'] = 0;
+					datalist['list'][index_col]['push_pre'] = 0;
+					datalist['list'][index_col]['push_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['allpass_avg'] = 0;
+					datalist['list'][index_col]['allpass_pre_avg'] = 0;
 					datalist['list'][index_col]['allpush_avg'] = 0;
+					datalist['list'][index_col]['allpush_pre_avg'] = 0;
 				}
 				
 				var pass_sum = datalist['list'][index_col]['pass_sum'];
 				var pass_avg = datalist['list'][index_col]['pass_avg'];
+				var pass_pre = datalist['list'][index_col]['pass_pre'];
+				var pass_pre_avg = datalist['list'][index_col]['pass_pre_avg'];
+				
 				var push_sum = datalist['list'][index_col]['push_sum'];
 				var push_avg = datalist['list'][index_col]['push_avg'];
+				var push_pre = datalist['list'][index_col]['push_pre'];
+				var push_pre_avg = datalist['list'][index_col]['push_pre_avg'];
+				
 				var allpass_avg = datalist['list'][index_col]['allpass_avg'];
+				var allpass_pre_avg = datalist['list'][index_col]['allpass_pre_avg'];
+				
 				var allpush_avg = datalist['list'][index_col]['allpush_avg'];
+				var allpush_pre_avg = datalist['list'][index_col]['allpush_pre_avg'];
+				
+				
 				var strstr = index_col+str;
 				
-				labelset.push(strstr);
-				newDataset.data.push(pass_sum);
-				newDatasetb.data.push(pass_avg);
-				newDatasetd.data.push(allpass_avg);
-				
-				if(index > 5){
+				var single_sum = 0;
+				var single_avg = 0;
+				var all_avg = 0;
+				var typeid_str = '';
+				if(datalist['typeid'] == 2){
+					single_sum = pass_pre;
+					single_avg = pass_pre_avg;
+					all_avg = allpass_pre_avg;
+					typeid_str = '%';
 					
+				}else if(datalist['typeid'] == 3){
+					single_sum = push_sum;
+					single_avg = push_avg;
+					all_avg = allpush_avg;
+				
+				}else if(datalist['typeid'] == 4){
+					single_sum = push_pre;
+					single_avg = push_pre_avg;
+					all_avg = allpush_pre_avg;
+					typeid_str = '%';
+					
+				}else{
+					single_sum = pass_sum;
+					single_avg = pass_avg;
+					all_avg = allpass_avg;
+				}
+				
+				labelset.push(strstr);
+				newDataset.data.push(single_sum);
+				newDatasetb.data.push(single_avg);
+				newDatasetd.data.push(all_avg);
+				
+				html_th_th = '<th style="text-align:center;padding:8px 5px;">时间</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值'+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值'+typeid_str+'</th>';
+				html_val += '<tr><td style="text-align:center;padding:8px 5px;">'+strstr+'</td><td style="text-align:center;">'+single_sum+'</td><td style="text-align:center;">'+single_avg+'</td><td style="text-align:center;">'+all_avg+'</td></tr>';
+				
+				/*
+				if(index > 5){
 					html_th2 += '<th style="text-align:center;" colspan="3">'+strstr+'</th>';
 					html_th_b2 += '<th style="text-align:center;padding:8px 5px;" >'+username+labelname+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值</th>';
 					html_val2 += '<td style="text-align:center;">'+pass_sum+'</td><td style="text-align:center;">'+pass_avg+'</td><td style="text-align:center;">'+allpass_avg+'</td>';
-					
-					
 				}else{
 					html_th += '<th style="text-align:center;" colspan="3">'+strstr+'</th>';
 					html_th_b += '<th style="text-align:center;padding:8px 5px;">'+username+labelname+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值</th>';
 					html_val += '<td style="text-align:center;">'+pass_sum+'</td><td style="text-align:center;">'+pass_avg+'</td><td style="text-align:center;">'+allpass_avg+'</td>';
 				}
-				
+				*/
 			}
-			
+			html_th += html_th_th;
 			html_th += '</tr></thead>';
 			html_th_b += '</tr></thead>';
-			html_val += '</tr></tbody>';
+			html_val += '</tbody>';
 			
 			$('#perinfo').append(html_th);
-			$('#perinfo').append(html_th_b);
+			//$('#perinfo').append(html_th_b);
 			$('#perinfo').append(html_val);
-
+			/*
 			if(labels_length > 5){
 				html_th2 += '</tr></thead>';
 				html_th_b2 += '</tr></thead>';
@@ -359,7 +468,7 @@
 			}else{
 				$('#perinfo2').remove();
 			}
-			
+			*/
 			
 			config.data.labels =labelset;
 			config.data.datasets.pop();

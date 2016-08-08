@@ -51,10 +51,11 @@ class WeiXinCountController extends AdminbaseController{
 	}
 	/**
 	 *获取操作个数
-	 *$type:1-默认所有,2-今天所有,3-机器操作所有,4-用户所有
+	 *$type:1-默认所有,2-今天所有,3-机器操作所有,4-用户所有,5-某个时间操作个数
 	 *$userid:用户id
+	 *$map_time:某个时间操作个数的条件
 	 */
-	protected function GetOperateCount($type='1',$userid){
+	protected function GetOperateCount($type='1',$userid,$map_time){
 		$map['status'] = 1;
 		if($type == 2){
 			$map["updatetime"] = array('gt',strtotime(date("Y-m-d",time())));
@@ -68,6 +69,11 @@ class WeiXinCountController extends AdminbaseController{
 			$map['userid'] = 0;
 		}else if($type == 4 && $userid > 0){
 			$map['userid'] = $userid;
+		}else if($type == 5){
+			if($userid > 0){
+				$map['userid'] = $userid;
+			}
+			$map = array_merge($map,$map_time);
 		}
 		$operatecounts = D('mobile')->where($map)->count();
 		return $operatecounts;
@@ -210,7 +216,7 @@ class WeiXinCountController extends AdminbaseController{
 	 *$sum_ruleid:时间筛选条件-1按天，2按月
 	 *$typeid:筛选条件-1通过数，2通过率,3推送数,4推送率
 	 *$year_num:统计年数，默认最近3年
-	 *$cur_year：统计年份，默认当前年份
+	 *$cur_time：统计时间，默认当前年份
 	 */
 	protected function Getsumgroup($userid,$sum_ruleid=2,$typeid=1,$year_num,$cur_time){
 		$datas = $this->Getsumgroupdata($userid,$sum_ruleid,$typeid,$year_num,$cur_time);
@@ -238,19 +244,34 @@ class WeiXinCountController extends AdminbaseController{
 			
 			$datas[$k]['pass_avg'] = round($v['pass_sum']/$single_days,2);
 			$datas[$k]['push_avg'] = round($v['push_sum']/$single_days,2);
+			$datas[$k]['pass_pre_avg'] = round($v['pass_pre']/$single_days,2);
+			$datas[$k]['push_pre_avg'] = round($v['push_pre']/$single_days,2);
 			
 			$datas[$k]['allpass_sum'] = $dataall[$k]['pass_sum'];
 			$datas[$k]['allpush_sum'] = $dataall[$k]['push_sum'];
+			$datas[$k]['allpass_pre'] = $dataall[$k]['pass_pre'];
+			$datas[$k]['allpush_pre'] = $dataall[$k]['push_pre'];
+			
 			$datas[$k]['allpass_avg'] = round($dataall[$k]['pass_sum']/$all_days,2);
 			$datas[$k]['allpush_avg'] = round($dataall[$k]['push_sum']/$all_days,2);
+			$datas[$k]['allpass_pre_avg'] = round($dataall[$k]['pass_pre']/$all_days,2);
+			$datas[$k]['allpush_pre_avg'] = round($dataall[$k]['push_pre']/$all_days,2);
 		}
 		
 		$datalist['typeid'] = $typeid;
 		$datalist['sum_ruleid'] = $sum_ruleid;
 		$datalist['list'] = $datas;
+		
 		return $datalist;
 	}
-	
+	/**
+	 *根据用户id获取每月通过数/推送数
+	 *$userid:用户id
+	 *$sum_ruleid:时间筛选条件-1按天，2按月
+	 *$typeid:筛选条件-1通过数，2通过率,3推送数,4推送率
+	 *$year_num:统计年数，默认最近3年
+	 *$cur_time：统计时间，默认当前年份
+	 */
 	protected function Getsumgroupdata($userid,$sum_ruleid=2,$typeid=1,$year_num,$cur_time){
 		if(!$cur_time){
 			$cur_time = date('Y',time());
@@ -279,61 +300,34 @@ class WeiXinCountController extends AdminbaseController{
 		
 		$field = "createtime,sum(pass_num) pass_sum,sum(push_num) push_sum";
 		$data = D('weixincount')->where($map)->group($group)->getField($field,true);
+		
 		foreach($data as $k=>$v){
 			if(isset($v['createtime'])){
 				$data[$k]['createtime'] = date('Y-m-d H:i:s',$v['createtime']);
 			}
+			$map_time["FROM_UNIXTIME(createtime,'%Y-%m')"] = date('Y-m',$v['createtime']);
+			$OperateCount = $this->GetOperateCount(5,$userid,$map_time);
+			$data[$k]['operate_count'] = $OperateCount;
+			
+			if($v['pass_sum'] < $OperateCount){
+				$pass_pre = round($v['pass_sum']/$OperateCount,2)*100;
+			}else{
+				$pass_pre = 0;
+			}
+			if($v['pass_sum'] > $v['push_sum']){
+				$push_pre = round($v['push_sum']/$v['pass_sum'],2)*100;
+			}else{
+				$push_pre = 0;
+			}
+			$data[$k]['pass_pre'] = $pass_pre;
+			$data[$k]['push_pre'] = $push_pre;
+			
 			$datas[date($date_rule,$k)] = $data[$k];
 		}
+		
 		return $datas;
 	}
 	
-	/**
-	 *根据用户id获取每月通过数/推送数
-	 *$userid:用户id
-	 *$sum_ruleid:筛选条件-1按天，2按月
-	 *$year_num:统计年数，默认最近3年
-	 *$cur_year：统计年份，默认当前年份
-	 */
-	/*
-	protected function Getsumgroup($userid,$sum_ruleid=2,$year_num,$cur_time){
-		if(!$cur_time){
-			$cur_time = date('Y',time());
-		}
-		if($sum_ruleid == 1 && $cur_time != ''){
-			$cur_time = date('Y-m',strtotime($cur_time));
-		}
-		
-		$map['userid'] = $userid;
-		if($sum_ruleid == 1){
-			$group = "FROM_UNIXTIME(createtime,'%Y-%m-%d')";
-			$map2["FROM_UNIXTIME(createtime,'%Y-%m')"] = $cur_time;
-			$map2['_logic'] = 'and';
-			$map['_complex'] = $map2;
-			$date_rule = 'j';
-		}else{
-			$group = "FROM_UNIXTIME(createtime,'%Y-%m')";
-			$map2["FROM_UNIXTIME(createtime,'%Y')"] = $cur_time;
-			$map2['_logic'] = 'and';
-			$map['_complex'] = $map2;
-			$date_rule = 'n';
-		}
-		
-		$field = "createtime,sum(pass_num) pass_sum,sum(push_num) push_sum";
-		$data = D('weixincount')->where($map)->group($group)->getField($field,true);
-		
-		foreach($data as $k=>$v){
-			if(isset($v['createtime'])){
-				$data[$k]['createtime'] = date('Y-m-d H:i:s',$v['createtime']);
-			}
-			$datas[date($date_rule,$k)] = $data[$k];
-		}
-		
-		$datalist['sum_ruleid'] = $sum_ruleid;
-		$datalist['list'] = $datas;
-		return $datalist;
-	}
-	*/
 	protected function getyears(){
 		$year_num = 10;
 		$cur_year = date('Y',time());
