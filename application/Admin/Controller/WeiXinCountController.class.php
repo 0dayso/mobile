@@ -23,11 +23,12 @@ class WeiXinCountController extends AdminbaseController{
 			$list[$k]['ucounts'] = $ucounts;
 			
 			$cmap['userid'] = $v['id'];
-			$cmap["modifytime"] = array('gt',strtotime(date("Y-m-d",time())));
-			$cmap2["modifytime"] = array('elt',strtotime(date("Y-m-d 23:59:59",time())));
+			$cmap["createtime"] = array('gt',strtotime(date("Y-m-d",time())));
+			$cmap2["createtime"] = array('elt',strtotime(date("Y-m-d 23:59:59",time())));
 			$cmap['_complex'] = $cmap2;
 			
 			$weixincount = D('weixincount')->where($cmap)->order('createtime desc')->find();
+			
 			$list[$k]['pass_num'] = $weixincount['pass_num'];
 			$list[$k]['push_num'] = $weixincount['push_num'];
 			$pass_pre = round($weixincount['pass_num']/$ccount,2)*100;
@@ -198,11 +199,94 @@ class WeiXinCountController extends AdminbaseController{
 		$userid = I('userid');
 		$sum_ruleid = I('sum_ruleid');
 		$cur_time = I('permenu_id');
-        $data = $this->Getsumgroup($userid,$sum_ruleid,$year_num,$cur_time);
+		$typeid = I('typeid');
+        $data = $this->Getsumgroup($userid,$sum_ruleid,$typeid,$year_num,$cur_time);
 		
 		$this->ajaxReturn($data);
 	}
+	/**
+	 *根据用户id获取每月通过数/推送数
+	 *$userid:用户id
+	 *$sum_ruleid:时间筛选条件-1按天，2按月
+	 *$typeid:筛选条件-1通过数，2通过率,3推送数,4推送率
+	 *$year_num:统计年数，默认最近3年
+	 *$cur_year：统计年份，默认当前年份
+	 */
+	protected function Getsumgroup($userid,$sum_ruleid=2,$typeid=1,$year_num,$cur_time){
+		$datas = $this->Getsumgroupdata($userid,$sum_ruleid,$typeid,$year_num,$cur_time);
+		$dataall = $this->Getsumgroupdata('',$sum_ruleid,$typeid,$year_num,$cur_time);
+		
+		foreach($datas as $k=>$v){
+			if($sum_ruleid == 1){
+				$count_map['userid'] = $userid;
+				$count_map["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',strtotime($v['createtime']));
+				$day_count =  D('weixincount')->where($count_map)->count();
+				
+				$allcount_map["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',strtotime($v['createtime']));
+				$allday_count =  D('weixincount')->where($allcount_map)->count();
+			
+				$single_days = $day_count;
+				$all_days = $allday_count;
+			}else{
+				$kktime = $this->mFristAndLastTime($k);
+				$last_time = $kktime['lasttime'];
+				$month_days = date('d',$last_time);
+				
+				$single_days = $month_days;
+				$all_days = $month_days;
+			}
+			
+			$datas[$k]['pass_avg'] = round($v['pass_sum']/$single_days,2);
+			$datas[$k]['push_avg'] = round($v['push_sum']/$single_days,2);
+			
+			$datas[$k]['allpass_sum'] = $dataall[$k]['pass_sum'];
+			$datas[$k]['allpush_sum'] = $dataall[$k]['push_sum'];
+			$datas[$k]['allpass_avg'] = round($dataall[$k]['pass_sum']/$all_days,2);
+			$datas[$k]['allpush_avg'] = round($dataall[$k]['push_sum']/$all_days,2);
+		}
+		
+		$datalist['typeid'] = $typeid;
+		$datalist['sum_ruleid'] = $sum_ruleid;
+		$datalist['list'] = $datas;
+		return $datalist;
+	}
 	
+	protected function Getsumgroupdata($userid,$sum_ruleid=2,$typeid=1,$year_num,$cur_time){
+		if(!$cur_time){
+			$cur_time = date('Y',time());
+		}
+		if($sum_ruleid == 1 && $cur_time != ''){
+			$cur_time = date('Y-m',strtotime($cur_time));
+		}
+		if($userid > 0){
+			$map['userid'] = $userid;
+		}
+		
+		if($sum_ruleid == 1){
+			$group = "FROM_UNIXTIME(createtime,'%Y-%m-%d')";
+			$map2["FROM_UNIXTIME(createtime,'%Y-%m')"] = $cur_time;
+			$map2['_logic'] = 'and';
+			$map['_complex'] = $map2;
+			$date_rule = 'j';
+			
+		}else{
+			$group = "FROM_UNIXTIME(createtime,'%Y-%m')";
+			$map2["FROM_UNIXTIME(createtime,'%Y')"] = $cur_time;
+			$map2['_logic'] = 'and';
+			$map['_complex'] = $map2;
+			$date_rule = 'n';
+		}
+		
+		$field = "createtime,sum(pass_num) pass_sum,sum(push_num) push_sum";
+		$data = D('weixincount')->where($map)->group($group)->getField($field,true);
+		foreach($data as $k=>$v){
+			if(isset($v['createtime'])){
+				$data[$k]['createtime'] = date('Y-m-d H:i:s',$v['createtime']);
+			}
+			$datas[date($date_rule,$k)] = $data[$k];
+		}
+		return $datas;
+	}
 	
 	/**
 	 *根据用户id获取每月通过数/推送数
@@ -211,6 +295,7 @@ class WeiXinCountController extends AdminbaseController{
 	 *$year_num:统计年数，默认最近3年
 	 *$cur_year：统计年份，默认当前年份
 	 */
+	/*
 	protected function Getsumgroup($userid,$sum_ruleid=2,$year_num,$cur_time){
 		if(!$cur_time){
 			$cur_time = date('Y',time());
@@ -248,7 +333,7 @@ class WeiXinCountController extends AdminbaseController{
 		$datalist['list'] = $datas;
 		return $datalist;
 	}
-	
+	*/
 	protected function getyears(){
 		$year_num = 10;
 		$cur_year = date('Y',time());
@@ -262,5 +347,18 @@ class WeiXinCountController extends AdminbaseController{
 		$sum = D('weixincount')->where('userid=%d',array($userid))->getField('SUM('.$colname.')');
 		return $sum;
 	}
-	
+	/**
+	 *
+	 * 获取指定年月的开始和结束时间戳
+	 *
+	 * @param int $time 当月任意时间戳
+	 * @return array(开始时间,结束时间)
+	 */
+	protected function mFristAndLastTime($time=0){
+		$time = $time ? $time : time();
+		$y = date('Y', $time);
+		$m = date('m', $time);
+		$d = date('t', $time);
+		return array("firsttime"=>mktime(0,0,0,$m,1,$y),"lasttime"=>mktime(23,59,59,$m,$d,$y));
+	}
 }

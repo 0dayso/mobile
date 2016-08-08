@@ -27,14 +27,22 @@
 			<li class="active"><a href="{:U('WeiXinCount/countchart',array('userid'=>$param['userid']))}">统计详情</a></li>
 		</ul>
 		
-		<div class="well" >
-			操作总个数&nbsp;{$param.ucounts} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			平均每天操作个数&nbsp;{$param.ucounts_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
-			通过总数&nbsp;{$param.pass_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			通过平均数&nbsp;{$param.pass_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			推送总数&nbsp;{$param.push_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-			推送平均数&nbsp;{$param.push_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="hidden" id="param_userid" value="{$param.userid}" username="{$param.username}" />
+		<div class="well clearfix" style="padding:0 19px;">
+			<div style="float:left;padding:19px 0;">
+				操作总个数&nbsp;{$param.ucounts} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				平均每天操作个数&nbsp;{$param.ucounts_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+				通过总数&nbsp;{$param.pass_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				通过平均数&nbsp;{$param.pass_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				推送总数&nbsp;{$param.push_sum} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+				推送平均数&nbsp;{$param.push_avg} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="hidden" id="param_userid" value="{$param.userid}" username="{$param.username}" />
+			</div>
+			<div id="labelslist" style="float:right;padding:13px 0;">
+				<button class="btn">通过数</button>
+				<button class="btn btn-primary">通过率</button>
+				<button class="btn btn-primary">推送数</button>
+				<button class="btn btn-primary">推送率</button>
+			</div>
 		</div>
 		
 		<div class="clearfix">
@@ -96,12 +104,20 @@
             data: {
                 labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
 				datasets: [{
-                    label: "通过数",
+                    label: "个人通过数",
                     data: [20, 90, 50, 70, 80, 100, 60, 50, 40, 60, 80, 90],
                     fill: false,
                 },{
-                    label: "推送数",
+                    label: "个人通过数平均值",
                     data: [10, 50, 60, 50, 70, 90, 100, 60, 70, 90, 85, 95],
+                    fill: false,
+                },{
+                    label: "本组通过数平均值",
+                    data: [20, 60, 70, 80, 70, 90, 70, 100, 60, 85, 85, 97],
+                    fill: false,
+                },{
+                    label: "全体通过数平均值",
+                    data: [15, 70, 80, 60, 20, 40, 50, 60, 70, 100, 95, 85],
                     fill: false,
                 }]
 			   /* datasets: [{
@@ -114,15 +130,6 @@
                     data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
                     fill: false,
                     borderDash: [5, 5],
-                }, {
-                    label: "My Third dataset - No bezier",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                    lineTension: 0,
-                    fill: false,
-                }, {
-                    label: "My Fourth dataset",
-                    data: [randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor(), randomScalingFactor()],
-                    fill: false,
                 }]*/
             },
             options: {
@@ -201,16 +208,29 @@
 			$('#perinfo').html('');
 			$('#perinfo2').remove();
 			var url="{:U('WeiXinCount/Getchart')}";
+			
 			$.get(url,{userid:userid,permenu_id:permenu_id,sum_ruleid:sum_ruleid},function(data){
 				update_config(data,username,label_length);
 			})
 		}
 		
 		function update_config(datalist,username,label_length){
+			var labelname = '';
+			if(datalist['typeid'] == 2){
+				labelname = '通过率';
+			}else if(datalist['typeid'] == 3){
+				labelname = '推送数';
+			}else if(datalist['typeid'] == 4){
+				labelname = '推送率';
+			}else{
+				labelname = '通过数';
+			}
+			
 			var background = randomColor(0.5);
 			var backgroundb = randomColor(0.5);
+			var backgroundd = randomColor(0.5);
 			var newDataset = {
-				label: username+'通过数',
+				label: username+labelname,
 				borderColor: background,
 				backgroundColor: background,
 				pointBorderColor: background,
@@ -220,7 +240,7 @@
 				data: [],
 			};
 			var newDatasetb = {
-				label: username+'推送数',
+				label: username+labelname+'平均值',
 				borderColor: backgroundb,
 				backgroundColor: backgroundb,
 				pointBorderColor: backgroundb,
@@ -229,7 +249,16 @@
 				fill: false,
 				data: [],
 			};
-			
+			var newDatasetd = {
+				label: '全体'+labelname+'平均值',
+				borderColor: backgroundd,
+				backgroundColor: backgroundd,
+				pointBorderColor: backgroundd,
+				pointBackgroundColor: backgroundd,
+				pointBorderWidth: 1,
+				fill: false,
+				data: [],
+			};
 			var html_th = '<thead><tr>';
 			var html_th_b = '<thead><tr>';
 			var html_val = '<tbody><tr>';
@@ -241,12 +270,13 @@
 				str = '日';
 				labels_length = label_length;
 			}
-			
-			if(labels_length > 15){
+			var tr_num = Math.ceil(labels_length/5);
+			if(labels_length > 5){
 				var html_table2 = '<table id="perinfo2" cellpadding="0" cellspacing="0"  class="table table-hover table-bordered">';
 				var html_th2 = '<thead><tr>';
 				var html_th_b2 = '<thead><tr>';
 				var html_val2 = '<tbody><tr>';
+				
 			}
 			
 			var mydate = new Date();
@@ -260,30 +290,47 @@
 					datalist['list'][index_col] = [] ;
 					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
+					datalist['list'][index_col]['pass_avg'] = 0;
 					datalist['list'][index_col]['push_sum'] = 0;
+					datalist['list'][index_col]['push_avg'] = 0;
+					datalist['list'][index_col]['allpass_avg'] = 0;
+					datalist['list'][index_col]['allpush_avg'] = 0;
 				}
 				if(!datalist['list'][index_col]){
 					datalist['list'][index_col] = [] ;
 					//datalist['list'][index_col]['year'] = 0;
 					datalist['list'][index_col]['pass_sum'] = 0;
+					datalist['list'][index_col]['pass_avg'] = 0;
 					datalist['list'][index_col]['push_sum'] = 0;
+					datalist['list'][index_col]['push_avg'] = 0;
+					datalist['list'][index_col]['allpass_avg'] = 0;
+					datalist['list'][index_col]['allpush_avg'] = 0;
 				}
 				
 				var pass_sum = datalist['list'][index_col]['pass_sum'];
+				var pass_avg = datalist['list'][index_col]['pass_avg'];
 				var push_sum = datalist['list'][index_col]['push_sum'];
+				var push_avg = datalist['list'][index_col]['push_avg'];
+				var allpass_avg = datalist['list'][index_col]['allpass_avg'];
+				var allpush_avg = datalist['list'][index_col]['allpush_avg'];
 				var strstr = index_col+str;
 				
 				labelset.push(strstr);
 				newDataset.data.push(pass_sum);
-				newDatasetb.data.push(push_sum);
-				if(index > 15){
-					html_th2 += '<th style="text-align:center;" colspan="2">'+strstr+'</th>';
-					html_th_b2 += '<th style="text-align:center;padding:8px 5px;" >通过数</th><th style="text-align:center;padding:8px 5px;">推送数</th>';
-					html_val2 += '<td align="center">'+pass_sum+'</td><td align="center">'+push_sum+'</td>';
+				newDatasetb.data.push(pass_avg);
+				newDatasetd.data.push(allpass_avg);
+				
+				if(index > 5){
+					
+					html_th2 += '<th style="text-align:center;" colspan="3">'+strstr+'</th>';
+					html_th_b2 += '<th style="text-align:center;padding:8px 5px;" >'+username+labelname+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值</th>';
+					html_val2 += '<td style="text-align:center;">'+pass_sum+'</td><td style="text-align:center;">'+pass_avg+'</td><td style="text-align:center;">'+allpass_avg+'</td>';
+					
+					
 				}else{
-					html_th += '<th style="text-align:center;" colspan="2">'+strstr+'</th>';
-					html_th_b += '<th style="text-align:center;padding:8px 5px;">通过数</th><th style="text-align:center;padding:8px 5px;">推送数</th>';
-					html_val += '<td align="center">'+pass_sum+'</td><td align="center">'+push_sum+'</td>';
+					html_th += '<th style="text-align:center;" colspan="3">'+strstr+'</th>';
+					html_th_b += '<th style="text-align:center;padding:8px 5px;">'+username+labelname+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值</th>';
+					html_val += '<td style="text-align:center;">'+pass_sum+'</td><td style="text-align:center;">'+pass_avg+'</td><td style="text-align:center;">'+allpass_avg+'</td>';
 				}
 				
 			}
@@ -296,16 +343,19 @@
 			$('#perinfo').append(html_th_b);
 			$('#perinfo').append(html_val);
 
-			if(labels_length > 15){
+			if(labels_length > 5){
 				html_th2 += '</tr></thead>';
 				html_th_b2 += '</tr></thead>';
 				html_val2 += '</tr></tbody>';
 				html_table2 += '</table>';
 				
-				$('.tablelist').append(html_table2);
-				$('#perinfo2').append(html_th2);
-				$('#perinfo2').append(html_th_b2);
-				$('#perinfo2').append(html_val2);
+				for(m=1;m<tr_num;m++){}
+					$('.tablelist').append(html_table2);
+					$('#perinfo2').append(html_th2);
+					$('#perinfo2').append(html_th_b2);
+					$('#perinfo2').append(html_val2);
+				
+				
 			}else{
 				$('#perinfo2').remove();
 			}
@@ -314,8 +364,11 @@
 			config.data.labels =labelset;
 			config.data.datasets.pop();
 			config.data.datasets.pop();
+			config.data.datasets.pop();
+			config.data.datasets.pop();
 			config.data.datasets.push(newDataset);
 			config.data.datasets.push(newDatasetb);
+			config.data.datasets.push(newDatasetd);
 			
 			window.myLine.update();
 		}
