@@ -24,13 +24,14 @@
 					<th width="50">ID</th>
 					<th>{:L('USERNAME')}</th>
 					<th>角色</th>
+					<th>分组</th>
 					<th>{:L('LAST_LOGIN_IP')}</th>
 					<th>{:L('LAST_LOGIN_TIME')}</th>
 					<th>{:L('EMAIL')}</th>
 					<th>今天操作个数</th>
 					<th>历史操作个数</th>
 					<th>{:L('STATUS')}</th>
-					<th width="120">{:L('ACTIONS')}</th>
+					<th width="170">{:L('ACTIONS')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -40,6 +41,7 @@
 					<td>{$vo.id}</td>
 					<td>{$vo.user_login}</td>
 					<td>{$vo.cur_roles}</td>
+					<td>{$vo.cate_name}</td>
 					<td>{$vo.last_login_ip}</td>
 					<td>
 						<if condition="$vo['last_login_time'] eq 0">
@@ -54,7 +56,7 @@
 					<td>{$user_statuses[$vo['user_status']]}</td>
 	   			    <td>
 						<if condition="$vo['id'] eq 1">
-						<font color="#cccccc">{:L('EDIT')}</font> | <font color="#cccccc">{:L('DELETE')}</font> |
+							<font color="#cccccc">{:L('EDIT')}</font> | <font color="#cccccc">{:L('DELETE')}</font> |
 							<if condition="$vo['user_status'] eq 1">
 								<font color="#cccccc">{:L('BLOCK_USER')}</font>
 							<else />
@@ -63,6 +65,7 @@
 						<else />
 							<a href='{:U("user/edit",array("id"=>$vo["id"]))}'>{:L('EDIT')}</a> | 
 							<a class="js-ajax-delete" href="{:U('user/delete',array('id'=>$vo['id']))}">{:L('DELETE')}</a> | 
+							<a href='{:U("user/usercate",array("id"=>$vo["id"]))}'>设置分组</a> | 
 							<if condition="$vo['user_status'] eq 1">
 								<a href="{:U('user/ban',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="{:L('BLOCK_USER_CONFIRM_MESSAGE')}">{:L('BLOCK_USER')}</a>
 							<else />

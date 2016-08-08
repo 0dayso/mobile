@@ -423,7 +423,7 @@ class AdminbaseController extends AppframeController {
 	}
 	
 	protected function Getuserbyid($id){
-		$userinfo = D('users')->field('id,user_login,user_nicename,last_login_time,user_status')->where('id=%d',array($id))->find();
+		$userinfo = D('users')->field('id,user_login,user_nicename,last_login_time,user_status,cate_id')->where('id=%d',array($id))->find();
 		return $userinfo;
 	}
 	

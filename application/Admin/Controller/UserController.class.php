@@ -40,9 +40,12 @@ class UserController extends AdminbaseController{
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
 		
+		$usercates = $this->usercates();
+		
 		foreach($users as $k=>$v){
 			$ucounts = $this->GetOperateCount(4,$v['id']);
 			$users[$k]['ucounts'] = $ucounts;
+			$users[$k]['cate_name'] = $usercates[$v['cate_id']]['cate_name'];
 			
 			$role_user_model=M("RoleUser");
 			$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
@@ -243,6 +246,30 @@ class UserController extends AdminbaseController{
     	}
     }
 	
+	public function usercate(){
+		$id = I('id');
+		$userinfo = $this->Getuserbyid($id);
+		
+		$data = $this->usercates();
+		$this->assign('data',$data);
+		$this->assign('userinfo',$userinfo);
+		$this->assign('id',$id);
+		$this->display();
+	}
 	
+	protected function usercates(){
+		$data=M('UserCate')->where('status=1')->getfield('id,cate_name,pid,status,authorid',true);
+		return $data;
+	}
 	
+	public function saveusercate(){
+		$id = I('id');
+		$data['cate_id'] = I('cate_id');
+		$result = D('users')->where('id=%d',array($id))->save($data);
+		if($result){
+			$this->success("设置成功", U("user/index"));
+		}else{
+			$this->success("设置失败");
+		}
+	}
 }

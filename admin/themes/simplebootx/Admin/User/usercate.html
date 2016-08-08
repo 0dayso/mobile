@@ -1,0 +1,34 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('user/index')}">{:L('ADMIN_USER_INDEX')}</a></li>
+			<li><a href="{:U('user/add')}">{:L('ADMIN_USER_ADD')}</a></li>
+			<li class="active"><a href="{:U('user/usercate',array('id'=>$id))}">设置分类</a></li>
+		</ul>
+		
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('user/saveusercate')}">
+			<input type="hidden" name="id" value="{$id}"/>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">分组名称:</label>
+					<div class="controls">
+						<select class="select_2" name="cate_id">
+							<foreach name="data" item="val">
+							<option value="{$val.id}" <if condition="$userinfo.cate_id == $val['id']">selected="selected"</if> >{$val.cate_name}</option>
+							</foreach>
+						</select>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="{:U('user/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
