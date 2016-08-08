@@ -1,0 +1,47 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('UserCate/index')}">分组列表</a></li>
+			
+			<if condition="$data['id'] gt 0">
+				<li><a href="{:U('UserCate/edit')}">添加分组</a></li>
+				<li class="active"><a href="{:U('UserCate/edit',array('id'=>$data['id']))}">修改分组</a></li>
+			<else/>
+				<li class="active"><a href="{:U('UserCate/edit')}">添加分组</a></li>
+			</if>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('UserCate/savedata')}">
+			<input type="hidden" name="id" value="{$data.id}"/>
+			<input type="hidden" name="pid" value="{$data.pid}"/>
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">分组名称:</label>
+					<div class="controls">
+						<input type="text" name="cate_name" value="{$data.cate_name}"/>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">是否显示:</label>
+					<div class="controls clearfix" style="padding:4px 0 0 0;">
+						<if condition="$data.id gt 0">
+						<label style="float:left;"><input type="radio" value="1" name="status" <if condition="$data.status == 1">checked="checked"</if> style="margin:0;"> 显示</label>
+						<label style="float:left;margin-left:30px;"><input type="radio" value="0" name="status" <if condition="$data.status == 0">checked="checked"</if> style="margin:0;"> 隐藏</label>
+						<else/>
+						<label style="float:left;"><input type="radio" value="1" name="status" checked="checked" style="margin:0;"> 显示</label>
+						<label style="float:left;margin-left:30px;"><input type="radio" value="0" name="status" style="margin:0;"> 隐藏</label>
+						</if>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="{:U('UserCate/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
