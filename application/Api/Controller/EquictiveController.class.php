@@ -16,7 +16,7 @@ class EquictiveController extends Controller {
         $fn=$path.$filename.'.lua';
         $sftime=filemtime($fn);    
   
-        if($t< $sftime+120){
+        if($t< $sftime){
             echo 1;
         }else{
             echo 0;
