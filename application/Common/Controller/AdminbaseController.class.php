@@ -324,6 +324,9 @@ class AdminbaseController extends AppframeController {
 						if($table == 'Sign'){
 							$v[0] = substr($v[0],0,60);
 						}
+						$v[$k1] = trim($v[$k1]);
+						$v[$k1] = str_replace(' ','',$v[$k1]);
+						
 						$one_da[$v1] = iconv("gb2312","utf-8",$v[$k1]);
 						$one_da['authorid'] = session("ADMIN_ID");
 					}
