@@ -9,17 +9,32 @@ class EquictiveController extends Controller {
 
     public function index() {         
         $path=ROOTPATRH."\public\script\scriptfile\\";        
-    	$filelist=scandir($path);        
-        $aryt=array();        
-        foreach ($filelist as $k => $v) {
-            $nbt=strpos($v,'.');            
-            if($nbt>0){
-                $t=substr($v,0,strpos($v,'.'));
-                $timenumb=date("M j H:i",filemtime($path.$v));  
-                $aryt[$t]=$timenumb;
-            } 
-        }      
-        $this->ajaxReturn($aryt,'xml');        
+    	//$filelist=scandir($path);  
+        $filename=I('n');      
+        $lfiletime=I('t')   ;        
+        $t=strtotime($lfiletime);
+        $fn=$path.$filename.'.lua';
+        $sftime=filemtime($fn);    
+        echo $sftime;    
+        if($t< $sftime){
+            echo 1;
+        }else{
+            echo 0;
+        }       
+        exit();
+
+        // $aryt=array();        
+        // foreach ($filelist as $k => $v) {
+        //     $nbt=strpos($v,'.');            
+        //     if($nbt>0){
+        //         $t=substr($v,0,strpos($v,'.'));
+        //         $timenumb=date("M j H:i",filemtime($path.$v));  
+        //         $aryt[$t]=$timenumb;
+        //     } 
+        // }     
+        // $sftime=filemtime($path.$filename.'.lua');
+
+        // $this->ajaxReturn($aryt,'xml');        
     }
 
     public function saveDeviceID(){
