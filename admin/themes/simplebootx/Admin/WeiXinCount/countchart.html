@@ -302,6 +302,16 @@
 				fill: false,
 				data: [],
 			};
+			var newDatasetc = {
+				label: '本组'+labelname+'平均值',
+				borderColor: backgroundb,
+				backgroundColor: backgroundb,
+				pointBorderColor: backgroundb,
+				pointBackgroundColor: backgroundb,
+				pointBorderWidth: 1,
+				fill: false,
+				data: [],
+			};
 			var newDatasetd = {
 				label: '全体'+labelname+'平均值',
 				borderColor: backgroundd,
@@ -353,6 +363,11 @@
 					datalist['list'][index_col]['push_pre'] = 0;
 					datalist['list'][index_col]['push_pre_avg'] = 0;
 					
+					datalist['list'][index_col]['tpass_avg'] = 0;
+					datalist['list'][index_col]['tpass_pre_avg'] = 0;
+					datalist['list'][index_col]['tpush_avg'] = 0;
+					datalist['list'][index_col]['tpush_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['allpass_avg'] = 0;
 					datalist['list'][index_col]['allpass_pre_avg'] = 0;
 					datalist['list'][index_col]['allpush_avg'] = 0;
@@ -371,6 +386,11 @@
 					datalist['list'][index_col]['push_pre'] = 0;
 					datalist['list'][index_col]['push_pre_avg'] = 0;
 					
+					datalist['list'][index_col]['tpass_avg'] = 0;
+					datalist['list'][index_col]['tpass_pre_avg'] = 0;
+					datalist['list'][index_col]['tpush_avg'] = 0;
+					datalist['list'][index_col]['tpush_pre_avg'] = 0;
+					
 					datalist['list'][index_col]['allpass_avg'] = 0;
 					datalist['list'][index_col]['allpass_pre_avg'] = 0;
 					datalist['list'][index_col]['allpush_avg'] = 0;
@@ -387,9 +407,13 @@
 				var push_pre = datalist['list'][index_col]['push_pre'];
 				var push_pre_avg = datalist['list'][index_col]['push_pre_avg'];
 				
+				var tpass_avg = datalist['list'][index_col]['tpass_avg'];
+				var tpass_pre_avg = datalist['list'][index_col]['tpass_pre_avg'];
+				var tpush_avg = datalist['list'][index_col]['tpush_avg'];
+				var tpush_pre_avg = datalist['list'][index_col]['tpush_pre_avg'];
+				
 				var allpass_avg = datalist['list'][index_col]['allpass_avg'];
 				var allpass_pre_avg = datalist['list'][index_col]['allpass_pre_avg'];
-				
 				var allpush_avg = datalist['list'][index_col]['allpush_avg'];
 				var allpush_pre_avg = datalist['list'][index_col]['allpush_pre_avg'];
 				
@@ -398,38 +422,44 @@
 				
 				var single_sum = 0;
 				var single_avg = 0;
+				var team_avg = 0;
 				var all_avg = 0;
 				var typeid_str = '';
 				if(datalist['typeid'] == 2){
 					single_sum = pass_pre;
 					single_avg = pass_pre_avg;
+					team_avg = tpass_pre_avg;
 					all_avg = allpass_pre_avg;
 					typeid_str = '%';
 					
 				}else if(datalist['typeid'] == 3){
 					single_sum = push_sum;
 					single_avg = push_avg;
+					team_avg = tpush_avg;
 					all_avg = allpush_avg;
 				
 				}else if(datalist['typeid'] == 4){
 					single_sum = push_pre;
 					single_avg = push_pre_avg;
+					team_avg = tpush_pre_avg;
 					all_avg = allpush_pre_avg;
 					typeid_str = '%';
 					
 				}else{
 					single_sum = pass_sum;
 					single_avg = pass_avg;
+					team_avg = tpass_avg;
 					all_avg = allpass_avg;
 				}
 				
 				labelset.push(strstr);
 				newDataset.data.push(single_sum);
 				newDatasetb.data.push(single_avg);
+				newDatasetc.data.push(team_avg);
 				newDatasetd.data.push(all_avg);
 				
-				html_th_th = '<th style="text-align:center;padding:8px 5px;">时间</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值'+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值'+typeid_str+'</th>';
-				html_val += '<tr><td style="text-align:center;padding:8px 5px;">'+strstr+'</td><td style="text-align:center;">'+single_sum+'</td><td style="text-align:center;">'+single_avg+'</td><td style="text-align:center;">'+all_avg+'</td></tr>';
+				html_th_th = '<th style="text-align:center;padding:8px 5px;">时间</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">'+username+labelname+'平均值'+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">本组'+labelname+'平均值'+typeid_str+'</th><th style="text-align:center;padding:8px 5px;">全体'+labelname+'平均值'+typeid_str+'</th>';
+				html_val += '<tr><td style="text-align:center;padding:8px 5px;">'+strstr+'</td><td style="text-align:center;">'+single_sum+'</td><td style="text-align:center;">'+single_avg+'</td><td style="text-align:center;">'+team_avg+'</td><td style="text-align:center;">'+all_avg+'</td></tr>';
 				
 				/*
 				if(index > 5){
@@ -477,6 +507,7 @@
 			config.data.datasets.pop();
 			config.data.datasets.push(newDataset);
 			config.data.datasets.push(newDatasetb);
+			config.data.datasets.push(newDatasetc);
 			config.data.datasets.push(newDatasetd);
 			
 			window.myLine.update();

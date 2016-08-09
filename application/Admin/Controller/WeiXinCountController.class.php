@@ -70,7 +70,10 @@ class WeiXinCountController extends AdminbaseController{
 		}else if($type == 4 && $userid > 0){
 			$map['userid'] = $userid;
 		}else if($type == 5){
-			if($userid > 0){
+			$str = strpos($userid,',');
+			if($str > 0){
+				$map['userid'] = array('in',$userid);
+			}else if($userid > 0){
 				$map['userid'] = $userid;
 			}
 			$map = array_merge($map,$map_time);
@@ -222,16 +225,25 @@ class WeiXinCountController extends AdminbaseController{
 		$datas = $this->Getsumgroupdata($userid,$sum_ruleid,$typeid,$year_num,$cur_time);
 		$dataall = $this->Getsumgroupdata('',$sum_ruleid,$typeid,$year_num,$cur_time);
 		
-		foreach($datas as $k=>$v){
+		$userinfo = $this->Getuserbyid($userid);
+		$userids = D('users')->where('cate_id=%d',array($userinfo['cate_id']))->getField('id',true);
+		$datateam = $this->Getsumgroupdata($userids,$sum_ruleid,$typeid,$year_num,$cur_time);
+		
+		foreach($dataall as $k=>$v){
 			if($sum_ruleid == 1){
 				$count_map['userid'] = $userid;
 				$count_map["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',strtotime($v['createtime']));
 				$day_count =  D('weixincount')->where($count_map)->count();
 				
+				$teamcount_map['userid'] = array('in',implode(',',$userids));
+				$teamcount_map["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',strtotime($v['createtime']));
+				$teamday_count =  D('weixincount')->where($teamcount_map)->count();
+				
 				$allcount_map["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',strtotime($v['createtime']));
 				$allday_count =  D('weixincount')->where($allcount_map)->count();
-			
+				
 				$single_days = $day_count;
+				$team_days = $teamday_count;
 				$all_days = $allday_count;
 			}else{
 				$kktime = $this->mFristAndLastTime($k);
@@ -239,28 +251,46 @@ class WeiXinCountController extends AdminbaseController{
 				$month_days = date('d',$last_time);
 				
 				$single_days = $month_days;
+				$team_days = $month_days;
 				$all_days = $month_days;
 			}
 			
-			$datas[$k]['pass_avg'] = round($v['pass_sum']/$single_days,2);
-			$datas[$k]['push_avg'] = round($v['push_sum']/$single_days,2);
-			$datas[$k]['pass_pre_avg'] = round($v['pass_pre']/$single_days,2);
-			$datas[$k]['push_pre_avg'] = round($v['push_pre']/$single_days,2);
+			$datas_list[$k]['createtime'] = $v['createtime'];
 			
-			$datas[$k]['allpass_sum'] = $dataall[$k]['pass_sum'];
-			$datas[$k]['allpush_sum'] = $dataall[$k]['push_sum'];
-			$datas[$k]['allpass_pre'] = $dataall[$k]['pass_pre'];
-			$datas[$k]['allpush_pre'] = $dataall[$k]['push_pre'];
+			$datas_list[$k]['allpass_sum'] = $v['pass_sum']!=''?$v['pass_sum']:0;
+			$datas_list[$k]['allpush_sum'] = $v['push_sum']!=''?$v['push_sum']:0;
+			$datas_list[$k]['allpass_pre'] = $v['pass_pre']!=''?$v['pass_pre']:0;
+			$datas_list[$k]['allpush_pre'] = $v['push_pre']!=''?$v['push_pre']:0;
 			
-			$datas[$k]['allpass_avg'] = round($dataall[$k]['pass_sum']/$all_days,2);
-			$datas[$k]['allpush_avg'] = round($dataall[$k]['push_sum']/$all_days,2);
-			$datas[$k]['allpass_pre_avg'] = round($dataall[$k]['pass_pre']/$all_days,2);
-			$datas[$k]['allpush_pre_avg'] = round($dataall[$k]['push_pre']/$all_days,2);
+			$datas_list[$k]['allpass_avg'] = round($v['pass_sum']/$all_days,2);
+			$datas_list[$k]['allpush_avg'] = round($v['push_sum']/$all_days,2);
+			$datas_list[$k]['allpass_pre_avg'] = round($v['pass_pre']/$all_days,2);
+			$datas_list[$k]['allpush_pre_avg'] = round($v['push_pre']/$all_days,2);
+			
+			$datas_list[$k]['tpass_sum'] = $datateam[$k]['pass_sum']!=''?$datateam[$k]['pass_sum']:0;
+			$datas_list[$k]['tpush_sum'] = $datateam[$k]['push_sum']!=''?$datateam[$k]['push_sum']:0;
+			$datas_list[$k]['tpass_pre'] = $datateam[$k]['pass_pre']!=''?$datateam[$k]['pass_pre']:0;
+			$datas_list[$k]['tpush_pre'] = $datateam[$k]['push_pre']!=''?$datateam[$k]['push_pre']:0;
+			
+			$datas_list[$k]['tpass_avg'] = round($datateam[$k]['pass_sum']/$team_days,2);
+			$datas_list[$k]['tpush_avg'] = round($datateam[$k]['push_sum']/$team_days,2);
+			$datas_list[$k]['tpass_pre_avg'] = round($datateam[$k]['pass_pre']/$team_days,2);
+			$datas_list[$k]['tpush_pre_avg'] = round($datateam[$k]['push_pre']/$team_days,2);
+			
+			$datas_list[$k]['pass_sum'] = $datas[$k]['pass_sum']!=''?$datas[$k]['pass_sum']:0;
+			$datas_list[$k]['push_sum'] = $datas[$k]['push_sum']!=''?$datas[$k]['push_sum']:0;
+			$datas_list[$k]['pass_pre'] = $datas[$k]['pass_pre']!=''?$datas[$k]['pass_pre']:0;
+			$datas_list[$k]['push_pre'] = $datas[$k]['push_pre']!=''?$datas[$k]['push_pre']:0;
+			
+			$datas_list[$k]['pass_avg'] = round($datas[$k]['pass_sum']/$single_days,2);
+			$datas_list[$k]['push_avg'] = round($datas[$k]['push_sum']/$single_days,2);
+			$datas_list[$k]['pass_pre_avg'] = round($datas[$k]['pass_pre']/$single_days,2);
+			$datas_list[$k]['push_pre_avg'] = round($datas[$k]['push_pre']/$single_days,2);
 		}
 		
 		$datalist['typeid'] = $typeid;
 		$datalist['sum_ruleid'] = $sum_ruleid;
-		$datalist['list'] = $datas;
+		$datalist['list'] = $datas_list;
 		
 		return $datalist;
 	}
@@ -279,7 +309,10 @@ class WeiXinCountController extends AdminbaseController{
 		if($sum_ruleid == 1 && $cur_time != ''){
 			$cur_time = date('Y-m',strtotime($cur_time));
 		}
-		if($userid > 0){
+		if(is_array($userid)){
+			$userid = implode(',',$userid);
+			$map['userid'] = array('in',$userid);
+		}else if($userid > 0){
 			$map['userid'] = $userid;
 		}
 		
@@ -305,7 +338,12 @@ class WeiXinCountController extends AdminbaseController{
 			if(isset($v['createtime'])){
 				$data[$k]['createtime'] = date('Y-m-d H:i:s',$v['createtime']);
 			}
-			$map_time["FROM_UNIXTIME(createtime,'%Y-%m')"] = date('Y-m',$v['createtime']);
+			if($sum_ruleid == 1){
+				$map_time["FROM_UNIXTIME(createtime,'%Y-%m-%d')"] = date('Y-m-d',$v['createtime']);
+			}else{
+				$map_time["FROM_UNIXTIME(createtime,'%Y-%m')"] = date('Y-m',$v['createtime']);
+			}
+			
 			$OperateCount = $this->GetOperateCount(5,$userid,$map_time);
 			$data[$k]['operate_count'] = $OperateCount;
 			
