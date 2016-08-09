@@ -15,7 +15,7 @@ class EquictiveController extends Controller {
             $nbt=strpos($v,'.');            
             if($nbt>0){
                 $t=substr($v,0,strpos($v,'.'));
-                $timenumb=date("M d H:i",filemtime($path.$v));  
+                $timenumb=date("M j H:i",filemtime($path.$v));  
                 $aryt[$t]=$timenumb;
             } 
         }      
