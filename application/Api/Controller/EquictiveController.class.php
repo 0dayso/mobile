@@ -9,7 +9,36 @@ class EquictiveController extends Controller {
 
     public function index() {         
         $path=ROOTPATRH."\public\script\scriptfile\\";        
-    	//$filelist=scandir($path);  
+    	$filelist=scandir($path);  
+        // $filename=I('n');      
+        // $lfiletime=I('t')   ;        
+        // $t=strtotime($lfiletime);
+        // $fn=$path.$filename.'.lua';
+        // $sftime=filemtime($fn);    
+  
+        // if($t<$sftime+60){
+        //     echo 1;
+        // }else{
+        //     echo 0;
+        // }       
+        // exit();
+
+        $aryt=array();        
+        foreach ($filelist as $k => $v) {
+            $nbt=strpos($v,'.');            
+            if($nbt>0){
+                $t=substr($v,0,strpos($v,'.'));
+                $timenumb=date("M j H:i",filemtime($path.$v));  
+                $aryt[$t]=$timenumb;
+            } 
+        }     
+        $sftime=filemtime($path.$filename.'.lua');
+
+        $this->ajaxReturn($aryt,'xml');        
+    }
+    public function filetime(){
+        $path=ROOTPATRH."\public\script\scriptfile\\";        
+        //$filelist=scandir($path);  
         $filename=I('n');      
         $lfiletime=I('t')   ;        
         $t=strtotime($lfiletime);
@@ -22,19 +51,6 @@ class EquictiveController extends Controller {
             echo 0;
         }       
         exit();
-
-        // $aryt=array();        
-        // foreach ($filelist as $k => $v) {
-        //     $nbt=strpos($v,'.');            
-        //     if($nbt>0){
-        //         $t=substr($v,0,strpos($v,'.'));
-        //         $timenumb=date("M j H:i",filemtime($path.$v));  
-        //         $aryt[$t]=$timenumb;
-        //     } 
-        // }     
-        // $sftime=filemtime($path.$filename.'.lua');
-
-        // $this->ajaxReturn($aryt,'xml');        
     }
 
     public function saveDeviceID(){
