@@ -277,9 +277,7 @@ class AdminbaseController extends AppframeController {
 				$this->success('上传成功！'); 
 			}else{
 				$this->success('上传错误！'); 
-			}
-
-			   			
+			}			   			
 		}
 	}
 	/*
