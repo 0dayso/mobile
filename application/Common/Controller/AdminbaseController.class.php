@@ -275,7 +275,10 @@ class AdminbaseController extends AppframeController {
 			
 			if($rul){
 				$this->success('上传成功！'); 
+			}else{
+				$this->success('上传错误！'); 
 			}
+
 			   			
 		}
 	}
