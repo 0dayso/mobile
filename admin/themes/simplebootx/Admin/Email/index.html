@@ -15,6 +15,7 @@
 						<th width="50">ID</th>
 						<th>邮箱</th>
 						<th>密码</th>
+                                                <th width="320">手机号码</th>
 						<th width="80">发布人</th>
 						<!--<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>-->
@@ -26,7 +27,8 @@
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.email}</td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" >{$vo.pwd}</td>
+                                                <td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" >{$vo.pwd}</td>
+                                                <td>{$vo.phone}</td>
 						<td>{$vo.username}</td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
@@ -34,16 +36,16 @@
 				</foreach>
 				</tbody>
 				
-				<tfoot>
+<!--				<tfoot>
 					<tr>				
 						<th width="50">ID</th>
 						<th>邮箱</th>
 						<th>密码</th>
 						<th width="80">发布人</th>
-						<!--<th width="80">{:L('STATUS')}</th>
-						<th width="180">{:L('ACTIONS')}</th>-->
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
-				</tfoot>
+				</tfoot>-->
 			</table>	
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	

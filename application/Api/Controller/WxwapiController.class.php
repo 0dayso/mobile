@@ -117,6 +117,28 @@ class WxwapiController extends Controller {
     }
     
 
+    //修改邮箱状态，保存解绑后的手机号码到邮箱管理
+    public function emailphone(){
+        $email=I('email'); 
+        $phone=I('phone'); 
+        $info = D('emailinfo')->field('id,email')->where('email=%d',$email)->find();
+        if($info){
+            $parame['status']=2;            
+            $parame['phone']=$phone;
+            $result=D('emailinfo')->where('id=%d',$info['id'])->save($parame);
+            if($result){
+                echo 1;
+            }else{
+                echo 0;
+            }
+        }else{
+            echo 0;
+        }
+        exit();         
+        
+    }
+    
+    
 
 /**
  * mobilestatus()
@@ -185,7 +207,7 @@ class WxwapiController extends Controller {
     }
     
 
-       //设备运行状态
+     //设备运行状态
     public function setmobsbzt(){
         $cdkey=I('get.cdkey');
         $run=I('get.run');
@@ -193,7 +215,7 @@ class WxwapiController extends Controller {
         if($cdkey){
             $data['run']=$run;
             $data['nmb']=$nmb;      
-            $result=M('equictive')->where("cdkey='%s'",$cdkey)->save($data);               
+            $result=M('equictive')->where("cdkey='%s'",$cdkey)->save($data); 
             if($result){
                 echo 1;
             }else{

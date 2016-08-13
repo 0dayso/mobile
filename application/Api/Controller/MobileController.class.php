@@ -30,6 +30,7 @@ class MobileController extends Controller {
     	}
         exit();
     }
+    
     //修改 ajax手机状态
     public function setmobiletype(){
         $mobile=I('get.mobile');
@@ -60,7 +61,7 @@ class MobileController extends Controller {
         exit();
     }
     
-    
+   
     
     //显示一个手机号码检查是否存在
     
