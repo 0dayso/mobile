@@ -121,17 +121,19 @@ class WxwapiController extends Controller {
     public function emailphone(){
         $email=I('email'); 
         $phone=I('phone'); 
-        $info = D('emailinfo')->field('id,email')->where('email=%d',$email)->find();
+        $info = D('emailinfo')->field('id,email')->where("email='%s'",$email)->find();
         if($info){
             $parame['status']=2;            
             $parame['phone']=$phone;
             $result=D('emailinfo')->where('id=%d',$info['id'])->save($parame);
+           
             if($result){
                 echo 1;
             }else{
-                echo 0;
+                echo 0;               
             }
         }else{
+           
             echo 0;
         }
         exit();         
