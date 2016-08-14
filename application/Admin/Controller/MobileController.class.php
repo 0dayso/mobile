@@ -71,12 +71,12 @@ class MobileController extends AdminbaseController{
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
 		$filesnames = scandir('./public/uploads/mobile',1);
+		
 		foreach($filesnames as $k=>$v){
 			if($v == '..' || $v == '.'){
 				unset($filesnames[$k]);
 				unset($v);
-			}
-			
+			}			
 		}
 		
 		foreach($filesnames as $k=>$v){
@@ -234,18 +234,27 @@ class MobileController extends AdminbaseController{
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
 			)";*/
-			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1  ORDER BY id DESC";
+			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
 			$result=M()->query($sql);
-			$ary=array();
 			$count=count($result)>200?200:count($result);
+			if($count==0){
+				$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+				    SELECT id,mobile FROM(
+						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
+					)AS t
+				WHERE a.mobile=t.mobile AND a.id!=t.id)";
+				$result=M()->query($sql);	
+				$count=count($result)>200?200:count($result);			
+			}
+			
+
 			for($i=0;$i<$count;$i++){
 				$map['id']=$result[$i]['id'];
 				$sul=M('mobile')->where($map)->delete();
 			}
 
 			/*
-			foreach ($result as $k => $v) {		
-			 	
+			foreach ($result as $k => $v) {					 	
 			}
 			*/
 		}catch(Exception $ex){
