@@ -234,7 +234,7 @@ class MobileController extends AdminbaseController{
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
 			)";*/
-			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 AND `status`=0 ORDER BY id DESC";
+			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1  ORDER BY id DESC";
 			$result=M()->query($sql);
 			$ary=array();
 			$count=count($result)>200?200:count($result);
