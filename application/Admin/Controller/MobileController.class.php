@@ -234,13 +234,20 @@ class MobileController extends AdminbaseController{
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
 			)";
+
 			$result=M()->query($sql);
 			$ary=array();
-			foreach ($result as $k => $v) {		
-			 	$map['id']=$v['id'];
+			$count=count($result)>200?200:count($result);
+			for($i=0;$i<$count;$++){
+				$map['id']=$$result[$id]['id'];
 				$sul=M('mobile')->where($map)->delete();
-
 			}
+
+			/*
+			foreach ($result as $k => $v) {		
+			 	
+			}
+			*/
 		}catch(Exception $ex){
 			$this->error('请重新删除数据'.$ex);
 		}
