@@ -238,7 +238,8 @@ class MobileController extends AdminbaseController{
 			$result=M()->query($sql);
 			$ary=array();
 			$count=count($result)>200?200:count($result);
-			for($i=0;$i<$count;$++){
+	
+			for($i=0;$i<$count;$i++){
 				$map['id']=$$result[$id]['id'];
 				$sul=M('mobile')->where($map)->delete();
 			}
