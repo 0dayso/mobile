@@ -237,7 +237,7 @@ class MobileController extends AdminbaseController{
 			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 AND `status`=0 ORDER BY id DESC";
 			$result=M()->query($sql);
 			$ary=array();
-			$count=count($result)>200?200:count($result);			
+			$count=count($result)>200?200:count($result);
 			for($i=0;$i<$count;$i++){
 				$map['id']=$result[$i]['id'];
 				$sul=M('mobile')->where($map)->delete();
