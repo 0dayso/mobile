@@ -237,7 +237,7 @@ class MobileController extends AdminbaseController{
 
 			$result=M()->query($sql);
 			$ary=array();
-			$count=count($result)>100?100:count($result);
+			$count=count($result)>50?50:count($result);
 	
 			for($i=0;$i<$count;$i++){
 				$map['id']=$$result[$id]['id'];
