@@ -228,19 +228,26 @@ class MobileController extends AdminbaseController{
 
 	public function uniqiddata(){
 		try{
-			$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+			/*$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
 				    SELECT id,mobile FROM(
 						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
-			)";
+			)";*/
+			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1  ORDER BY id DESC";
 			$result=M()->query($sql);
 			$ary=array();
-			foreach ($result as $k => $v) {		
-			 	$map['id']=$v['id'];
+			$count=count($result)>200?200:count($result);
+			for($i=0;$i<$count;$i++){
+				$map['id']=$result[$i]['id'];
 				$sul=M('mobile')->where($map)->delete();
-
 			}
+
+			/*
+			foreach ($result as $k => $v) {		
+			 	
+			}
+			*/
 		}catch(Exception $ex){
 			$this->error('请重新删除数据'.$ex);
 		}
