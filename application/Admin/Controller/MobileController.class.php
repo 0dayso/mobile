@@ -233,13 +233,13 @@ class MobileController extends AdminbaseController{
 		$data['status']=0;
 		$data['url']=U('Mobile/uploadmobile');
 		try{
-			/*$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+			$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
 				    SELECT id,mobile FROM(
 						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
-			)";*/
-			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
+			)";
+			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
 			$result=M()->query($sql);
 			$count=count($result)>200?200:count($result);
 
