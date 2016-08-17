@@ -104,7 +104,7 @@ class MobileaddController extends AdminbaseController{
 	//上传文件信息
 	public function add(){
 		if(IS_POST){
-			var_dump($_File);
+			var_dump($_FILES);
 			exit();
 			$config = array(    
 			'maxSize'    =>    3145728, 	
@@ -123,7 +123,8 @@ class MobileaddController extends AdminbaseController{
 				$path=$info['mobilefile']['savepath'].$info['mobilefile']['savename'];
 				$data=$this->fileinfo($path);
 				$rul=$this->mobileaddall($data);
-			  	$this->success('上传成功！');    			}
+			  	$this->success('上传成功！');    			
+			}
 		}
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
