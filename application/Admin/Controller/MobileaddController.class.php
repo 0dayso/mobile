@@ -100,8 +100,12 @@ class MobileaddController extends AdminbaseController{
 		$result=M('mobile')->addAll($ary);
 		return $result;
 	}
+
+	//上传文件信息
 	public function add(){
 		if(IS_POST){
+			var_dump($_File);
+			exit();
 			$config = array(    
 			'maxSize'    =>    3145728, 	
 			'rootPath'	 =>		'.',
