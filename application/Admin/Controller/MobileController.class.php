@@ -152,7 +152,7 @@ class MobileController extends AdminbaseController{
 		}
 	}
 	
-	public function uploadmobile(){
+	public function upload_mobile(){
 		$this->upload_weixin_resourse('mobile','mobile');
 	}
 	
