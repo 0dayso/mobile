@@ -79,10 +79,7 @@ class MobileController extends AdminbaseController{
 			}			
 		}
 		
-		foreach($filesnames as $k=>$v){
-			if($k==11){
-				break;
-			}
+		foreach($filesnames as $k=>$v){			
 			$encode = $this->check_utf8($v);
 			if(!$encode){
 				$files_names['filename'] = iconv('gb2312','utf-8',$v);
