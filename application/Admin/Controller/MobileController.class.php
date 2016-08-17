@@ -242,7 +242,7 @@ class MobileController extends AdminbaseController{
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
 			$result=M()->query($sql);
 			$count=count($result)>200?200:count($result);
-
+			/*
 			if($count==0){
 				$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
 				    SELECT id,mobile FROM(
@@ -252,7 +252,7 @@ class MobileController extends AdminbaseController{
 				$result=M()->query($sql);	
 				$count=count($result)>200?200:count($result);			
 			}
-			
+			*/
 
 			for($i=0;$i<$count;$i++){
 				$map['id']=$result[$i]['id'];
