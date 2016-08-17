@@ -120,8 +120,16 @@ class MobileaddController extends AdminbaseController{
 			}else{// 上传成功        
 				$path=$info['mobilefile']['savepath'].$info['mobilefile']['savename'];
 				$data=$this->fileinfo($path);
+				if(count($data)<1){
+					$this->error('数据处理错误');
+				}
 				$rul=$this->mobileaddall($data);
-			  	$this->success('上传成功！');    			
+				if($rul){
+					$this->success('上传成功！');   
+				}else{
+					$this->error('数据添加错误');
+				}			  	
+
 			}
 		}
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
