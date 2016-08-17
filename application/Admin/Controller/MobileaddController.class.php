@@ -71,6 +71,7 @@ class MobileaddController extends AdminbaseController{
 	public function fileinfo($path){
 		$path=getcwd().str_replace('/','\\',$path);
 		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
+
 		if(!file_exists($path)){
 			return '文件路径错误';
 		}
@@ -118,7 +119,8 @@ class MobileaddController extends AdminbaseController{
 			if(!$info) {// 上传错误提示错误信息       			  
 			  	$this->error($upload->getError());    
 			}else{// 上传成功        
-				$path=$info['mobilefile']['savepath'].$info['mobilefile']['savename'];
+				$path=$info['file']['savepath'].$info['file']['savename'];
+		
 				$data=$this->fileinfo($path);
 				if(count($data)<1){
 					$this->error('数据处理错误');
