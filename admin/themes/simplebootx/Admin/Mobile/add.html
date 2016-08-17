@@ -36,6 +36,7 @@
 				</thead>-->
 				<tbody>
 				<foreach name="fileinfo" item="vo" key="k">
+					<if condtion="$k lt 10">
 					<tr class="trclick" >
 						<!---<td style="width:4px;" >{$k}</td>-->
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
@@ -43,10 +44,11 @@
 						</td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
 							{$vo.filepath}
-						</td>
+						</td>					
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
+					</if>
 				</foreach>
 				</tbody>
 <!-- 
