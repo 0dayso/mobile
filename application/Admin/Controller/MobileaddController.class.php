@@ -71,6 +71,7 @@ class MobileaddController extends AdminbaseController{
 	public function fileinfo($path){
 		$path=getcwd().str_replace('/','\\',$path);
 		//$path='D:\WWW\mobile\public\uploads\20160530\5760fe811f2dc.txt';
+
 		if(!file_exists($path)){
 			return '文件路径错误';
 		}
@@ -100,8 +101,10 @@ class MobileaddController extends AdminbaseController{
 		$result=M('mobile')->addAll($ary);
 		return $result;
 	}
+
+	//上传文件信息
 	public function add(){
-		if(IS_POST){
+		if(IS_POST){	
 			$config = array(    
 			'maxSize'    =>    3145728, 	
 			'rootPath'	 =>		'.',
@@ -116,10 +119,20 @@ class MobileaddController extends AdminbaseController{
 			if(!$info) {// 上传错误提示错误信息       			  
 			  	$this->error($upload->getError());    
 			}else{// 上传成功        
-				$path=$info['mobilefile']['savepath'].$info['mobilefile']['savename'];
+				$path=$info['file']['savepath'].$info['file']['savename'];
+		
 				$data=$this->fileinfo($path);
+				if(count($data)<1){
+					$this->error('数据处理错误');
+				}
 				$rul=$this->mobileaddall($data);
-			  	$this->success('上传成功！');    			}
+				if($rul){
+					$this->success('上传成功！');   
+				}else{
+					$this->error('数据添加错误');
+				}			  	
+
+			}
 		}
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);

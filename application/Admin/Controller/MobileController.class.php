@@ -71,15 +71,15 @@ class MobileController extends AdminbaseController{
 		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
 		$filesnames = scandir('./public/uploads/mobile',1);
+
 		foreach($filesnames as $k=>$v){
 			if($v == '..' || $v == '.'){
 				unset($filesnames[$k]);
 				unset($v);
-			}
-			
+			}			
 		}
 		
-		foreach($filesnames as $k=>$v){
+		foreach($filesnames as $k=>$v){			
 			$encode = $this->check_utf8($v);
 			if(!$encode){
 				$files_names['filename'] = iconv('gb2312','utf-8',$v);
@@ -96,6 +96,7 @@ class MobileController extends AdminbaseController{
 		foreach($fileinfo as $k=>$v){
 			$sort[$k] = $k;
 		}
+
 		array_multisort($sort,SORT_DESC,SORT_NUMERIC,$fileinfo);
 		
 		$this->assign('cq',count($data));
@@ -151,7 +152,7 @@ class MobileController extends AdminbaseController{
 		}
 	}
 	
-	public function uploadmobile(){
+	public function upload_mobile(){
 		$this->upload_weixin_resourse('mobile','mobile');
 	}
 	
@@ -214,7 +215,6 @@ class MobileController extends AdminbaseController{
 		header( "Pragma:   public "); 
 		echo "测试/r/n";
 		echo "测试/r/n";
-
 		echo "输入的内容为文本文件的内容。";*/
 	}
 	
@@ -227,35 +227,44 @@ class MobileController extends AdminbaseController{
 	}
 
 	public function uniqiddata(){
+		$data['status']=0;
+		$data['url']=U('Mobile/uploadmobile');
 		try{
-			/*$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+			$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
 				    SELECT id,mobile FROM(
 						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
 					)AS t
 				WHERE a.mobile=t.mobile AND a.id!=t.id
-			)";*/
-			$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1  ORDER BY id DESC";
+			)";
+			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
 			$result=M()->query($sql);
-			$ary=array();
 			$count=count($result)>200?200:count($result);
+			/*
+			if($count==0){
+				$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
+				    SELECT id,mobile FROM(
+						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
+					)AS t
+				WHERE a.mobile=t.mobile AND a.id!=t.id)";
+				$result=M()->query($sql);	
+				$count=count($result)>200?200:count($result);			
+			}
+			*/
+
 			for($i=0;$i<$count;$i++){
 				$map['id']=$result[$i]['id'];
 				$sul=M('mobile')->where($map)->delete();
 			}
 
+			$data['status']=1;
 			/*
-			foreach ($result as $k => $v) {		
-			 	
+			foreach ($result as $k => $v) {					 	
 			}
 			*/
 		}catch(Exception $ex){
-			$this->error('请重新删除数据'.$ex);
+			$this->ajaxreturn($data);
 		}
-	   if($result){
-			$this->success('已成功');
-		}else{
-			$this->success('已删除');
-		}
+		$this->ajaxreturn($data);
 	}
 
 	public function nameinfo(){
