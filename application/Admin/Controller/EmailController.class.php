@@ -55,18 +55,21 @@ class EmailController extends AdminbaseController {
         
 		$keyword = I('keyword');
 		if($keyword != ''){
-			$map['email'] = array('like','%'.$keyword.'%');
-			$map['phone'] = array('like','%'.$keyword.'%');
-			$map['_logic'] = 'or';
-			$parameters['keyword'] = $keyword;
-		}                
-		$count=D('Emailinfo')->where('status=2')->count(); //统计status状态下有多少条数据
+			$map1['email'] = array('like','%'.$keyword.'%');
+			$map1['phone'] = array('like','%'.$keyword.'%');
+			$map1['_logic'] = 'or';
+			$map['_complex'] = $map1;
+		}
+              
+                $map['status']=2;
+		$count=D('Emailinfo')->where($map)->count(); //统计status状态下有多少条数据
+    
 		$Page = new \Think\Page($count,11);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
-                                
-		$data=M('Emailinfo')->where($map,'status=2')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid,phone',true);
+                               
+                $data=M('Emailinfo')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid,phone',true);
 		foreach($data as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
