@@ -33,7 +33,7 @@ class WeixiController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-    	$list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
+                $list=D('weixi')->where($map)->limit($Page->firstRow.','.$Page->listRows)->order('id desc')->select();
 		foreach($list as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$list[$k]['username'] = $userinfo['user_login'];
@@ -42,7 +42,7 @@ class WeixiController extends AdminbaseController {
 			$list[$k]['alias'] = $alias;
 		}
 		
-    	$this->assign('list',$list);
+                $this->assign('list',$list);
 		$this->assign('parameters',$parameters);
 		$this->assign('page',$show);
        	$this->display();        

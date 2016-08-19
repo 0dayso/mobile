@@ -132,8 +132,7 @@ class WxwapiController extends Controller {
             }else{
                 echo 0;               
             }
-        }else{
-           
+        }else{     
             echo 0;
         }
         exit();         

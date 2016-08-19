@@ -23,7 +23,7 @@ class EmailController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$data=M('Emailinfo')->where('status=0 or status=2')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid,phone',true);
+		$data=M('Emailinfo')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid',true);
 		foreach($data as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
@@ -34,6 +34,57 @@ class EmailController extends AdminbaseController {
        	$this->display();
         
     }
+    
+    
+/**
+ * 解绑手机号对应的邮箱
+ */    
+    
+     public function deparlist(){
+        if(I('post.accounts')){
+            $map['cate_name']=array('like','%'.I('post.accounts').'%');
+        }
+        $data=D('Category')->department($map);
+        $this->assign('data',$data);
+        $this->display();
+    }   
+    
+    
+    
+    public function emaindex(){
+        
+		$keyword = I('keyword');
+		if($keyword != ''){
+			$map['email'] = array('like','%'.$keyword.'%');
+			$map['phone'] = array('like','%'.$keyword.'%');
+			$map['_logic'] = 'or';
+			$parameters['keyword'] = $keyword;
+		}                
+		$count=D('Emailinfo')->where('status=2')->count(); //统计status状态下有多少条数据
+		$Page = new \Think\Page($count,11);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+                                
+		$data=M('Emailinfo')->where($map,'status=2')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,email,pwd,authorid,phone',true);
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$data[$k]['username'] = $userinfo['user_login'];
+		}
+		$this->assign('parameters',$parameters);
+		$this->assign('count',$count);//还有多少条数据未操作
+		$this->assign('data',$data);
+		$this->assign('page',$show);
+       	$this->display();
+        
+    }
+
+    
+    
+    
+    /**
+     * 邮箱添加
+     */
 	public function add(){
 		$sql="SELECT id,email,COUNT(*) AS ct FROM mbl_emailinfo GROUP BY id HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
