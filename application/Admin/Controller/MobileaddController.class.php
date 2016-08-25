@@ -113,7 +113,7 @@ class MobileaddController extends AdminbaseController{
 				M('usermobile')->where($ummap)->setInc('count');	
 			}else{
 				$ummap['count']=1;
-				M('usermobile')->where($ummap)->add($ummap);	
+				M('usermobile')->add($ummap);	
 			}
 			
 			M()->commit();		
