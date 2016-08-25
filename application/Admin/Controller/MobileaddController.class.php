@@ -12,13 +12,20 @@ class MobileaddController extends AdminbaseController{
 	public function index(){
 
 		M()->startTrans();		
-		$count=M('mobile')->where('status=0 and type=2  ')->count();
-		$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
-		if($counts==0){
-			$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
-		}
+		$count=M('mobile')->where('status=0 and type=2')->count();
+		// $counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
+		// if($counts==0){
+		// 	$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
+		// }
         $isallsave=true;                  
-		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);
+		$data=M('mobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('id,mobile',true);	
+
+		if(!$data&&$count>0){
+			$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
+			if($counts<=0){
+				$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
+			}
+		}
 		$aryid=array();
 		foreach ($data as $key => $value) {		
 			$moibledata['isshow']=1;
@@ -82,14 +89,34 @@ class MobileaddController extends AdminbaseController{
 			$data['msg']=$id;	
 			$this->ajaxreturn($data);
 		}
+
+		$sdata=M('mobile')->where('id=%d',$id)->find();
+		if($sdata['status']==1){
+			$data['status']=2;	
+			$data['name']=$sdata['userid'];
+			$this->ajaxreturn($data);
+			exit();
+		}
+
+
 		M()->startTrans();
 		$data['status']=1;		
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
 		$data1=M('mobile')->where('id='.$id)->save($data);
 		if($data1){
-			M()->commit();
 			$data['status']=1;	
+			$ummap['uid']=session('ADMIN_ID');
+			$ummap['now']= strtotime(date('Y-m-d', time()));
+			$umdata=M('usermobile')->where($ummap)->find();
+			if($umdata){
+				M('usermobile')->where($ummap)->setInc('count');	
+			}else{
+				$ummap['count']=1;
+				M('usermobile')->where($ummap)->add($ummap);	
+			}
+			
+			M()->commit();		
 			$this->ajaxreturn($data);
 			exit();
 		}

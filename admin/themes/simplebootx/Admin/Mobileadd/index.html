@@ -140,6 +140,10 @@
 					if(data.status=="1"){						
 						$("#vl"+id).html('已');					
 					}else{
+						if(data.status=="2"){
+							alert('数据已经被同事'+data.name+'添加');
+							$("#vl"+id).html('已');	
+						}
 						$("#vl"+id).html('未');
 					}				
 				});

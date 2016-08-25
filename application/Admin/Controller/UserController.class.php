@@ -41,19 +41,23 @@ class UserController extends AdminbaseController{
 		$users = $this->users_model->alias("ul")
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
-	
-		// $usercates = $this->usercates();
-		
+		$now=strtotime(date('Y-m-d', time()));
+
+		foreach($users as $k=>$v){
+			$users[$k]['ucounts'] = M('usermobile')->where(array('uid'=>$v['id'],'now'=>$now))->getField('count');
+		}
+
+		// $usercates = $this->usercates();		
 		// foreach($users as $k=>$v){
+		//}
 		// 	$ucounts = $this->GetOperateCount(4,$v['id']);
 		// 	$users[$k]['ucounts'] = $ucounts;
-		// 	$users[$k]['cate_name'] = $usercates[$v['cate_id']]['cate_name'];
-			
+		// 	$users[$k]['cate_name'] = $usercates[$v['cate_id']]['cate_name'];			
 		// 	$role_user_model=M("RoleUser");
 		// 	$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
 		// 	$role_ids = implode(',',$role_ids);
 		// 	if($v['id'] != 1 && $role_ids != ''){
-		// 		$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);;
+		// 		$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);
 		// 		$cur_roles = implode(',',$cur_roles);
 		// 		$users[$k]['cur_roles'] = $cur_roles;
 		// 	}else if($v['id'] == 1){
