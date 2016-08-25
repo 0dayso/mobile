@@ -82,7 +82,6 @@
 	<div class="wrap js-check-wrap">
 
 		<form class="js-ajax-form" action="{:U('Mobileadd/index')}" method="post">
-
 			<table class="table table-hover table-bordered table-list">
 <!-- 				<thead>
 					<tr>
@@ -98,7 +97,7 @@
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
-						<td id="vl{$k}" style="width:4px">未</td>
+						<td id="vl{$k}" class="statustext" style="width:4px">未</td>
 					<!-- 	<td>返回</td> -->
 					</tr>
 				</foreach>
@@ -115,10 +114,9 @@
 			</table>	
 			<div class="form-actions">
 				<button type="button" id="zuofei" class="btn btn-primary js-ajax-submit">作废</button>
-				<input type="hidden" id="aryid"   value="{$aryid}" />	
-				
+				<input type="hidden" id="aryid"   value="{$aryid}" />					
 				<input type="hidden" id="zuofeiv"  value="0" />
-				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
+				<button type="button" class="btn btn-primary js-ajax-submit btnreload" >刷新</button>	
 				<span>
 					还有{$count}条未操作信息
 				</span>	
@@ -152,13 +150,28 @@
 				var url="{:U('Admin/Mobileadd/mobilecancel')}";
 				var aryid=$('#aryid').val();
 				$.post(url,{'aryid':aryid},function(data){	
-					if(data.status==1){						
-						alert("已处理了数据请示重新刷新");	
+					if(data.status==1){	
+						alert("数据已作废");	
+						$(".statustext").html('已');					
 					}else{
-						alert("请重新点击按钮");
+						alert("数据已处理");
 					}				
 				});
 				$("#zuofeiv").val('1');
+			});
+			$(".btnreload").click(function(){
+				var url="{:U('Admin/Mobileadd/reloadmobile')}";
+				var data=$('#aryid').val();			
+				$.post(url,{'id':data},function(data){
+					if(data['status']==1){						
+						window.location.href="{:U('Admin/Mobileadd/index')}";
+					}else if(data['status']==0){
+						alert("还有示处理数据,请点作废按钮");	
+					}else if(data['status']==2){
+						alert("没有得到数据");	
+					}
+
+				})
 			})
 
 		});

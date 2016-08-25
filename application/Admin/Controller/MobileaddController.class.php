@@ -10,6 +10,7 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
+
 		M()->startTrans();		
 		$count=M('mobile')->where('status=0 and type=2  ')->count();
 		$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
@@ -39,6 +40,36 @@ class MobileaddController extends AdminbaseController{
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
+	}
+
+
+	function reloadmobile(){
+		$id=I('post.id');
+		if($id){
+			$where['id']=array('in',$id);
+			$where['status']=0;
+			$where['type']=2;
+			$data=M('mobile')->where($where)->limit(5)->lock(true)->getfield('id,mobile',true);
+
+			if($data){
+				$this->assign('data',$data);
+				$data['status']=0;
+				$this->ajaxreturn($data);
+				exit();
+			}else{
+				$this->assign('data',$data);
+				$data['status']=1;
+				$this->ajaxreturn($data);
+				exit();
+			}
+		}else{
+			$this->assign('data',$data);
+			$data['status']=2;
+			$this->ajaxreturn($data);
+			exit();
+		}
+
+
 	}
 
 
@@ -175,7 +206,7 @@ class MobileaddController extends AdminbaseController{
 	}
 
 	public function nameinfo(){
-		echo "dfsdfd";
+		
 	}
 
 
@@ -222,12 +253,11 @@ class MobileaddController extends AdminbaseController{
 			  fwrite($myfile, $value);
 		}
 
-		fclose($myfile);
-		
+		fclose($myfile);		
     }
+
     //作已经加入处理
     public function mobilecancel(){
-
     	$id=I('aryid');	
     
 		if(empty($id)){
@@ -236,17 +266,25 @@ class MobileaddController extends AdminbaseController{
 			$this->ajaxreturn($data);
 			exit();
 		}
-
+		
 
 		M()->startTrans();
 		$data['status']=1;		
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
 		$aryid=explode(',', $id);
-		foreach ($aryid as $k => $v) {			
-			$data1=M('mobile')->where('id='.$v)->save($data);
+
+
+		foreach ($aryid as $k => $v) {	
+			$tmap['status']=1;
+			$tmap['id']=$v;
+			$cuont=M('mobile')->where($tmap)->count();
+			if($counts<=0){
+				$data1=M('mobile')->where('id=%d',$v)->save($data);			
+			}
+			
 		}
-		
+
 		if($data1){
 			M()->commit();
 			$data['status']=1;	
@@ -258,10 +296,6 @@ class MobileaddController extends AdminbaseController{
 		$this->ajaxreturn($data);
 		exit();
     }
-
-
-	
-
 }
 
 ?>
