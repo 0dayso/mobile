@@ -23,7 +23,7 @@ class MobileaddController extends AdminbaseController{
 		foreach ($data as $key => $value) {		
 			$moibledata['isshow']=1;
 			$moibledata['ffid']=session('ADMIN_ID');
-			$t=M('mobile')->where("id=%d",array($key))->save($moibledata);	
+			$t=M('mobile')->where("id=%d",$key)->save($moibledata);	
 			if(!$t){
 			    $isallsave=false;
 			}
@@ -42,7 +42,7 @@ class MobileaddController extends AdminbaseController{
 		$this->display();
 	}
 
-
+	//检查是否还有数据没有处理就不能点刷新
 	function reloadmobile(){
 		$id=I('post.id');
 		if($id){
@@ -73,7 +73,7 @@ class MobileaddController extends AdminbaseController{
 	}
 
 
-
+	//修改状态
 	public function update(){
 		$id=I('id');
 		
@@ -256,7 +256,7 @@ class MobileaddController extends AdminbaseController{
 		fclose($myfile);		
     }
 
-    //作已经加入处理
+    //作已废处理-作为已加入
     public function mobilecancel(){
     	$id=I('aryid');	
     

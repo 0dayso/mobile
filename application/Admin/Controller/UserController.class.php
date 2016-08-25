@@ -31,37 +31,39 @@ class UserController extends AdminbaseController{
 		
 		$count=$this->users_model->where($map)->count();
 		$page = $this->page($count, 20,$parameters);
-
-		$users = $this->users_model->alias("ul")
-		->field('*,count')
+		/*
+			->field('*,count')
 		->join(sprintf('(SELECT userid,COUNT(*) AS count FROM  mbl_mobile WHERE status=1 and userid>0 and updatetime>%d and updatetime<%d GROUP BY userid) as om on om.userid=ul.id',strtotime(date("Y-m-d",time())),strtotime(date("Y-m-d 23:59:59",time()))),'left')		
 		->where($map)
 		->order("create_time DESC")
+		*/
+
+		$users = $this->users_model->alias("ul")
 		->limit($page->firstRow . ',' . $page->listRows)
 		->select();
+	
+		// $usercates = $this->usercates();
 		
-		$usercates = $this->usercates();
-		
-		foreach($users as $k=>$v){
-			$ucounts = $this->GetOperateCount(4,$v['id']);
-			$users[$k]['ucounts'] = $ucounts;
-			$users[$k]['cate_name'] = $usercates[$v['cate_id']]['cate_name'];
+		// foreach($users as $k=>$v){
+		// 	$ucounts = $this->GetOperateCount(4,$v['id']);
+		// 	$users[$k]['ucounts'] = $ucounts;
+		// 	$users[$k]['cate_name'] = $usercates[$v['cate_id']]['cate_name'];
 			
-			$role_user_model=M("RoleUser");
-			$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
-			$role_ids = implode(',',$role_ids);
-			if($v['id'] != 1 && $role_ids != ''){
-				$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);;
-				$cur_roles = implode(',',$cur_roles);
-				$users[$k]['cur_roles'] = $cur_roles;
-			}else if($v['id'] == 1){
-				$users[$k]['cur_roles'] = '超级管理员';
-			}
-		}
+		// 	$role_user_model=M("RoleUser");
+		// 	$role_ids=$role_user_model->where(array("user_id"=>$v['id']))->getField("role_id",true);
+		// 	$role_ids = implode(',',$role_ids);
+		// 	if($v['id'] != 1 && $role_ids != ''){
+		// 		$cur_roles=$this->role_model->where("status=1 and id in(".$role_ids.")")->getField("name",true);;
+		// 		$cur_roles = implode(',',$cur_roles);
+		// 		$users[$k]['cur_roles'] = $cur_roles;
+		// 	}else if($v['id'] == 1){
+		// 		$users[$k]['cur_roles'] = '超级管理员';
+		// 	}
+		// }
 		
-		$allcountlist['allcounts'] = $this->GetOperateCount();
-		$allcountlist['todaycounts'] = $this->GetOperateCount(2);
-		$allcountlist['machcounts'] = $this->GetOperateCount(3);
+		// $allcountlist['allcounts'] = $this->GetOperateCount();
+		// $allcountlist['todaycounts'] = $this->GetOperateCount(2);
+		// $allcountlist['machcounts'] = $this->GetOperateCount(3);
 		
 		$roles_src=$this->role_model->select();
 		$roles=array();
