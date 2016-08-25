@@ -44,7 +44,7 @@ class UserController extends AdminbaseController{
 		$now=strtotime(date('Y-m-d', time()));
 
 		foreach($users as $k=>$v){
-			$users[$k]['ucounts'] = M('usermobile')->where(array('uid'=>$v['id'],'now'=>$now))->getField('count');
+			$users[$k]['count'] = M('usermobile')->where(array('uid'=>$v['id'],'now'=>$now))->getField('count');
 		}
 
 		// $usercates = $this->usercates();		
