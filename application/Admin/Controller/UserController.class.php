@@ -45,6 +45,7 @@ class UserController extends AdminbaseController{
 
 		foreach($users as $k=>$v){
 			$users[$k]['count'] = M('usermobile')->where(array('uid'=>$v['id'],'now'=>$now))->getField('count');
+			$users[$k]['ucount'] = M('usermobile')->where(array('uid'=>$v['id']))->sum('count');
 		}
 
 		// $usercates = $this->usercates();		
