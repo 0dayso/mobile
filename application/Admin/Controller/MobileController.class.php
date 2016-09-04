@@ -239,15 +239,23 @@ class MobileController extends AdminbaseController{
 	public function uniqiddata(){
 		$data['status']=0;
 		$data['url']=U('Mobile/uploadmobile');
-		try{
-			$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
-				    SELECT id,mobile FROM(
-						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
-					)AS t
-				WHERE a.mobile=t.mobile AND a.id!=t.id
-			)";
+		try{			
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
-			$result=M()->query($sql);
+			$result=M('mobiledel')->select();
+			if($result){
+				foreach ($variable as $ky => $vo) {
+					$map['mobile']=$vo['mobile'];
+					$sul=M('mobile')->where($map)->order('status desc')->getfield('id',true);
+					if(count($sul)>1){
+						for($i=1;$i<count($sul);$i++){
+							$map1['id']=$result[$i]['id'];
+							$sul=M('mobile')->where($map1)->delete();
+						}						
+					}
+					
+				}
+			}
+
 			$count=count($result)>200?200:count($result);
 			/*
 			if($count==0){
@@ -261,10 +269,10 @@ class MobileController extends AdminbaseController{
 			}
 			*/
 
-			for($i=0;$i<$count;$i++){
-				$map['id']=$result[$i]['id'];
-				$sul=M('mobile')->where($map)->delete();
-			}
+			// for($i=0;$i<$count;$i++){
+			// 	$map['id']=$result[$i]['id'];
+			// 	$sul=M('mobile')->where($map)->delete();
+			// }
 
 			$data['status']=1;
 			/*
