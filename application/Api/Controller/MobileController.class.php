@@ -6,6 +6,7 @@
 namespace Api\Controller;
 use Think\Controller;
 class MobileController extends Controller {
+    
 	//显示之前就修改状态
     public function index() {
         M()->startTrans();        
@@ -64,13 +65,20 @@ class MobileController extends Controller {
    
     
     //显示一个手机号码检查是否存在
-  /*  
+   
     public function getmboiletype(){ 
-        $count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();               
-        $nub=rand(1,$count);
-        $data=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->limit($nub,1)->select();     
-        if($count<$nub+1){           
-            $data=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->limit(1)->select();              
+      
+        //$count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();
+         M()->startTrans();         
+        $nmb=M('options')->where('option_id=5')->getfield('option_value');        
+       
+        $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit '.$nmb.',1');
+        if($data){  
+            $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');        
+            M()->commit();      
+            $numt=1;            
+        }else{
+             M()->rollback();
         }
         if($data){
             echo $data[0]['mobile'];         
@@ -79,8 +87,8 @@ class MobileController extends Controller {
         }
         exit();
     }
-*/
 
+/*
     public function getmboiletype(){ 
         M()->startTrans();        
         //$data=M('mobilefind.views')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->limit(1)->lock(true)->select();
@@ -98,7 +106,7 @@ class MobileController extends Controller {
         }
         exit();
     }
-
+*/
     
 /*
     public function getmboiletype(){ 
