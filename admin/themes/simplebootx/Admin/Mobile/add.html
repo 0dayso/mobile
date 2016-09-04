@@ -64,6 +64,14 @@
 	</div>	
 </body>
 <script type="text/javascript">
+	$(function(){
+		var url="{:U('Mobile/cqmobile')}";
+		$.get(url,function(data){
+			$('.nmb').html(data);
+		})
+
+
+	})
 	$('#cfinfo').click(function(){
 		var url="{:U('Mobile/uniqiddata')}";
 		t(url);

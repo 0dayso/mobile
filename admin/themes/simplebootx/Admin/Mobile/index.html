@@ -48,8 +48,8 @@
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
 				
-					总{$allcount|default=0}条，未检测{$countlist[0]|default=0}条，已检测{$countlist[1]+$countlist[2]+$countlist[3]}条，
-					未使用{$uselist[0]|default=0}条，已使用{$uselist[1]|default=0}条，女粉{$countlist[3]|default=0}条
+					总{$count|default=0}条，未检测<span id="wj1"></span>条，已检测<span id="wj2"></span>条，
+					未使用<span id="wj3"></span>条，已使用<span id="wj4"></span>条，女粉<span id="wj5"></span>条
 				</span>	
 				<div class="page" style="margin-top:10px;">
 				{$page}
@@ -59,10 +59,21 @@
 	</div>
 	
 	<script>
-	    function t(){
-	    	alert("df");
-	    }
+	 
 		$(function() {
+			var url="{:U('Mobile/mobilesum')}";			
+			$.get(url,function(data){
+
+				if(data['status']=1){
+
+					$('#wj1').html(data[0]);			
+					$('#wj2').html(parseInt(data[1])+parseInt(data[2])+parseInt(data[3]));
+					$('#wj3').html(data[9]);
+					$('#wj4').html(data[7]);
+					$('#wj5').html(data[3]);
+				}
+			})
+
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
 			});

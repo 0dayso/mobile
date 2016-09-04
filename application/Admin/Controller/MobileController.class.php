@@ -13,9 +13,9 @@ class MobileController extends AdminbaseController{
 		$map['status'] = 0;
 		if(I('type') > 0){
 			$map['type'] = I('type');
-		}
-		
+		}		
 		$count=M('mobile')->where($map)->count();
+
 		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
@@ -28,17 +28,23 @@ class MobileController extends AdminbaseController{
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
 		}
-		$countlist = M('mobile')->group('type')->getField('type,count(*)',true);
-		$uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
-		$allcount=M('mobile')->count();
+		// $countlist = M('mobile')->group('type')->getField('type,count(*)',true);
+		// $uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
+		// $allcount=M('mobile')->count();
 		
-		$this->assign('countlist',$countlist);
-		$this->assign('uselist',$uselist);
+		// $this->assign('countlist',$countlist);
+		// $this->assign('uselist',$uselist);
 		$this->assign('count',$count);
-		$this->assign('allcount',$allcount);
+		//$this->assign('allcount',$allcount);
 		$this->assign('data',$data);
 		$this->assign('page',$show);
 		$this->display();
+	}
+
+	public function mobilesum(){
+		$sum=M('mobilesum')->getfield('cont',true);
+		$sum['status']=1;
+		$this->ajaxreturn($sum);
 	}
 	
 	protected function GetCatebyid($id){
@@ -68,8 +74,7 @@ class MobileController extends AdminbaseController{
 	}
 	
 	public function add(){
-		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
-		$data=M()->query($sql);
+		
 		$filesnames = scandir('./public/uploads/mobile',1);
 
 		foreach($filesnames as $k=>$v){
@@ -99,9 +104,14 @@ class MobileController extends AdminbaseController{
 
 		array_multisort($sort,SORT_DESC,SORT_NUMERIC,$fileinfo);
 		
-		$this->assign('cq',count($data));
+		
 		$this->assign('fileinfo',$fileinfo);
 		$this->display();
+	}
+	function cqmobile(){
+		$sql="SELECT id,mobile,COUNT(*) AS ct FROM mbl_mobile GROUP BY mobile HAVING ct>1 ORDER BY ct DESC";
+		$data=M()->query($sql);		
+		$this->ajaxreturn(count($data));
 	}
 	public function addmobile(){
 		$this->display();
