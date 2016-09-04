@@ -83,7 +83,8 @@ class MobileController extends Controller {
 
     public function getmboiletype(){ 
         M()->startTrans();        
-        $data=M('mobilefind.views')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->limit(1)->lock(true)->select();
+        //$data=M('mobilefind.views')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->limit(1)->lock(true)->select();
+        $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit 1');
         $sul=M('mobile')->where('id=%d',$data[0]['id'])->setfield('twotime',time());
         if($sul){
             M()->commit();
