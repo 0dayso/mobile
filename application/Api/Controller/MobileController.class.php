@@ -69,7 +69,7 @@ class MobileController extends Controller {
     public function getmboiletype(){ 
       
         //$count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();
-         M()->startTrans();         
+        M()->startTrans();         
         $nmb=M('options')->where('option_id=5')->getfield('option_value');        
        
         $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit '.$nmb.',1');
