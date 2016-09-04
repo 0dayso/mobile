@@ -74,7 +74,11 @@ class MobileController extends Controller {
             $data=M()->query('select * from mobiledata.mobilefind where type=2 limit '.$nmb.',1'); 
             if($data){
                 $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('twotime',time());
-            }            
+            }else{
+                echo 0;
+                exit();
+            } 
+
          }
         if($data){
             echo $data[0]['mobile'];         
