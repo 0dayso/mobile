@@ -66,27 +66,15 @@ class MobileController extends Controller {
     
     //显示一个手机号码检查是否存在
    
-    public function getmboiletype(){ 
-      
-        //$count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();
-         
-        //$nmb=M('options')->where('option_id=5')->getfield('option_value');  
-        $data=M()->query('select id,mobile from mobiledata.mobilefind where type=2 limit 1');        
-        if($data[0]['id']){  
-            $data=M('mobile')->field('id,mobile')->where('id=%d',$data[0]['id'])->limit(1)->lock(true)->select();
-            $sul=M('mobile')->where('id=%d',$data[0]['id'])->setfield('twotime',time());
-        //    //
-        //     $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');   
-            if($sul){
-             M()->commit();         
-            }else{
-            M()->rollback(); 
-            }      
-             
-        //     $numt=1;            
-        // }else{            
-        //   //  
-        //     $sul=  $id=M('options')->where('option_id=5')->setField('option_value',1);
+    public function getmboiletype(){       
+        $count=M()->query('select count(*) as count from mobiledata.mobilefind where type=2');
+       
+        $nmb=rand(1,$count[0]['count']);         
+        if($count>0){
+            $data=M()->query('select * from mobiledata.mobilefind where type=2 limit '.$nmb.',1'); 
+            if($data){
+                $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('twotime',time());
+            }            
          }
         if($data){
             echo $data[0]['mobile'];         
