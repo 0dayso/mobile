@@ -70,9 +70,9 @@ class MobileController extends Controller {
       
         //$count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();
         M()->startTrans();         
-        $nmb=M('options')->where('option_id=5')->getfield('option_value');        
-       
-        $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit '.$nmb.',1');
+        $nmb=M('options')->where('option_id=5')->getfield('option_value');  
+        $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit '.$nmb.',1 FOR UPDATE');
+        
         if($data){  
             $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');        
             M()->commit();      
