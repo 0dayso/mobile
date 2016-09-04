@@ -77,8 +77,9 @@ class MobileController extends Controller {
             $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');        
             M()->commit();      
             $numt=1;            
-        }else{
-             M()->rollback();
+        }else{            
+            M()->rollback();
+            $sul=  $id=M('options')->where('option_id=5')->setField('option_value',1);
         }
         if($data){
             echo $data[0]['mobile'];         
