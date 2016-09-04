@@ -70,18 +70,19 @@ class MobileController extends Controller {
       
         //$count=M('mobile')->field('id,mobile')->where('type=%d and status=0',0)->count();
        // M()->startTrans();         
-        $nmb=M('options')->where('option_id=5')->getfield('option_value');  
-        $data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit '.$nmb.',1 FOR UPDATE');
+        //$nmb=M('options')->where('option_id=5')->getfield('option_value');  
+        $data=M()->query('select id,mobile from mobiledata.mobilefind where type=2 limit 1');        
+        if($data[0]['id']){  
+            $data=M('mobile')->field('id,mobile')->where('id=%d',$data[0]['id'])->limit(1)->lock(true)->select();
         
-        if($data){  
-            $sul=M('mobile')->where('id=%d',$data[0]['id'])->setfield('twotime',time());
-            $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');        
-          //  M()->commit();      
-            $numt=1;            
-        }else{            
-          //  M()->rollback();
-            $sul=  $id=M('options')->where('option_id=5')->setField('option_value',1);
-        }
+        //    // $sul=M('mobile')->where('id=%d',$data[0]['id'])->setfield('twotime',time());
+        //     $sul=  $id=M('options')->where('option_id=5')->setinc('option_value');        
+        //   //  M()->commit();      
+        //     $numt=1;            
+        // }else{            
+        //   //  M()->rollback();
+        //     $sul=  $id=M('options')->where('option_id=5')->setField('option_value',1);
+         }
         if($data){
             echo $data[0]['mobile'];         
         }else{
