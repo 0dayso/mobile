@@ -42,7 +42,7 @@ class MobileController extends AdminbaseController{
 	}
 
 	public function mobilesum(){
-		$sum=M('mobilesum')->getfield('cont',true);
+		$sum=M('mobilesum')->cache(60)->getfield('cont',true);
 		$sum['status']=1;
 		$this->ajaxreturn($sum);
 	}
