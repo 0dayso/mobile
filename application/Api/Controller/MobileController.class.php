@@ -67,17 +67,16 @@ class MobileController extends Controller {
     //显示一个手机号码检查是否存在
    
     public function getmboiletype(){       
-        $count=M()->query('select count(*) as count from mobiledata.mobilefind where type=2');
-       
+        $count=M()->query('select count(*) as count from mobiledata.mobilefind where status=0 and type=0');   
         $nmb=rand(1,$count[0]['count']);         
         if($count>0){
-            $data=M()->query('select * from mobiledata.mobilefind where type=2 limit '.$nmb.',1'); 
-            if($data){
-                $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('twotime',time());
-            }else{
-                echo 0;
-                exit();
-            } 
+            $data=M()->query('select * from mobiledata.mobilefind where status=0 and type=0 limit '.$nmb.',1'); 
+            // if($data){
+            //     $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('update',time());
+            // }else{
+            //     echo 0;
+            //     exit();
+            // } 
 
          }
         if($data){
