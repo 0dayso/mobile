@@ -238,7 +238,7 @@ class MobileController extends AdminbaseController{
 
 	public function uniqiddata(){
 		$data['status']=0;
-		$data['url']=U('Mobile/uploadmobile');
+		$data['url']=U('Mobile/uniqiddata');
 		try{			
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
 			$result=M('mobiledel')->select();
