@@ -241,22 +241,23 @@ class MobileController extends AdminbaseController{
 		$data['url']=U('Mobile/uniqiddata');
 		try{			
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
-			$result=M('mobiledel')->select();
+			$result=M('mobiledel')->select();		
 			if($result){
-				foreach ($variable as $ky => $vo) {
-					$map['mobile']=$vo['mobile'];
+				$count=count($result)>80?80:count($result);
+				for ($i=0;$i<$count;$i++) {
+					$map['mobile']=$result[$i]['mobile'];
 					$sul=M('mobile')->where($map)->order('status desc')->getfield('id',true);
+
 					if(count($sul)>1){
-						for($i=1;$i<count($sul);$i++){
-							$map1['id']=$result[$i]['id'];
-							$sul=M('mobile')->where($map1)->delete();
-						}						
-					}
+						for($j=1;$j<count($sul);$j++){
+							$map1['id']=$sul[$j];						
+							$sultt=M('mobile')->where($map1)->delete();						
 					
+						}						
+					}									
 				}
 			}
-
-			$count=count($result)>200?200:count($result);
+			//
 			/*
 			if($count==0){
 				$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
@@ -273,7 +274,6 @@ class MobileController extends AdminbaseController{
 			// 	$map['id']=$result[$i]['id'];
 			// 	$sul=M('mobile')->where($map)->delete();
 			// }
-
 			$data['status']=1;
 			/*
 			foreach ($result as $k => $v) {					 	
