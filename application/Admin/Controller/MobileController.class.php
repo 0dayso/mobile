@@ -256,6 +256,7 @@ class MobileController extends AdminbaseController{
 						}						
 					}									
 				}
+				$data['status']=1;
 			}
 			//
 			/*
@@ -274,7 +275,7 @@ class MobileController extends AdminbaseController{
 			// 	$map['id']=$result[$i]['id'];
 			// 	$sul=M('mobile')->where($map)->delete();
 			// }
-			$data['status']=1;
+			
 			/*
 			foreach ($result as $k => $v) {					 	
 			}
