@@ -48,7 +48,7 @@
 				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
 				
-					总{$count|default=0}条，未检测<span id="wj1"></span>条，已检测<span id="wj2"></span>条，
+					总<span id="wj0"></span>条，未检测<span id="wj1"></span>条，已检测<span id="wj2"></span>条，
 					未使用<span id="wj3"></span>条，已使用<span id="wj4"></span>条，女粉<span id="wj5"></span>条
 				</span>	
 				<div class="page" style="margin-top:10px;">
@@ -71,6 +71,7 @@
 					$('#wj3').html(data[9]);
 					$('#wj4').html(data[7]);
 					$('#wj5').html(data[3]);
+					$('#wj0').html(data[10]);
 				}
 			})
 
