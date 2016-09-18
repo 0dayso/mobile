@@ -337,6 +337,118 @@ class MobileController extends AdminbaseController{
 		fclose($myfile);
 		
     }
+    //删除广东账号
+    public function delguangdong(){
+    	// $mobile='15818618500';
+       
+         // $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+	    // $jsul=$this->HTTP_GET($url);
+	    // var_dump($jsul);
+	    // exit();
+
+    	set_time_limit(0);
+    	$map['status']=0;
+    	$map['type']=2;
+    	$map['province']='';
+    	$data=D('Mobile')->field('id,mobile')->where($map)->select();
+    	for($i=0; $i<count($data); $i++){
+    		   $mobile=trim($data[$i]['mobile']);
+    		   $id=$data[$i]['id'];
+    		   $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+    		   // echo $url;
+			    $jsul=$this->HTTP_GET($url);
+			    $t=substr($jsul,20,strlen(trim($jsul))-21);
+			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+			    $at=explode(',',str_ireplace("'","",$ati));
+				//$at=json_decode('('.trim($ati).')',true);
+
+				$pr=explode(':',$at[1]);
+				$data1['province']=$pr[1];
+				$cn=explode(':',$at[6]);
+				$data1['catName']=$cn[1];
+
+			    if($data1['province']=='广东'){
+					$data1['status']=1;
+				}
+	
+				$where['id']=$id;
+				
+				$sul=D('Mobile')->where($where)->save($data1);
+
+				unset($data1);
+				if($sul){
+					echo $mobile."<br/>";
+				}
+				
+			   
+
+    		//$this->deldata($data[$i]['id'],$data[$i]['mobile']);
+    	}    	
+    }
+
+    public function deldata($id,$mobile){
+    	if($id&&$mobile){
+	    	$url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;	
+	    	echo $url;	
+	    	$jsul=$this->HTTP_GET($url);
+	    	dump($jsul);
+	    	exit();
+	    	$tj=json_decode($jsul);
+			if($jsul){
+
+				if($tj['province']=='广东'){
+					$data1['status']=1;
+					$data1['province']=$tj['province'];
+					$data1['catName']=$tj['catName'];
+				
+				}else{
+					$data1['province']=$tj['province'];
+					$data1['catName']=$tj['catName'];
+				}
+				$where['id']=$id;
+				$sul=D('Mobile')->where($where)->save($data1);
+
+			}
+		}
+
+   }
+
+    private function HTTP_POST($url, $param) {
+        $oCurl = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+
+        $strPOST = http_build_query($param);
+
+        curl_setopt($oCurl, CURLOPT_URL, $url);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($oCurl, CURLOPT_POST, true);
+        curl_setopt($oCurl, CURLOPT_POSTFIELDS, $strPOST);
+        curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, true);
+        $sContent = curl_exec($oCurl);
+        $aStatus = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        return $sContent;
+    }
+
+     private function HTTP_GET($url) {
+        $oCurl = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+       	curl_setopt($oCurl, CURLOPT_URL, $url);
+       	curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($oCurl, CURLOPT_HEADER, 0);
+
+        $sContent = curl_exec($oCurl);
+        $aStatus = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        return $sContent;
+    }
+
 
 
 	
