@@ -388,7 +388,7 @@ class MobileController extends AdminbaseController{
     }
     public $countt=0;
     public function setorder(){
-    	set_time_limit(0);
+
     	$map['status']=0;
     	$map['type']=2;
     	$map['province']='';
@@ -409,9 +409,7 @@ class MobileController extends AdminbaseController{
     public function onedelguangdong(){
 
     	set_time_limit(0);
-    	$map['status']=0;
-    	$map['type']=2;
-    	$map['province']='';
+
 
    		$data=$this->setorder();
  
