@@ -18,7 +18,7 @@ if (ini_get('magic_quotes_gpc')) {
 	$_POST = stripslashesRecursive($_POST);
 }
 //开启调试模式
-define("APP_DEBUG", false);
+define("APP_DEBUG", true);
 //根目录
 define('ROOTPATRH',dirname(__FILE__));
 //网站当前路径

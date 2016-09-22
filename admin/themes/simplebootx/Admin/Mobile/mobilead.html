@@ -53,14 +53,26 @@
 			
 			$.get(url,function(data){
 			console.log(data);
-
-				if(data.status==3){
-					$('.tbt').prepend('处理完成');
-				}else{
+				switch(data.status){
+					case 2:
+						$("#suminfo").html(i);
+						$('.tbt').prepend(data.mobile+':城市'+data.province+"--<br/>");
+						tm();
+					break;
+					case 3:
+						$('.tbt').prepend('处理完成');
+					break;
+					default:
 					i++;
 					$("#suminfo").html(i);
 					$('.tbt').prepend(data.mobile+':城市'+data.province+"<br/>");
 					tm();
+
+				}
+				if(data.status==3){
+					
+				}else{
+					
 				}
 			});
 		}
