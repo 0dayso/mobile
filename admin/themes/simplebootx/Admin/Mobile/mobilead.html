@@ -1,0 +1,87 @@
+<admintpl file="header" />
+<style>
+	.trback{background: #999; color: #666;}
+	#mobile_inputs input{margin-bottom:10px;}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('mobile/index')}">手机号码管理</a></li>
+			<li><a href="{:U('mobile/add')}">添加手机号码(上传文件)</a></li>
+			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
+			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
+			<li><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
+			<li class="active"><a href="{:U('Mobile/mobilead')}">检查归属地</a></li>
+		</ul>
+
+
+
+
+			<div class="form-actions">
+				<input type="botton" onclick="tm()" class="btn btn-primary js-ajax-submit" value="检查归属地" />
+				<a class="btn" href="{:U('Mobile/index')}">{:L('BACK')}</a>
+			</div>
+	
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" style="width:190px;margin-right:10px;">请输入手机号码<br/>(多个号码之间请换行)</label>
+					<div class="controls">
+						<div class="tbt" name="mobile" style="width:800px;height:500px;text-align:left; border:1px solid #999;overflow:scroll"></div><!--13511111111,13522222222,13533333333-->
+						<!--
+						<div id="mobile_inputs">
+							<input type="text" name="mobile[]" /><br/>
+						</div>
+						<div class="btn btn-primary" onclick="addinput(1)">添加新号码</div>
+						<div class="btn btn-primary del_imput" onclick="addinput(-1)">删除一个号码</div>
+						<div class="cerror"></div>-->
+					</div>
+					
+				</div>
+			</fieldset>
+		
+		
+		
+	</div>	
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		function tm(){
+			var url="{:U('mobile/onedelguangdong')}";
+			
+			$.get(url,function(data){
+			console.log(data);
+
+				if(data.status==3){
+					$('.tbt').append('处理完成');
+				}else{
+					
+					$('.tbt').append(data.mobile+':城市'+data.province+"<br/>");
+					tm();
+				}
+			});
+		}
+	</script>
+	<!--
+	<script>
+		function addinput(type){
+			var input_html = '<input type="text" name="mobile[]" /><br/>';
+			$('.del_imput').next('.cerror').text('');
+			if(type == 1){
+				$('#mobile_inputs').append(input_html);
+			}else{
+				var input_num = $('#mobile_inputs').find('input').length;
+				if(input_num > 1){
+					$('#mobile_inputs').find('input:last').remove();
+					$('#mobile_inputs').find('br:last').remove();
+				}else{
+					$('.del_imput').next('.cerror').text('已经没得删了');
+					setTimeout = (function(){
+						$('.del_imput').next('.cerror').hide();
+					} ,600);
+				}
+			}
+			
+		}
+	</script>-->
+</body>
+</html>
