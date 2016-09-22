@@ -394,7 +394,7 @@ class MobileController extends AdminbaseController{
     	$map['province']='';
     	$this->$countt=count(session('omobile'));
     	if(count(session('omobile'))<1){
-    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(0,10)->order("id desc")->select();
+    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(500,100)->order("id desc")->select();
     		session('omobile',$data);
     	}else{
     		$data=session('omobile');
@@ -430,7 +430,8 @@ class MobileController extends AdminbaseController{
     		   }
     		
 
-			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");
+			       var_dump($ati);			  
 			    $at=explode(',',str_ireplace("'","",$ati));
 				//$at=json_decode('('.trim($ati).')',true);
 
@@ -448,20 +449,25 @@ class MobileController extends AdminbaseController{
 				
 				$where['id']=$id;
 				$sul=D('Mobile')->where($where)->save($data1);
+				unset($t);
+				unset($ati);
+				unset($at);
+				unset($cn);
 				unset($data1);
 				if($sul){
 					$retrun['status']=1;
 					$retrun['msg']='数据检查完成';
 					$retrun['mobile']=$mobile;
 					$retrun['province']=$pr[1];
-					unset($data1);
+					unset($pr);
 					$this->ajaxreturn($retrun);
 					exit();
 				}else{
 					$retrun['status']=2;
 					$retrun['msg']='修改失败';
 					$retrun['mobile']=$mobile;
-					$retrun['province']=$pr[1];				
+					$retrun['province']=$pr[1];	
+					unset($pr);			
 					$this->ajaxreturn($retrun);
 					exit();
 				}
