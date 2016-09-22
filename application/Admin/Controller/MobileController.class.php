@@ -386,13 +386,13 @@ class MobileController extends AdminbaseController{
     public function mobilead(){
     	$this->display();
     }
-
+    public $countt=0;
     public function setorder(){
     	set_time_limit(0);
     	$map['status']=0;
     	$map['type']=2;
     	$map['province']='';
-
+    	$this->$countt=count(session('omobile'));
     	if(count(session('omobile'))<1){
     		$data=D('Mobile')->field('id,mobile')->where($map)->limit(0,10)->order("id desc")->select();
     		session('omobile',$data);
@@ -407,12 +407,6 @@ class MobileController extends AdminbaseController{
 
      //增加查询归属地
     public function onedelguangdong(){
-    	// $mobile='15818618500';
-       
-         // $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
-	    // $jsul=$this->HTTP_GET($url);
-	    // var_dump($jsul);
-	    // exit();
 
     	set_time_limit(0);
     	$map['status']=0;
@@ -424,13 +418,19 @@ class MobileController extends AdminbaseController{
     	//$data=D('Mobile')->where($map)->find();
 
     	if($data){
+
+
     		   $mobile=trim($data['mobile']);
     		  
     		   $id=$data['id'];
-    		   $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
-    		   // echo $url;
-			    $jsul=$this->HTTP_GET($url);
-			    $t=substr($jsul,20,strlen(trim($jsul))-21);
+    		   $t=$this->semobile($mobile);
+
+    		   if(stripos($t,'302 Found')>0){
+    		   	
+    		   		$t=$this->semobile($mobile);
+    		   }
+    		   
+
 			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
 			    $at=explode(',',str_ireplace("'","",$ati));
 				//$at=json_decode('('.trim($ati).')',true);
@@ -448,10 +448,7 @@ class MobileController extends AdminbaseController{
 				}
 	
 				$where['id']=$id;
-				
 				$sul=D('Mobile')->where($where)->save($data1);
-				
-				
 				if($sul){
 					$retrun['status']=1;
 					$retrun['msg']='数据检查完成';
@@ -472,6 +469,15 @@ class MobileController extends AdminbaseController{
 		}
     	    	
     }
+
+    public function semobile($mobile){
+    	$url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+    		   // echo $url;
+			    $jsul=$this->HTTP_GET($url);			    
+			    $t=substr($jsul,20,strlen(trim($jsul))-21);
+		return $t;
+    }
+
 
     public function deldata($id,$mobile){
     	if($id&&$mobile){
@@ -528,6 +534,7 @@ class MobileController extends AdminbaseController{
         }
        	curl_setopt($oCurl, CURLOPT_URL, $url);
        	curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+       	curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST, 'GET');
 		curl_setopt($oCurl, CURLOPT_HEADER, 0);
 
         $sContent = curl_exec($oCurl);
