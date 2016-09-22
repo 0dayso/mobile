@@ -421,6 +421,7 @@ class MobileController extends AdminbaseController{
     		   $mobile=trim($data['mobile']);
     		  
     		   $id=$data['id'];
+    		   dump($data);
     		   $t=$this->semobile($mobile);
 
     		   if(stripos($t,'302 Found')>0){
@@ -428,7 +429,7 @@ class MobileController extends AdminbaseController{
     		   		$t=$this->semobile($mobile);
     		   }
     		   dump($t);
-    		    exit();
+    		   exit();
 
 			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
 			    $at=explode(',',str_ireplace("'","",$ati));
