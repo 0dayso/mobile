@@ -421,7 +421,7 @@ class MobileController extends AdminbaseController{
     		   $mobile=trim($data['mobile']);
     		  
     		   $id=$data['id'];
-    	
+
     		   $t=$this->semobile($mobile);
 
     		   if(stripos($t,'302 Found')>0){
@@ -445,24 +445,34 @@ class MobileController extends AdminbaseController{
 			    if($data1['province']=='广东'){
 					$data1['status']=1;//删除广东用户
 				}
-	
+				
 				$where['id']=$id;
 				$sul=D('Mobile')->where($where)->save($data1);
+				unset($data1);
 				if($sul){
 					$retrun['status']=1;
 					$retrun['msg']='数据检查完成';
 					$retrun['mobile']=$mobile;
-					$retrun['province']=$data1['province'];
+					$retrun['province']=$pr[1];
 					unset($data1);
 					$this->ajaxreturn($retrun);
 					exit();
+				}else{
+					$retrun['status']=2;
+					$retrun['msg']='修改失败';
+					$retrun['mobile']=$mobile;
+					$retrun['province']=$pr[1];				
+					$this->ajaxreturn($retrun);
+					exit();
 				}
-				unset($data1);
+				
 
     		//$this->deldata($data[$i]['id'],$data[$i]['mobile']);
 		}else{
 			$retrun['status']=3;
 			$retrun['msg']='数据检查完成';
+			$retrun['mobile']='没有数据';
+			$retrun['province']="没有数据";
 			$this->ajaxreturn($retrun);
 			exit();
 		}
