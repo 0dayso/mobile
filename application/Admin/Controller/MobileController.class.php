@@ -337,7 +337,7 @@ class MobileController extends AdminbaseController{
 		fclose($myfile);
 		
     }
-    //删除广东账号
+    //增加查询归属地
     public function delguangdong(){
     	// $mobile='15818618500';
        
@@ -368,7 +368,7 @@ class MobileController extends AdminbaseController{
 				$data1['catName']=$cn[1];
 
 			    if($data1['province']=='广东'){
-					$data1['status']=1;
+					$data1['status']=1;//删除广东用户
 				}
 	
 				$where['id']=$id;
@@ -379,11 +379,98 @@ class MobileController extends AdminbaseController{
 				if($sul){
 					echo $mobile."<br/>";
 				}
-				
-			   
-
     		//$this->deldata($data[$i]['id'],$data[$i]['mobile']);
     	}    	
+    }
+
+    public function mobilead(){
+    	$this->display();
+    }
+
+    public function setorder(){
+    	set_time_limit(0);
+    	$map['status']=0;
+    	$map['type']=2;
+    	$map['province']='';
+
+    	if(count(session('omobile'))<1){
+    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(0,10)->order("id desc")->select();
+    		session('omobile',$data);
+    	}else{
+    		$data=session('omobile');
+    	}
+    	
+    	$return= array_shift($data);
+    	session('omobile',$data);
+    	return $return;
+    }
+
+     //增加查询归属地
+    public function onedelguangdong(){
+    	// $mobile='15818618500';
+       
+         // $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+	    // $jsul=$this->HTTP_GET($url);
+	    // var_dump($jsul);
+	    // exit();
+
+    	set_time_limit(0);
+    	$map['status']=0;
+    	$map['type']=2;
+    	$map['province']='';
+
+   		$data=$this->setorder();
+ 
+    	//$data=D('Mobile')->where($map)->find();
+
+    	if($data){
+    		   $mobile=trim($data['mobile']);
+    		  
+    		   $id=$data['id'];
+    		   $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+    		   // echo $url;
+			    $jsul=$this->HTTP_GET($url);
+			    $t=substr($jsul,20,strlen(trim($jsul))-21);
+			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+			    $at=explode(',',str_ireplace("'","",$ati));
+				//$at=json_decode('('.trim($ati).')',true);
+
+				$pr=explode(':',$at[1]);
+				$data1['province']=$pr[1];
+				$cn=explode(':',$at[6]);
+				$data1['catName']=$cn[1];
+
+				if(empty($data1['province'])){
+					$data1['province']='没有检查到';
+				}
+			    if($data1['province']=='广东'){
+					$data1['status']=1;//删除广东用户
+				}
+	
+				$where['id']=$id;
+				
+				$sul=D('Mobile')->where($where)->save($data1);
+				
+				
+				if($sul){
+					$retrun['status']=1;
+					$retrun['msg']='数据检查完成';
+					$retrun['mobile']=$mobile;
+					$retrun['province']=$data1['province'];
+					unset($data1);
+					$this->ajaxreturn($retrun);
+					exit();
+				}
+				unset($data1);
+
+    		//$this->deldata($data[$i]['id'],$data[$i]['mobile']);
+		}else{
+			$retrun['status']=3;
+			$retrun['msg']='数据检查完成';
+			$this->ajaxreturn($retrun);
+			exit();
+		}
+    	    	
     }
 
     public function deldata($id,$mobile){
