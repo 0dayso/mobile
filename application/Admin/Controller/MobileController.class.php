@@ -431,7 +431,7 @@ class MobileController extends AdminbaseController{
     		
 
 			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");
-			       var_dump($ati);			  
+			     			  
 			    $at=explode(',',str_ireplace("'","",$ati));
 				//$at=json_decode('('.trim($ati).')',true);
 
