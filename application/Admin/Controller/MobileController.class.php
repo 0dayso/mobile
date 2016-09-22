@@ -416,8 +416,7 @@ class MobileController extends AdminbaseController{
     	//$data=D('Mobile')->where($map)->find();
 
     	if($data){
-    		    dump($data);
-    		    exit();
+
 
     		   $mobile=trim($data['mobile']);
     		  
@@ -428,7 +427,8 @@ class MobileController extends AdminbaseController{
     		   	
     		   		$t=$this->semobile($mobile);
     		   }
-    		   
+    		   dump($t);
+    		    exit();
 
 			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
 			    $at=explode(',',str_ireplace("'","",$ati));
