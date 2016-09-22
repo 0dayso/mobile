@@ -416,7 +416,8 @@ class MobileController extends AdminbaseController{
     	//$data=D('Mobile')->where($map)->find();
 
     	if($data){
-
+    		    dump($data);
+    		    exit();
 
     		   $mobile=trim($data['mobile']);
     		  
