@@ -19,6 +19,7 @@
 
 
 			<div class="form-actions">
+				<input type="text" id="province" class="text" value="" placeholder="为空时检查没有的检没检测" />
 				<input type="botton" onclick="tm()" class="btn btn-primary js-ajax-submit" value="检查归属地" />
 				<a class="btn" href="{:U('Mobile/index')}">{:L('BACK')}</a> 
 				
@@ -26,6 +27,7 @@
 	
 			<fieldset>
 				<div class="control-group">
+
 					<label class="control-label" style="width:190px;margin-right:10px;">检测手机号码：<span id="suminfo"></span></label>
 					<div class="controls">
 						<div class="tbt" name="mobile" style="width:800px;height:500px;text-align:left; border:1px solid #999;overflow:scroll"></div><!--13511111111,13522222222,13533333333-->
@@ -50,9 +52,8 @@
 		function tm(){
 
 			var url="{:U('mobile/onedelguangdong')}";
-			
-			$.get(url,function(data){
-			console.log(data);
+			$.post(url,{'province':$('#province').val()},function(data){
+			//console.log(data);
 				switch(data.status){
 					case 2:
 						$("#suminfo").html(i);
@@ -60,7 +61,7 @@
 						tm();
 					break;
 					case 3:
-						$('.tbt').prepend('处理完成');
+						$('.tbt').prepend('处理完成<br/>');
 					break;
 					default:
 					i++;

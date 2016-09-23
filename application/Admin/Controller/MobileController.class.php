@@ -391,17 +391,26 @@ class MobileController extends AdminbaseController{
 
     	$map['status']=0;
     	$map['type']=2;
-    	$map['province']='江苏';
-    	$this->$countt=count(session('omobile'));
-    	if(count(session('omobile'))<1){
-    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(500,100)->order("id desc")->select();
-    		session('omobile',$data);
+    	if(I('province')){
+    		$map['province']=trim(I('province')); 
     	}else{
-    		$data=session('omobile');
+    		$map['province']='';
+    	}
+
+    	$this->$countt=count(s('omobile'));
+   
+
+    	if(count(S('omobile'))<2||S('omobile')==false){
+    		S('omobile',null);
+    		$data=D('Mobile')->field('id,mobile')->where($map)->order("id desc")->select();
+    		
+    		S('omobile',$data);
+    	}else{
+    		$data=S('omobile');
     	}
     	
     	$return= array_shift($data);
-    	session('omobile',$data);
+    	S('omobile',$data);
     	return $return;
     }
 
@@ -441,7 +450,7 @@ class MobileController extends AdminbaseController{
 				$data1['catName']=$cn[1];
 
 				if(empty($data1['province'])){
-					$data1['province']='没有检查到';
+					$data1['province']='没';
 				}
 			    if($data1['province']=='广东'){
 					$data1['status']=1;//删除广东用户
