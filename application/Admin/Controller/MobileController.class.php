@@ -391,7 +391,7 @@ class MobileController extends AdminbaseController{
 
     	$map['status']=0;
     	$map['type']=2;
-    	$map['province']='';
+    	$map['province']='江苏';
     	$this->$countt=count(session('omobile'));
     	if(count(session('omobile'))<1){
     		$data=D('Mobile')->field('id,mobile')->where($map)->limit(500,100)->order("id desc")->select();
