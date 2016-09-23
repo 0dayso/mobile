@@ -402,7 +402,7 @@ class MobileController extends AdminbaseController{
 
     	if(count(S('omobile'))<2||S('omobile')==false){
     		S('omobile',null);
-    		$data=D('Mobile')->field('id,mobile')->where($map)->order("id desc")->select();
+    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
     		
     		S('omobile',$data);
     	}else{
