@@ -12,14 +12,14 @@ class MobileaddController extends AdminbaseController{
 	public function index(){
 
 		$count=M('mobile')->where("status=0 and type=2 and province='江苏'")->count();
-		$mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
-		if($mobilest!=1){
-			$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
-			$this->assign('count',$count);
-			$this->assign('data',$data);
-			$this->display();
-			exit();
-		}
+		// $mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
+		// if($mobilest!=1){
+		// 	$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
+		// 	$this->assign('count',$count);
+		// 	$this->assign('data',$data);
+		// 	$this->display();
+		// 	exit();
+		// }
 
 
 		//$count=M('mobile')->where("status=0 and type=2 and province='江苏'")->count();
