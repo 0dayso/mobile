@@ -11,25 +11,37 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 
-		M()->startTrans();		
 		$count=M('mobile')->where("status=0 and type=2 and province='江苏'")->count();
+		$mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
+		if($mobilest!=1){
+			$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
+			$this->assign('count',$count);
+			$this->assign('data',$data);
+			$this->display();
+			exit();
+		}
+
+
+		//$count=M('mobile')->where("status=0 and type=2 and province='江苏'")->count();
 		// $counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
 		// if($counts==0){
 		// 	$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
 		// }
+
         $isallsave=true;                  
-		$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile',true);	
+		$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
 
 		if(!$data&&$count>0){
 			$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
 			if($counts<=0){
-				$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
+				//$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
 			}
 		}
 		$aryid=array();
 		foreach ($data as $key => $value) {		
-			$moibledata['isshow']=1;
+			$moibledata['isshow']=array('exp',"isshow+1");
 			$moibledata['ffid']=session('ADMIN_ID');
+			$moibledata['showtime']=time();
 			$t=M('mobile')->where("id=%d",$key)->save($moibledata);	
 			if(!$t){
 			    $isallsave=false;
