@@ -93,14 +93,14 @@
 				</thead> -->
 				<tbody>
 				<?php $i=0 ?>
-				<foreach name="data" item="vo" key="k">
+				<volist name="data" id="vo" key="k">
 					<tr class="trclick" >
-						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo}</td>
-						<td id="vl{$k}" class="statustext" style="width:4px">未</td>
+						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$vo.id}" /></td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.mobile}</td>
+						<td id="vl{$vo.id}" class="statustext" style="width:4px"><eq name="$vo.status" value="1">已<else/>未</eq></td>
 					<!-- 	<td>返回</td> -->
 					</tr>
-				</foreach>
+				</volist>
 				</tbody>
 <!-- 
 				<tfoot>
@@ -130,21 +130,23 @@
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
 			});
-
-			$(".trclick").on('touchstart ',function(){	
+				//touchstart
+			$(".trclick").on('touchstart',function(){	
 				$(this).addClass("trback");	
 				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
 				var id=$(this).find('.keyinfo').val();
-				$.post(url,{'id':id},function(data){	
-					if(data.status=="1"){						
+				$.post(url,{'id':id},function(data){
+					if(data.status=="1" || data.status==1){						
 						$("#vl"+id).html('已');					
 					}else{
-						if(data.status=="2"){
+						if(data.status=="2" || data.status==2){
 							alert('数据已经被同事'+data.name+'添加');
 							$("#vl"+id).html('已');	
+						}else{
+							$("#vl"+id).html('未');	
 						}
-						$("#vl"+id).html('未');
+						
 					}				
 				});
 			});
