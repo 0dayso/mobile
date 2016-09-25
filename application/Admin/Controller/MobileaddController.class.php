@@ -27,7 +27,7 @@ class MobileaddController extends AdminbaseController{
 		// if($counts==0){
 		// 	$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
 		// }
-
+		M()->startTrans();
         $isallsave=true;                  
 		$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
 
