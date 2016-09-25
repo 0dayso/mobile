@@ -50,10 +50,12 @@ class MobileaddController extends AdminbaseController{
 		}
 
 		$this->assign('aryid',implode(',', $aryid));
-		M()->commit();
+		
 		if(!$isallsave){
 			M()->rollback();
 			$data='';
+		}else{
+			M()->commit();
 		}
 
 		$this->assign('count',$count);
