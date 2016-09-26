@@ -396,8 +396,7 @@ class MobileController extends AdminbaseController{
     	}else{
     		$map['province']='';
     	}
-    	S('omobile',null);
-    	exit();
+    	
     	if(S('omobile')==false||count(S('omobile'))<2){    		
     		S('omobile',null);
     		$data=D('Mobile')->field('id,mobile')->where($map)->limit(100)->order("id desc")->select();    		
