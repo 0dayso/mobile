@@ -396,8 +396,7 @@ class MobileController extends AdminbaseController{
     	}else{
     		$map['province']='';
     	}
-    	S('omobile',null);
-    	exit();
+    	
     	if(S('omobile')==false){
     	
     		S('omobile',null);
