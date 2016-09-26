@@ -131,7 +131,7 @@
 				$("#mainform").submit();
 			});
 				//touchstart
-			$(".trclick").on('touchstart',function(){	
+			$(".trclick").on('click',function(){	
 				$(this).addClass("trback");	
 				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
@@ -146,7 +146,6 @@
 						}else{
 							$("#vl"+id).html('未');	
 						}
-						
 					}				
 				});
 			});

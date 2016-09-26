@@ -79,8 +79,8 @@
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
 			});
-
-			$(".trclick").on('touchstart ',function(){	
+			//touchstart
+			$(".trclick").on('click ',function(){	
 
 				$(this).addClass("trback");	
 				var url="{:U('Admin/Mobile/update')}";
@@ -89,7 +89,6 @@
 				$.post(url,{'id':id},function(data){	
 					if(data.status=="1"){						
 						$("#vl"+id).html('已');
-					
 					}else{
 						$("#vl"+id).html('已');
 					}				
