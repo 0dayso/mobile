@@ -86,10 +86,16 @@ class MobileaddController extends AdminbaseController{
 	}
 	//缓存数据增加数据
 	function setorder(){
+		if(I('province')){
+    		$map['province']=trim(I('province')); 
+    	}
+    	$map['status']=0;
+    	$map['type']=2;
+    	$map['adds']=0;
     	if(count(S('omobile'))<2||S('omobile')==false){
     		S('omobile',null);
     		//$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
-    		$data=M('mobile')->where("status=0 and type=2 and adds=0 and province='江苏'")->limit(500)->select();
+    		$data=M('mobile')->where($map)->limit(500)->select();
     		
     		S('omobile',$data);
     	}else{
