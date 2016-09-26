@@ -10,8 +10,8 @@ class MobileaddController extends AdminbaseController{
 		$this->navcat_model =D("Common/NavCat");
 	}
 	public function index(){
-
-		$count=M('mobile')->where("status=0 and type=2 and province='江苏'")->count();
+		//->where('isshow=0')
+		$count=M('applemobile')->count();
 		// $mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
 		// if($mobilest!=1){
 		// 	$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
@@ -28,8 +28,16 @@ class MobileaddController extends AdminbaseController{
 		// 	$t=M('mobile')->where("status=0 and type=2 and isshow=1")->setField('isshow',0);	
 		// }
 		M()->startTrans();
-        $isallsave=true;                  
-		$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
+        $isallsave=true;
+
+   //      if(S('apdata')){
+
+   //      }else{
+   //      	$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
+   //      	//$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
+			// S('apdata',$data);	
+   //      } 	
+        $data=M('applemobile')->where('isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);	               
 
 		if(!$data&&$count>0){
 			$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
@@ -42,13 +50,23 @@ class MobileaddController extends AdminbaseController{
 			$moibledata['isshow']=array('exp',"isshow+1");
 			$moibledata['ffid']=session('ADMIN_ID');
 			$moibledata['showtime']=time();
-			$t=M('mobile')->where("id=%d",$key)->save($moibledata);	
-			if(!$t){
-			    $isallsave=false;
+			
+			$t=M('mobile')->where("id=%d",$value['id'])->save($moibledata);
+			if(!$t){				
+			   $isallsave=false;
+			   unset($data[$key]);
+				braek;
 			}
-			$aryid[]=$key;
+			
+			$sulap=M('applemobile')->where("mid=%d",$value['id'])->setField('isshow',1);
+			if(!$sulap){
+				$isallsave=false;
+				unset($data[$key]);
+				braek;
+			}
+			$aryid[]=$value['id'];
 		}
-
+	
 		$this->assign('aryid',implode(',', $aryid));
 		
 		if(!$isallsave){
@@ -61,6 +79,75 @@ class MobileaddController extends AdminbaseController{
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->display();
+	}
+
+	function newmobile(){
+		$this->display();
+	}
+	//缓存数据增加数据
+	function setorder(){
+    	if(count(S('omobile'))<2||S('omobile')==false){
+    		S('omobile',null);
+    		//$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
+    		$data=M('mobile')->where('status=0 and type=2 and adds=0')->limit(500)->select();
+    		
+    		S('omobile',$data);
+    	}else{
+    		$data=S('omobile');
+    	}
+    	$return= array_shift($data);
+    	S('omobile',$data);
+    	return $return;
+    }
+	//增加数据到apple查询数据
+	function appleajaxmobile(){
+
+		$resul['status']=0;
+		$resul['msg']='没有得到数据';
+		M()->startTrans();
+	
+		$data=$this->setorder();
+
+		if($data){
+			 $param['mid']=$data['id'];
+			 $param['mobile']=$data['mobile'];
+			 $sul=M('applemobile')->add($param);
+			 if($sul){
+			 	if(empty($data['id'])){
+			 		M()->rollback();
+				 	$resul['moible']=$param['mobile'];
+				 	$resul['status']=3;
+				 	$resul['msg']='复制失败';
+			 	}
+			 	$usul=M('mobile')->where('id=%d',$data['id'])->setField('adds',1);
+			 	if($usul){
+			 		M()->commit();
+				 	$resul['mobile']=$param['mobile'];
+				 	$resul['status']=1;
+				 	$resul['msg']='复制成功';
+			 	}else{
+			 		M()->rollback();
+				 	$resul['mobile']=$param['mobile'];
+				 	$resul['status']=2;
+				 	$resul['msg']='复制失败';
+			 	}
+			 	unset($usul);
+			 
+			 }else{
+			 	M()->rollback();
+			 	$resul['mobile']=$param['mobile'];
+			 	$resul['status']=3;
+			 	$resul['msg']='复制失败';
+			 }
+		}else{
+			M()->rollback();
+			$resul['mobile']=$param['mobile'];
+			$resul['status']=4;
+			$resul['msg']='没有数据';
+		}
+
+		unset($data);
+		$this->ajaxreturn($resul);
 	}
 
 	//检查是否还有数据没有处理就不能点刷新
@@ -118,7 +205,10 @@ class MobileaddController extends AdminbaseController{
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
 		$data1=M('mobile')->where('id='.$id)->save($data);
+		
+
 		if($data1){
+			//用户加1
 			$data['status']=1;	
 			$ummap['uid']=session('ADMIN_ID');
 			$ummap['now']= strtotime(date('Y-m-d', time()));
@@ -129,8 +219,13 @@ class MobileaddController extends AdminbaseController{
 				$ummap['count']=1;
 				M('usermobile')->add($ummap);	
 			}
-			
-			M()->commit();		
+			//删除已经操作过的数据
+			$sulap=M('applemobile')->where("mid=%d",$id)->delete();
+			if($sulap){
+				M()->commit();	
+			}else{
+				M()->rollback();
+			}
 			$this->ajaxreturn($data);
 			exit();
 		}
@@ -300,7 +395,7 @@ class MobileaddController extends AdminbaseController{
     //作已废处理-作为已加入
     public function mobilecancel(){
     	$id=I('aryid');	
-    
+    	
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
@@ -321,11 +416,25 @@ class MobileaddController extends AdminbaseController{
 			$tmap['id']=$v;
 			$cuont=M('mobile')->where($tmap)->count();
 			if($counts<=0){
-				$data1=M('mobile')->where('id=%d',$v)->save($data);			
+				$data1=M('mobile')->where('id=%d',$v)->save($data);	
+				if(!$data1){
+					break;
+				}		
+			}
+			
+			$t=M('applemobile')->where("mid=%d",$v)->delete();	
+			if(!$t){
+			    break;
 			}
 			
 		}
 
+		if($t){
+			M()->commit();
+			$data['status']=1;	
+			$this->ajaxreturn($data);
+			exit();
+		}
 		if($data1){
 			M()->commit();
 			$data['status']=1;	
