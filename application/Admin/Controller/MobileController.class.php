@@ -396,19 +396,19 @@ class MobileController extends AdminbaseController{
     	}else{
     		$map['province']='';
     	}
-
-    	$this->$countt=count(s('omobile'));
-   
-
-    	if(count(S('omobile'))<2||S('omobile')==false){
+    	
+    	if(S('omobile')==false){
+    	
     		S('omobile',null);
     		$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
     		
     		S('omobile',$data);
     	}else{
+    	
     		$data=S('omobile');
     	}
-    	
+ 
+    	S('omobile',null);
     	$return= array_shift($data);
     	S('omobile',$data);
     	return $return;
