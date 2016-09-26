@@ -92,6 +92,7 @@ class MobileaddController extends AdminbaseController{
     	$map['status']=0;
     	$map['type']=2;
     	$map['adds']=0;
+    
     	if(count(S('omobile'))<2||S('omobile')==false){
     		S('omobile',null);
     		//$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
