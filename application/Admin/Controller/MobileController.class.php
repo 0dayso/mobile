@@ -407,11 +407,9 @@ class MobileController extends AdminbaseController{
     		$data=S('omobile');
     	}
     	
-
-    	S('omobile',null);
     	$return= array_shift($data);
     	S('omobile',$data);
-    
+    	unset($data);
     	return $return;
     }
 
@@ -426,8 +424,6 @@ class MobileController extends AdminbaseController{
     	//$data=D('Mobile')->where($map)->find();
 
     	if($data){
-
-
     		   $mobile=trim($data['mobile']);
     		  
     		   $id=$data['id'];
