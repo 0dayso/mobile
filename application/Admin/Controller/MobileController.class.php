@@ -396,21 +396,23 @@ class MobileController extends AdminbaseController{
     	}else{
     		$map['province']='';
     	}
-    	
+    	S('omobile',null);
+    	exit();
     	if(S('omobile')==false){
-    	
-    		S('omobile',null);
-    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(30)->order("id desc")->select();
     		
+    		S('omobile',null);
+    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(5)->order("id desc")->select();    		
     		S('omobile',$data);
     	}else{
     	
     		$data=S('omobile');
     	}
+    	
 
     	S('omobile',null);
     	$return= array_shift($data);
     	S('omobile',$data);
+    
     	return $return;
     }
 
