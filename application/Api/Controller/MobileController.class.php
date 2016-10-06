@@ -101,20 +101,21 @@ class MobileController extends Controller {
         // }
         // exit();
     }
-
 */
+
     public function getmboiletype(){ 
         M()->startTrans();        
-        $data=M('mobile')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->limit(1)->lock(true)->select();
+        $data=M('mobile')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->lock(true)->find();
+
         //$data=M()->query('select id,mobile from mobiledata.mobilefind where status=0 and type=2 and twotime=0 limit 1');
-        $sul=M('mobile')->where('id=%d',$data[0]['id'])->setfield('twotime',time());
+        $sul=M('mobile')->where('id=%d',$data['id'])->setfield('twotime',time());
         if($sul){
             M()->commit();
         }else{
             M()->rollback();
         }
         if($data){
-            echo $data[0]['mobile'];         
+            echo $data['mobile'];         
         }else{
             echo 0;
         }
