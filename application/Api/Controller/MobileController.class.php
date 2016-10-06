@@ -68,7 +68,7 @@ class MobileController extends Controller {
    
     public function getmboiletype(){       
         M()->startTrans();        
-        $data=M('mobile')->field('id,mobile')->where('status=0 and type=0')->lock(true)->find();
+        $data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->lock(true)->find();
         $t=M('mobile')->where("id=%d",$data['id'])->setField('isshow',1); 
         M()->commit();
         if(!$t){
