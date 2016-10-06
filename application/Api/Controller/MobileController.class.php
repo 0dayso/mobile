@@ -65,7 +65,7 @@ class MobileController extends Controller {
    
     
     //显示一个手机号码检查是否存在
-   
+   /*
     public function getmboiletype(){       
         M()->startTrans();        
         $data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->lock(true)->find();
@@ -102,7 +102,7 @@ class MobileController extends Controller {
         // exit();
     }
 
-/*
+*/
     public function getmboiletype(){ 
         M()->startTrans();        
         //$data=M('mobilefind.views')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->limit(1)->lock(true)->select();
@@ -120,7 +120,7 @@ class MobileController extends Controller {
         }
         exit();
     }
-*/
+
     
 /*
     public function getmboiletype(){ 
