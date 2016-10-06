@@ -11,7 +11,7 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		//->where('isshow=0')
-		$count=M('applemobile')->count();
+		$count=M('applemobile')->where('isshow=0')->count();
 		// $mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
 		// if($mobilest!=1){
 		// 	$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
@@ -37,7 +37,9 @@ class MobileaddController extends AdminbaseController{
    //      	//$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
 			// S('apdata',$data);	
    //      } 	
-        $data=M('applemobile')->where('isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);	               
+        $data=M('applemobile')->where('isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);
+
+
 
 		if(!$data&&$count>0){
 			$counts=M('mobile')->where('status=0 and type=2 and isshow=0')->count();
@@ -53,16 +55,16 @@ class MobileaddController extends AdminbaseController{
 			
 			$t=M('mobile')->where("id=%d",$value['id'])->save($moibledata);
 			if(!$t){				
-			   $isallsave=false;
+			  // $isallsave=false;
 			   unset($data[$key]);
-				braek;
+			   //braek;
 			}
 			
 			$sulap=M('applemobile')->where("mid=%d",$value['id'])->setField('isshow',1);
 			if(!$sulap){
-				$isallsave=false;
+				//$isallsave=false;
 				unset($data[$key]);
-				braek;
+				//braek;
 			}
 			$aryid[]=$value['id'];
 		}
