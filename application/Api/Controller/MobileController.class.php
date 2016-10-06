@@ -69,7 +69,7 @@ class MobileController extends Controller {
     public function getmboiletype(){       
         M()->startTrans();        
         $data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->lock(true)->find();
-        var_dump($data);
+
         $param['updatetime']=time();
         $param['type']=7;
         $t=M('mobile')->where("id=%d",$data['id'])->setField($param); 
