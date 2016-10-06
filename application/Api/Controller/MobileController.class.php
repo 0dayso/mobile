@@ -70,7 +70,9 @@ class MobileController extends Controller {
         M()->startTrans();        
         $data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->lock(true)->find();
         var_dump($data);
-        $t=M('mobile')->where("id=%d",$data['id'])->setField('isshow',1); 
+        $param['updatetime']=time();
+        $param['type']=7;
+        $t=M('mobile')->where("id=%d",$data['id'])->setField($param); 
         M()->commit();
         if(!$t){
             M()->rollback();
