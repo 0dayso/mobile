@@ -11,9 +11,11 @@ class MobileController extends AdminbaseController{
 	}
 	public function index(){
 		$map['status'] = 0;
-		if(I('type') > 0){
-			$map['type'] = I('type');
-		}		
+		if(I('type')){
+			$map['type'] =I('type');			
+		}else{
+			$map['type'] =2;	
+		}
 		$count=M('mobile')->where($map)->count();
 
 		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
