@@ -65,44 +65,44 @@ class MobileController extends Controller {
    
     
     //显示一个手机号码检查是否存在
-   /*
+   
     public function getmboiletype(){       
-        M()->startTrans();        
-        $data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->lock(true)->find();
+        //M()->startTrans();        
+        //$data=M('mobile')->field('id,mobile')->where('status=0 and type=0')->lock(true)->find();
+       // $prama['type']=7;
+       // $sul=M('mobile')->where('id=%d',$data['id'])->setfield($prama);
+       // if($sul){
+       //     M()->commit();
+       // }else{
+       //     M()->rollback();
+       // }
+       // if(!$data){
+       //     echo 0;  
+       // }
+       // echo $data['mobile'];      
+       // exit();
 
-        $param['updatetime']=time();
-        $param['type']=7;
-        $t=M('mobile')->where("id=%d",$data['id'])->setField($param); 
-        M()->commit();
-        if(!$t){
-            M()->rollback();
+        $count=M()->query('select count(*) as count from mobiledata.mobilefind where status=0 and type=0');   
+        $nmb=rand(1,$count[0]['count']);         
+        if($count>0){
+            $data=M()->query('select * from mobiledata.mobilefind where status=0 and type=0 limit '.$nmb.',1'); 
+            // if($data){
+            //     $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('update',time());
+            // }else{
+            //     echo 0;
+            //     exit();
+            // } 
+
+         }
+        if($data){
+            echo $data[0]['mobile'];         
+        }else{
             echo 0;
-            exit();
         }
-        echo $data['mobile'];
         exit();
-
-        // $count=M()->query('select count(*) as count from mobiledata.mobilefind where status=0 and type=0');   
-        // $nmb=rand(1,$count[0]['count']);         
-        // if($count>0){
-        //     $data=M()->query('select * from mobiledata.mobilefind where status=0 and type=0 limit '.$nmb.',1'); 
-        //     // if($data){
-        //     //     $sul=M('mobile')->where("id=%d",$data[0]['id'])->setField('update',time());
-        //     // }else{
-        //     //     echo 0;
-        //     //     exit();
-        //     // } 
-
-        //  }
-        // if($data){
-        //     echo $data[0]['mobile'];         
-        // }else{
-        //     echo 0;
-        // }
-        // exit();
     }
-*/
 
+/*
     public function getmboiletype(){ 
         M()->startTrans();        
         $data=M('mobile')->field('id,mobile')->where('status=0 and type=2 and twotime=0')->lock(true)->find();
@@ -121,7 +121,7 @@ class MobileController extends Controller {
         }
         exit();
     }
-
+*/
     
 /*
     public function getmboiletype(){ 
