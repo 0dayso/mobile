@@ -11,7 +11,7 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		//->where('isshow=0')
-		$count=M('applemobile')->where('status=0 and type=2 and isshow=0')->count();
+		$count=M('applemobile')->where('isshow=0')->count();
 		// $mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
 		// if($mobilest!=1){
 		// 	$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
@@ -37,7 +37,7 @@ class MobileaddController extends AdminbaseController{
    //      	//$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
 			// S('apdata',$data);	
    //      } 	
-        $data=M('applemobile')->where('status=0 and type=2 and isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);
+        $data=M('applemobile')->where('isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);
 
 
 
