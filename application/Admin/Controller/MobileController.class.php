@@ -257,46 +257,39 @@ class MobileController extends AdminbaseController{
 	public function uniqiddata(){
 		$data['status']=0;
 		$data['url']=U('Mobile/uniqiddata');
-		try{			
+		try{	
+			
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
-			$result=M('mobiledel')->select();		
+			S('data',null);
+			if(!S('data')){				
+				$result=M('mobiledel')->select();
+			}else{
+				$result=S('data');
+			}
+			
 			if($result){
-				$count=count($result)>80?80:count($result);
-				for ($i=0;$i<$count;$i++) {
+				
+				for ($i=0;$i<3;$i++) {
 					$map['mobile']=$result[$i]['mobile'];
+					
 					$sul=M('mobile')->where($map)->order('status asc,createtime asc')->getfield('id',true);
 					if(count($sul)>1){
 						for($j=1;$j<count($sul);$j++){
 							$map1['id']=$sul[$j];						
-							$sultt=M('mobile')->where($map1)->delete();						
-					
+							$sultt=M('mobile')->where($map1)->delete();	
+							if($sultt){
+								array_shift($result);
+							}
+							
 						}						
 					}									
 				}
+				S('data',$result);
 				$data['status']=1;
+			}else{
+				$data['status']=0;
 			}
-			//
-			/*
-			if($count==0){
-				$sql="SELECT id FROM mbl_mobile AS a WHERE EXISTS(
-				    SELECT id,mobile FROM(
-						SELECT id,`mobile` FROM mbl_mobile GROUP BY `mobile` HAVING COUNT(*) > 1
-					)AS t
-				WHERE a.mobile=t.mobile AND a.id!=t.id)";
-				$result=M()->query($sql);	
-				$count=count($result)>200?200:count($result);			
-			}
-			*/
-
-			// for($i=0;$i<$count;$i++){
-			// 	$map['id']=$result[$i]['id'];
-			// 	$sul=M('mobile')->where($map)->delete();
-			// }
 			
-			/*
-			foreach ($result as $k => $v) {					 	
-			}
-			*/
 		}catch(Exception $ex){
 			$this->ajaxreturn($data);
 		}
