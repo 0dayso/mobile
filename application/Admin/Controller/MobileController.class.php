@@ -264,7 +264,7 @@ class MobileController extends AdminbaseController{
 				$count=count($result)>80?80:count($result);
 				for ($i=0;$i<$count;$i++) {
 					$map['mobile']=$result[$i]['mobile'];
-					$sul=M('mobile')->where($map)->order('status asc')->getfield('id',true);
+					$sul=M('mobile')->where($map)->order('status asc,createtime asc')->getfield('id',true);
 					if(count($sul)>1){
 						for($j=1;$j<count($sul);$j++){
 							$map1['id']=$sul[$j];						
