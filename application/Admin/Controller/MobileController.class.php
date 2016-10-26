@@ -263,7 +263,6 @@ class MobileController extends AdminbaseController{
 			
 			if(!S('data')){				
 				$result=M('mobiledel')->select();
-				S('data',$result);
 			}else{
 				$result=S('data');
 			}
