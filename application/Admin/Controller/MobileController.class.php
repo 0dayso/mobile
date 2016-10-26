@@ -265,6 +265,7 @@ class MobileController extends AdminbaseController{
 				$result=M('mobiledel')->select();
 			}else{
 				$result=S('data');
+				S('data',null);
 			}
 			
 			if($result){
@@ -287,8 +288,8 @@ class MobileController extends AdminbaseController{
 				//}
 			
 				S('data',$result);
-					dump($result);
-			exit();
+				dump($result);
+			    exit();
 				$data['status']=1;
 			}else{
 				$data['status']=0;
