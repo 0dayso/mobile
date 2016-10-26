@@ -269,8 +269,8 @@ class MobileController extends AdminbaseController{
 			
 			if($result){
 				
-				for ($i=0;$i<3;$i++) {
-					$map['mobile']=$result[$i]['mobile'];
+				//for ($i=0;$i<3;$i++) {
+					$map['mobile']=$result[0]['mobile'];
 					
 					$sul=M('mobile')->where($map)->order('status asc,createtime asc')->getfield('id',true);
 					if(count($sul)>1){
@@ -282,8 +282,9 @@ class MobileController extends AdminbaseController{
 							}
 							
 						}						
-					}									
-				}
+					}	
+					
+				//}
 				S('data',$result);
 				$data['status']=1;
 			}else{
