@@ -297,6 +297,7 @@ class MobileController extends AdminbaseController{
 			}
 			
 		}catch(Exception $ex){
+			$data['status']=0;
 			$this->ajaxreturn($data);
 		}
 		$this->ajaxreturn($data);
