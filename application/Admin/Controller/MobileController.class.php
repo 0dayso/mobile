@@ -260,9 +260,10 @@ class MobileController extends AdminbaseController{
 		try{	
 			
 			//$sql="SELECT id,STATUS FROM mbl_mobile GROUP BY mobile HAVING COUNT(*)>1 and status=0  ORDER BY id DESC";
-			S('data',null);
+			
 			if(!S('data')){				
 				$result=M('mobiledel')->select();
+				S('data',$result);
 			}else{
 				$result=S('data');
 			}
