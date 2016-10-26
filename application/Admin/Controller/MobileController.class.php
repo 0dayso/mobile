@@ -266,7 +266,8 @@ class MobileController extends AdminbaseController{
 			}else{
 				$result=S('data');
 			}
-			
+			dump($result);
+			exit();
 			if($result){
 				
 				//for ($i=0;$i<3;$i++) {
