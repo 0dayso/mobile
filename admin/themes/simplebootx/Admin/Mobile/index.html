@@ -52,7 +52,7 @@
 			<div class="form-actions">
 				<span>
 					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
-					未使用<span id="wj3">{$count[2]|default=0}</span>条，已使用<span id="wj4"></span>条，女粉<span id="wj5"></span>条
+					未使用<span id="wj3">{$count[2]|default=0}</span>条，<!--已使用<span id="wj4"></span>条，女粉<span id="wj5"></span>条-->
 				</span>	
 			</div>
 
@@ -65,13 +65,13 @@
 			<div class="form-actions">
 				<span>
 					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
-					未检测<span id="wj1">{$count[0]|default=0}</span>条，已检测<span id="wj2">{$count[1]|default=0}</span>条
+					未检测<span id="wj1">{$count[0]|default=0}</span>条，<!--已检测<span id="wj2">{$count[1]|default=0}</span>条-->
 				</span>	
 			</div>
 			<div class="form-actions">
 				<span>
 					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
-					总<span id="wj0">{$count[0]+$count[1]}</span>条，
+					总<span id="wj0">{$count[0]+$count[1]+$count[2]+$count[3]}</span>条，
 				</span>	
 			</div>
 			
