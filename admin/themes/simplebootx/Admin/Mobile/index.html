@@ -71,8 +71,7 @@
 			<div class="form-actions">
 				<span>
 					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
-
-					总<span id="wj0"></span>条，
+					总<span id="wj0">{$count[0]+$count[1]}</span>条，
 				</span>	
 			</div>
 			
@@ -84,6 +83,7 @@
 	<script>
 	 
 		$(function() {
+			/*
 			var url="{:U('Mobile/mobilesum')}";			
 			$.get(url,function(data){
 				if(data['status']=1){
@@ -95,6 +95,7 @@
 					$('#wj5').html(data[3]);
 				}
 			})
+			*/
 
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
