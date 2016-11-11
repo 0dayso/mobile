@@ -11,17 +11,19 @@
 			<li><a target="_black" href="{:U('Mobile/mobilead')}">检查归属地</a></li>
 			<li><a target="_black" href="{:U('Mobileadd/newmobile')}">生成apple添加数据</a></li>
 		</ul>
+		
+		<!-- 
 		<form class="js-ajax-form" action="{:U('Mobile/index')}" method="post">
 
 			<table class="table table-hover table-bordered table-list">
-<!-- 				<thead>
+				<thead>
 					<tr>
 						<th width="50">ID</th>
 						<th>手机号码</th>
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
-				</thead> -->
+				</thead> 
 				<tbody>
 				<?php $i=0 ?>
 				<foreach name="data" item="vo" key="k">
@@ -33,7 +35,7 @@
 						<td width="80"><a href="{:U('Admin/Mobile/mobilecate',array('id'=>$vo['id']))}">设置分类</a></td>
 					<!--	<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
-					</tr>
+				<!--	</tr>
 				</foreach>	
 				</tbody>
 <!-- 
@@ -44,19 +46,38 @@
 						<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
-				</tfoot> -->
+				</tfoot> 
 			</table>	
+			-->
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary js-ajax-submit">刷新</button>	
 				<span>
-				
-					总<span id="wj0"></span>条，未检测<span id="wj1"></span>条，已检测<span id="wj2"></span>条，
+					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
 					未使用<span id="wj3"></span>条，已使用<span id="wj4"></span>条，女粉<span id="wj5"></span>条
 				</span>	
-				<div class="page" style="margin-top:10px;">
-				{$page}
-				</div>
 			</div>
+
+			<div class="form-actions">
+				<span>
+					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
+					apple添加数据 总共<span id="wj10">{$mobile[0]+$mobile[1]}</span>条，已显示<span id="wj11">{$mobile[1]|default=0}</span>条，未显示<span id="wj12">{$mobile[0]|default=0}</span>条
+				</span>	
+			</div>
+			<div class="form-actions">
+				<span>
+					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
+					未检测<span id="wj1">{$count[0]|default=0}</span>条，已检测<span id="wj2">{$count[1]|default=0}</span>条
+				</span>	
+			</div>
+			<div class="form-actions">
+				<span>
+					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
+
+					总<span id="wj0"></span>条，
+				</span>	
+			</div>
+			
+			
+			
 		</form>
 	</div>
 	
@@ -65,15 +86,13 @@
 		$(function() {
 			var url="{:U('Mobile/mobilesum')}";			
 			$.get(url,function(data){
-
 				if(data['status']=1){
 					$('#wj0').html(data[7]);
 					$('#wj1').html(data[0]);			
 					$('#wj2').html(parseInt(data[1])+parseInt(data[2])+parseInt(data[3]));
-					$('#wj3').html(data[5]);
+					//$('#wj3').html(data[5]);
 					$('#wj4').html(data[6]);
 					$('#wj5').html(data[3]);
-					
 				}
 			})
 
