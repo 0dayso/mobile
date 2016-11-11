@@ -52,23 +52,11 @@ class MobileController extends AdminbaseController{
 
 	public function mobilesum(){
 		
-		$countlist = M('mobile')->group('type')->getField('type,count(*)',true);
-		$uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
+	
 		$allcount=M('mobile')->count();
-		$sum[0]=$countlist[0];
-		$sum[1]=$countlist[1];
-		$sum[2]=$countlist[2];
-		$sum[3]=$countlist[3];
-		$sum[4]=$countlist[7];
-		
-		$sum[5]=$uselist[0];
-		$sum[6]=$uselist[1];
 
-		$sum[7]=$allcount;
-
-
-		//$sum=M('mobilesum')->cache(60)->getfield('cont',true);
-		//$sum['status']=1;
+		$sum['count']=$allcount;//M('mobilesum')->cache(60)->getfield('cont',true);
+		$sum['status']=1;
 		$this->ajaxreturn($sum);
 	}
 	

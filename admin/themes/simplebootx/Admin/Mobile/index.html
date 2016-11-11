@@ -70,8 +70,8 @@
 			</div>
 			<div class="form-actions">
 				<span>
-					<button type="submit" class="btn btn-primary js-ajax-submit">显示</button>
-					总<span id="wj0">{$count[0]+$count[1]+$count[2]+$count[3]}</span>条，
+					<button type="submit" class="btn btn-primary js-ajax-submit countsmb">显示</button>
+					总<span id="wj0">0</span>条，
 				</span>	
 			</div>
 			
@@ -83,19 +83,24 @@
 	<script>
 	 
 		$(function() {
-			/*
-			var url="{:U('Mobile/mobilesum')}";			
-			$.get(url,function(data){
-				if(data['status']=1){
-					$('#wj0').html(data[7]);
-					$('#wj1').html(data[0]);			
-					$('#wj2').html(parseInt(data[1])+parseInt(data[2])+parseInt(data[3]));
-					//$('#wj3').html(data[5]);
-					$('#wj4').html(data[6]);
-					$('#wj5').html(data[3]);
-				}
-			})
-			*/
+			
+			var url="{:U('Mobile/mobilesum')}";	
+			$(".countsmb").on("click",function(){
+				$.get(url,function(data){
+					if(data['status']=1){
+						$('#wj0').html(data['count']);
+						/*
+						$('#wj1').html(data[0]);			
+						$('#wj2').html(parseInt(data[1])+parseInt(data[2])+parseInt(data[3]));
+						//$('#wj3').html(data[5]);
+						$('#wj4').html(data[6]);
+						$('#wj5').html(data[3]);
+						*/
+					}
+				})
+			})		
+			
+			
 
 			$("#navcid_select").change(function() {
 				$("#mainform").submit();
