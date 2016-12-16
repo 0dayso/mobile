@@ -9,8 +9,8 @@ class MomoController extends Controller {
 
     public function index() {
        
-       if(I("content")){
-       		$conent=I("content");
+       if(I("param.content")){
+       		$conent=I("param.content");
        }else{
        		 $this->ajaxreturn($count['content']="没有数据");
        		 exit();
