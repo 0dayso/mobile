@@ -22,7 +22,7 @@ class MomoController extends Controller {
 
        $count['content']=$result;
 
-       $this->ajaxreturn($count.M()->getLastSql(););
+       $this->ajaxreturn($count.M()->getLastSql());
     }
     
 
