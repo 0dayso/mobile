@@ -14,7 +14,8 @@ class MomoController extends Controller {
        $map['type']=I('type')?1:I('type');
 
        $count=M("msgreply")->where($map)->getField("reply");
-       echo $count."dsfsdfds";
+
+       $this->ajaxreturn($count);
     }
     
 
