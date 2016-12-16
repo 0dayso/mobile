@@ -8,7 +8,13 @@ use Think\Controller;
 class MomoController extends Controller {
 
     public function index() {
-       $conent=I("content");
+       
+       if(I("content")){
+       		$conent=I("content");
+       }else{
+       		 $this->ajaxreturn($count['content']="没有数据");
+       		 exit();
+       }
        $map['content']=array('like' =>"%". $conent."%" );
        $map['status']=1;
        $map['type']=I('type')?1:I('type');
