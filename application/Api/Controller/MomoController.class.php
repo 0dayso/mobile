@@ -18,10 +18,11 @@ class MomoController extends Controller {
        $map['content']=array('like' =>"%". $conent."%" );
        $map['status']=1;
        $map['type']=I('type')?1:I('type');
+       $result=M("msgreply")->where($map)->getField("reply");
 
-       $count['content']=M("msgreply")->where($map)->getField("reply");
+       $count['content']=$result;
 
-       $this->ajaxreturn($count);
+       $this->ajaxreturn($count.M()->getLastSql(););
     }
     
 
