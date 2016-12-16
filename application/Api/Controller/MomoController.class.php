@@ -8,7 +8,13 @@ use Think\Controller;
 class MomoController extends Controller {
 
     public function index() {
-       echo "dsfsdfds";
+       $conent=I("content");
+       $map['content']=array('like' =>"%". $conent."%" );
+       $map['status']=1;
+       $map['type']=I('type')?1:I('type');
+
+        M("msreply")->where($map)->find();
+       echo $count."dsfsdfds";
     }
     
 
