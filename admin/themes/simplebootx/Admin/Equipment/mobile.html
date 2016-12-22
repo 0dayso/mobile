@@ -124,9 +124,17 @@
 					<p>
 						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
 					</p>
+					<p style="clear:both;display:block;">
+						x坐标:<input type="text" class="alias" name="x" value="{$val.x}" onchange="changealias(this,{$val.id})"/><span></span>
+					</p>
+					<p>
+						y坐标:<input type="text" class="alias" name="y" value="{$val.y}" onchange="changealias(this,{$val.id})"/><span></span>
+					</p>
 					<p>
 						<span class="s_status">运行状态：</span><if condition="$val.run == 1"><span class="s_status nomorl"></span><else/><span class="s_status nerror"></span></if>
 					</p>
+					<br/>
+					
 					<a class="error_pit" href="javascript:;" data_url="{:U('Admin/Equipment/changeshow')}" onclick="changeshow(this,{$val.id})">×</a>
 				</div>
 			</li>
@@ -221,7 +229,8 @@
 		
 		function changealias(obj,id){
 			var alias = $(obj).val();
-			$.post("__URL__/savemobileajax",{id:id,alias:alias},function(data){
+			var fname=$(obj).attr('name');
+			$.post("__URL__/savemobileajax",{id:id,alias:alias,fname,fname},function(data){
 				if(data.result == 1){
 					$(obj).val(alias);
 				}else{
