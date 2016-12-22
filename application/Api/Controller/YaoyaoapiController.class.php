@@ -20,8 +20,9 @@ class YaoyaoapiController extends Controller {
                 }
 
             }else{
+                $now=I("now");
                 $data['id']="wx".I("id");    
-                $data['jgtime']=time();
+                $data['jgtime']=time()+$now*60;
                 $sult=D("wxyaoyao")->where($map)->add($data);
                 if($sult){
                     echo 1;
