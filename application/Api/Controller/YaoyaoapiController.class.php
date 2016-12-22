@@ -23,6 +23,8 @@ class YaoyaoapiController extends Controller {
                 $data['id']="wx".I("id");    
                 $data['jgtime']=time();
                 $sult=D("wxyaoyao")->where($map)->save($data);
+                echo 1;
+                exit();
             }
        }
        echo 0;
