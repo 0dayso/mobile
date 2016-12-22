@@ -98,10 +98,8 @@ class EquipmentController extends AdminbaseController {
 	
 	public function savemobileajax(){
 		$id = I('id');
-		$data=array(
-					'alias'=>I('alias')
-					);
 		if($id > 0){
+			$data[I("fname")]=I('alias');
 			$result=D('equictive')->where('id=%d',array($id))->save($data);
 		}
 		
@@ -292,5 +290,7 @@ class EquipmentController extends AdminbaseController {
 		$this->assign('page',$show);
         $this->display();
     }
+
+
 }
 
