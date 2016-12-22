@@ -11,7 +11,7 @@ class YaoyaoapiController extends Controller {
             if($find>0){
                 $now=I("now");
                 if($find["jgtime"]<time()){
-                    $data['jgtime']=time();
+                    $data['jgtime']=time()+$now*60;
                     $sult=D("wxyaoyao")->where($map)->save($data);
                     if($sult){
                         echo 1;
@@ -25,7 +25,7 @@ class YaoyaoapiController extends Controller {
                 $sult=D("wxyaoyao")->where($map)->add($data);
                 if($sult){
                     echo 1;
-                     exit();
+                    exit();
                 }
             }
        }
