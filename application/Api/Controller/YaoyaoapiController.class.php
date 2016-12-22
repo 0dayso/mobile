@@ -22,9 +22,11 @@ class YaoyaoapiController extends Controller {
             }else{
                 $data['id']="wx".I("id");    
                 $data['jgtime']=time();
-                $sult=D("wxyaoyao")->where($map)->save($data);
-                echo 1;
-                exit();
+                $sult=D("wxyaoyao")->where($map)->add($data);
+                if($sult){
+                    echo 1;
+                     exit();
+                }
             }
        }
        echo 0;
