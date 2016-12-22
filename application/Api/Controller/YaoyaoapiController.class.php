@@ -21,7 +21,7 @@ class YaoyaoapiController extends Controller {
 
             }else{
                 $now=I("now");
-                $data['id']="wx".I("id");    
+                $data['phoneid']="wx".I("id");    
                 $data['jgtime']=time()+$now*60;
                 $sult=D("wxyaoyao")->add($data);
                 if($sult){
