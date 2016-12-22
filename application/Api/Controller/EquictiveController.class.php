@@ -79,8 +79,10 @@ class EquictiveController extends Controller {
                     $parame=array_merge($parame,$mingle);
                 }            
 
-                $data['parame']=implode($parame,',');                        
-
+                $data['parame']=implode($parame,',');   
+                $data['phonex']=$result['x'];
+                $data['phoney']=$result['x'];  
+                
                 $data['mingle']=$mingle;
                 $data['mustt']=$mustt;
 
