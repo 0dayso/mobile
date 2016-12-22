@@ -81,8 +81,8 @@ class EquictiveController extends Controller {
 
                 $data['parame']=implode($parame,',');   
                 $data['phonex']=$result['x'];
-                $data['phoney']=$result['x'];  
-                
+                $data['phoney']=$result['y'];  
+
                 $data['mingle']=$mingle;
                 $data['mustt']=$mustt;
 
