@@ -101,6 +101,7 @@ class EquipmentController extends AdminbaseController {
 		if($id > 0){
 			$data[I("fname")]=I('alias');
 			$result=D('equictive')->where('id=%d',array($id))->save($data);
+		
 		}
 		
 		if($result){
