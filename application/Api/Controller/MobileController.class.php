@@ -11,6 +11,7 @@ class MobileController extends Controller {
     public function index() {
         M()->startTrans();        
     	$data=M('applemobile')->field('mid,mobile')->where('isshow=0')->lock(true)->find();
+       
         $t=M('applemobile')->where("mid=%d",$data['id'])->setField('isshow',1); 
         M()->commit();
         if(!$t){
