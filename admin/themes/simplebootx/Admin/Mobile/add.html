@@ -11,12 +11,15 @@
 			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
 			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
 			<li><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
+			<li><a href="{:U('MobileExl/index')}">增加xls号码</a></li>
+			<li><a target="_black" href="{:U('Mobile/mobilead')}">检查归属地</a></li>
+			<li><a target="_black" href="{:U('Mobileadd/newmobile')}">生成apple添加数据</a></li>
 		</ul>
 		<form class="well form-search" id="mainform" enctype="multipart/form-data" action="{:U('Mobile/upload_mobile')}" method="post">
 			<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />
 			<button type="submit" class="btn btn-primary submit">{:L('ADD')}</button>
 		</form>
-		
+		<div>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">一键清空重复手机</button>（<b class="tinfo">清空比较慢请耐心等候</b>）
 			共有重复<span class="nmb">{$cq}</span><input type="hidden" id="nmbcs"/>条数据
 			<!--
@@ -24,8 +27,15 @@
 			-->
 			<a class="btn btn-primary" href="{:U('Mobile/backups')}">备份所有手机号</a>
 			<a class="btn btn-primary" href="{:U('Mobile/backups',array('status'=>-1))}">备份未操作手机号</a>
+		</div>
+
+		<div style="float: left">
+				<textarea style="height: 650px; margin-right:20px;">
+					
+				</textarea>
+			</div>
 	
-		<table class="table table-hover table-bordered table-list">
+		<table class="table table-hover table-bordered table-list " style="width: 500px">
 				<!---<thead>
 					<tr>
 						<th width="50">序号</th>
@@ -61,6 +71,7 @@
 					</tr>
 				</tfoot> -->
 			</table>	
+
 	</div>	
 </body>
 <script type="text/javascript">

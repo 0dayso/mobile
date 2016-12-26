@@ -1776,3 +1776,97 @@ function sp_delete_physics_img($imglist){
     
     return $res;
 }
+
+/*导入xlsx表格
+        对应
+         $column = array (
+                    'A' => 'cdnmb',
+                    'B' => 'truename',
+                    'C' => 'mobile',
+                    'D' => 'sex' ,
+                    'E' => 'email',
+            );
+            
+            $attach_id = I ( 'attach', 0 );
+            $dateCol = array (
+                    'H' 
+            );
+            $res = importFormExcel ( $attach_id, $column, $dateCol );
+
+
+            
+
+    */
+    function importFormExcel($column, $dateColumn = array(),$filepath='',$extend="xls") {
+      
+        $res = array (
+                'status' => 0,
+                'data' => '' 
+        );
+
+        //$file = M ( 'file' )->where ( 'id=' . $attach_id )->find ();
+        //$root = C ( 'DOWNLOAD_UPLOAD.rootPath' );
+       // $filename = SITE_PATH . '/Uploads/Download/' . $file ['savepath'] . $file ['savename'];
+        $filename=$filepath;
+        // dump($filename);
+        if (! file_exists ( $filename )) {
+            $res ['data'] = '上传的文件失败';
+            return $res;
+        }
+       
+        
+
+        if (! ($extend == 'xls' || $extend == 'xlsx' || $extend == 'csv')) {
+            $res ['data'] = '文件格式不对，请上传xls,xlsx格式的文件';
+            return $res;
+        }
+        vendor ( 'PHPExcel' );
+        vendor ( 'PHPExcel.PHPExcel_IOFactory' );
+        vendor ( 'PHPExcel.Reader.Excel5' );
+        
+        switch (strtolower ( $extend )) {
+            case 'csv' :
+                $format = 'CSV';
+                $objReader = \PHPExcel_IOFactory::createReader ( $format )->setDelimiter ( ',' )->setInputEncoding ( 'GBK' )->setEnclosure ( '"' )->setLineEnding ( "\r\n" )->setSheetIndex ( 0 );
+                break;
+            case 'xls' :
+                $format = 'Excel5';
+                $objReader = \PHPExcel_IOFactory::createReader ( $format );
+                break;
+            default :
+                $format = 'excel2007';
+                $objReader = \PHPExcel_IOFactory::createReader ( $format );
+        }
+        
+        $objPHPExcel = $objReader->load ( $filename );
+        $objPHPExcel->setActiveSheetIndex ( 0 );
+        $sheet = $objPHPExcel->getSheet ( 0 );
+        $highestRow = $sheet->getHighestRow (); // 取得总行数
+        for($j = 2; $j <= $highestRow; $j ++) {
+            $addData = array ();
+            foreach ( $column as $k => $v ) {
+                if ($dateColumn) {
+                    foreach ( $dateColumn as $d ) {
+                        if ($k == $d) {
+                            $addData [$v] = gmdate ( "Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP ( $objPHPExcel->getActiveSheet ()->getCell ( "$k$j" )->getValue () ) );
+                        } else {
+                            $addData [$v] = trim ( ( string ) $objPHPExcel->getActiveSheet ()->getCell ( $k . $j )->getValue () );
+                        }
+                    }
+                } else {
+                    $addData [$v] = trim ( ( string ) $objPHPExcel->getActiveSheet ()->getCell ( $k . $j )->getValue () );
+                }
+            }
+            
+            $isempty = true;
+            foreach ( $column as $v ) {
+                $isempty && $isempty = empty ( $addData [$v] );
+            }
+            
+            if (! $isempty)
+                $result [$j] = $addData;
+        }
+        $res ['status'] = 1;
+        $res ['data'] = $result;
+        return $res;
+    }

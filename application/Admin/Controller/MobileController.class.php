@@ -50,6 +50,11 @@ class MobileController extends AdminbaseController{
 		$this->display();
 	}
 
+	public function addajax(){
+
+	
+	}
+
 	public function mobilesum(){
 		
 	
@@ -577,6 +582,9 @@ class MobileController extends AdminbaseController{
     }
 
 
+    public function addexl(){
+    	$this->display();
+    }
 
 	
 

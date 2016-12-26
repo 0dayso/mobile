@@ -8,18 +8,18 @@
 	<div class="wrap js-check-wrap">
 		<ul class="nav nav-tabs">
 			<li><a href="{:U('mobile/index')}">手机号码管理</a></li>
-			<li><a href="{:U('mobile/add')}">添加手机号码(上传文件)</a></li>
+			<li class="active"><a href="{:U('mobile/add')}">添加手机号码(上传文件)</a></li>
 			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
 			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
 			<li><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
-			<li ><a href="{:U('Mobile/mobilead')}">检查归属地</a></li>
-			<li class="active"><a href="{:U('Mobileadd/newmobile')}">生成apple添加表</a></li>
+			<li><a href="{:U('MobileExl/index')}">增加xls号码</a></li>
+			<li><a target="_black" href="{:U('Mobile/mobilead')}">检查归属地</a></li>
+			<li class="active"><a target="_black" href="{:U('Mobileadd/newmobile')}">生成apple添加数据</a></li>
 		</ul>
 			<div class="form-actions">
 				<input type="text" id="province" class="text" value="" placeholder="指定增加地区为空不设置" />
 				<input type="botton" onclick="tm()" class="btn btn-primary js-ajax-submit" value="生成apple有效数据" />
 				<a class="btn" href="{:U('Mobile/index')}">{:L('BACK')}</a> 
-				
 			</div>
 	
 			<fieldset>
