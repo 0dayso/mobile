@@ -12,8 +12,8 @@ class MobileController extends Controller {
         M()->startTrans();        
     	$data=M('applemobile')->field('mid,mobile')->where('isshow=0')->lock(true)->find();
 
-        $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',1);
-         
+        $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
+
         M()->commit();
         if(!$t){
             M()->rollback();
