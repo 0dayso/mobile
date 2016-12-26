@@ -10,7 +10,7 @@ class MobileController extends Controller {
 	//显示之前就修改状态
     public function index() {
         M()->startTrans();        
-    	$data=M('applemobile')->field('mid,mobile')->where('isshow=0')->lock(true)->find();
+    	$data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->lock(true)->find();
 
         $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
 
@@ -20,7 +20,7 @@ class MobileController extends Controller {
             echo 0;
             exit();
         }
-        echo $data['mobile'];
+        $this->ajaxreturn($data,"xml");
         exit();
     }
     //显示一个手机号码
