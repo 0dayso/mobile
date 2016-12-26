@@ -10,7 +10,7 @@ class MobileController extends Controller {
 	//显示之前就修改状态
     public function index() {
         M()->startTrans();        
-    	$data=M('mobile')->field('id,mobile')->where('status=%d and type=2 and isshow=0',0)->lock(true)->find();
+    	$data=M('applemobile')->field('id,mobile')->where('status=%d and isshow=0',0)->lock(true)->find();
         $t=M('mobile')->where("id=%d",$data['id'])->setField('isshow',1); 
         M()->commit();
         if(!$t){
