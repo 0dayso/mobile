@@ -5,8 +5,8 @@
  */
 
 //header('Location:http://g.7gu.cn/index.php?g=api&m=Mobile&a=phonemobile');
- header('Content-type: application/json');
 
+header('Content-type:text/json');
  echo file_get_contents("http://g.7gu.cn/index.php?g=api&m=Mobile&a=phonemobile");
 
  exit();
