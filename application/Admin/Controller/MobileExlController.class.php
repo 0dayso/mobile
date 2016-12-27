@@ -206,7 +206,7 @@ class MobileExlController extends AdminbaseController{
 			$parame['updatetime']=time();
 			$parame['type']=2;
 
-			
+			try {
 				$where['id']=$ndata['mid'];
 				$sul=M("mobile")->where($where)->save($parame);
 
@@ -217,13 +217,14 @@ class MobileExlController extends AdminbaseController{
 				M("applemobile")->add($adata);
 
 				$entry['status']=1;
-				/*
-			try {
+				
+			
 
 			} catch (\Exception $e) {
 				$this->ajaxreturn($entry);
 				exit();
 			}
+			/*
 			*/
 			
 		}else{
