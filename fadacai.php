@@ -7,9 +7,9 @@
 //header('Location:http://g.7gu.cn/index.php?g=api&m=Mobile&a=phonemobile');
 
 header('Content-type:text/json');
- echo file_get_contents("http://g.7gu.cn/index.php?g=api&m=Mobile&a=phonemobile");
+echo file_get_contents("http://g.7gu.cn/index.php?g=api&m=Mobile&a=phonemobile&row=".$_REQUES['row']);
+exit();
 
- exit();
 
 ?>
 
