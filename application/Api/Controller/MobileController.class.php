@@ -16,7 +16,6 @@ class MobileController extends Controller {
         if(strlen($data['username'])>1){
            $data['username']= substr( $data['username'], 0,3);
         }
-        
 
         M()->commit();
         if(!$t){
@@ -26,6 +25,25 @@ class MobileController extends Controller {
         }
         $this->ajaxreturn($data,"xml");
         exit();
+    }
+
+    public function phonemobile(){
+        M()->startTrans();        
+        $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit(100)->lock(true)->select();
+        foreach ($data as $k => $vl) {
+            $t=M('applemobile')->where("mid=%d",$vl['mid'])->setField('isshow',3);
+
+            if(!$t){
+                M()->rollback();
+                echo 0;
+                exit();
+            }
+        }
+        M()->commit();
+        
+        $this->ajaxreturn($data);
+        exit();
+
     }
     //显示一个手机号码
     public function mboile(){
