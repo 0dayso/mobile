@@ -23,6 +23,20 @@ class MobileExlController extends AdminbaseController{
     	$this->uploadsexl($config);
     }
 
+    public function dumpdata(){
+
+    }
+
+    public function mobileclose(){
+
+    	$sul=M("mobilename")->delete();
+    	if($sul){
+    		$this->success("已清空数据");
+    	}else{
+    		$this->error("已没有数据");
+    	}
+    }
+
     /**
 	 *$table:表名
 	 *$column:字段名
