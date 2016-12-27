@@ -30,7 +30,7 @@ class MobileController extends Controller {
     public function phonemobile(){
         $row=I("REQUEST.row");
         if(!$row){
-            $row=100;
+            $row=1;
         }
         M()->startTrans();        
         $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
