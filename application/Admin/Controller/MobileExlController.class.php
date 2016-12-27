@@ -29,9 +29,8 @@ class MobileExlController extends AdminbaseController{
     	ob_end_clean();
     	vendor ( 'download-xlsx' );
 
-         $dataAry[0][0]="下单日期";
-         $dataAry[0][1]="分公司";
-
+         $dataAry[0][0]="手机号码";
+         $dataAry[0][1]="姓名";
 
         $starttime=strtotime(date("Y-m-d",time()));
         //$map['ori.addtime']=array(array("gt",$starttime),array("lt",time()),'and');
