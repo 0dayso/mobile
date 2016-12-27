@@ -36,7 +36,6 @@ class MobileController extends Controller {
         $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
         foreach ($data as $k => $vl) {
             $t=M('applemobile')->where("mid=%d",$vl['mid'])->setField('isshow',3);
-
             if(!$t){
                 M()->rollback();
                 echo 0;
@@ -44,7 +43,6 @@ class MobileController extends Controller {
             }
         }
         M()->commit();
-        
         $this->ajaxreturn($data);
         exit();
 
