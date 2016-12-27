@@ -28,8 +28,12 @@ class MobileController extends Controller {
     }
 
     public function phonemobile(){
+        $row=I("REQUEST.row");
+        if(!$row){
+            $row=100;
+        }
         M()->startTrans();        
-        $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit(100)->lock(true)->select();
+        $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
         foreach ($data as $k => $vl) {
             $t=M('applemobile')->where("mid=%d",$vl['mid'])->setField('isshow',3);
 
