@@ -207,14 +207,15 @@ class MobileExlController extends AdminbaseController{
 			$parame['type']=2;
 
 			try {
-				$where=$ndata['mid'];
-				$sul=M("mobile")->ndata($where)->save($parame);
+				$where['id']=$ndata['mid'];
+				$sul=M("mobile")->where($where)->save($parame);
 
 				$adata['mobile']=$ndata['mobile'];
 				$adata['mid']=$ndata['mid'];
 				$adata['username']=$ndata['username'];
 
 				M("applemobile")->add($adata);
+
 				$entry['status']=1;
 
 			} catch (\Exception $e) {
