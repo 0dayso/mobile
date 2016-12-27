@@ -202,7 +202,7 @@ class MobileExlController extends AdminbaseController{
 				exit();
 			}
 
-			$parame['mobile']=$entry["mobile"];
+		
 			$parame['updatetime']=time();
 			$parame['type']=2;
 
