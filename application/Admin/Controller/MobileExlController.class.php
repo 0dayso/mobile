@@ -218,18 +218,11 @@ class MobileExlController extends AdminbaseController{
 
 				$return['status']=1;
 				$return=array_merge($adata,$return);
-				
-				
-			
-
 			} catch (\Exception $e) {
 				$return['status']=0;
 				$this->ajaxreturn($return);
 				exit();
 			}
-			/*
-			*/
-			
 		}else{
 			$return['status']=2;
 		}
