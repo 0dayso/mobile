@@ -216,21 +216,24 @@ class MobileExlController extends AdminbaseController{
 
 				M("applemobile")->add($adata);
 
-				$entry['status']=1;
+				$return['status']=1;
+				$return=array_merge($adata,$return);
+				
 				
 			
 
 			} catch (\Exception $e) {
-				$this->ajaxreturn($entry);
+				$return['status']=0;
+				$this->ajaxreturn($return);
 				exit();
 			}
 			/*
 			*/
 			
 		}else{
-			$entry['status']=2;
+			$return['status']=2;
 		}
-		$this->ajaxreturn($entry);
+		$this->ajaxreturn($return);
 	}
 
 	
