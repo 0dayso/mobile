@@ -24,12 +24,26 @@ class MobileExlController extends AdminbaseController{
     }
 
     public function dumpdata(){
+  
 
+    	ob_end_clean();
+    	vendor ( 'download-xlsx' );
+
+         $dataAry[0][0]="下单日期";
+         $dataAry[0][1]="分公司";
+
+
+        $starttime=strtotime(date("Y-m-d",time()));
+        //$map['ori.addtime']=array(array("gt",$starttime),array("lt",time()),'and');
+
+        $order=M('mobilename')->field("mobile,username")->select();
+        $dataAry=array_merge($dataAry,$order);
+
+    	export_csv($dataAry,"dumpexl");
     }
 
     public function mobileclose(){
-
-    	$sul=M("mobilename")->delete();
+    	$sul=M("mobilename")->where('1')->delete();
     	if($sul){
     		$this->success("已清空数据");
     	}else{
@@ -61,6 +75,8 @@ class MobileExlController extends AdminbaseController{
 				$data=$this->filetxt($path);
 			}else{
 				$data=$this->fileexl($path,$info["file"]["ext"]);
+				//$data=$data['data'];
+
 			}
 
 			if($data){
