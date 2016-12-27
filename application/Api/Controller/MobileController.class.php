@@ -13,6 +13,10 @@ class MobileController extends Controller {
     	$data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->lock(true)->find();
 
         $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
+        if(strlen($data['username'])>1){
+           $data['username']= substr( $data['username'], 0,3);
+        }
+        
 
         M()->commit();
         if(!$t){
