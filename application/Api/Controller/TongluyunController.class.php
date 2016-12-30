@@ -1,7 +1,7 @@
 <?php
 namespace Api\Controller;
 use Think\Controller;
-class TongluyunController extends AdminbaseController{
+class TongluyunController  extends Controller{
 
 
 	function index(){
