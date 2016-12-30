@@ -16,7 +16,7 @@ class TongluyunController extends AdminbaseController{
 			if(!$sul){
 				$data['option_name']="tlymsg";
 				$data['option_value']="哥我是张丹";
-				M("option")->add($data);	
+				M("options")->add($data);	
 			}else{
 				$map['option_name']="tlymsg";
 				$data['option_value']=I("request.name");
