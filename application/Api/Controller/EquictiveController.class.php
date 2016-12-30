@@ -10,18 +10,6 @@ class EquictiveController extends Controller {
     public function index() {         
         $path=ROOTPATRH."\public\script\scriptfile\\";        
     	$filelist=scandir($path);  
-        // $filename=I('n');      
-        // $lfiletime=I('t')   ;        
-        // $t=strtotime($lfiletime);
-        // $fn=$path.$filename.'.lua';
-        // $sftime=filemtime($fn);    
-  
-        // if($t<$sftime+60){
-        //     echo 1;
-        // }else{
-        //     echo 0;
-        // }       
-        // exit();
 
         $aryt=array();        
         foreach ($filelist as $k => $v) {
