@@ -22,7 +22,7 @@ class TongluyunController extends AdminbaseController{
 				$data['option_value']=I("request.name");
 				M("options")->where($map)->save($data);
 			}
-			$this->sucess("修改成功");
+			$this->success("修改成功");
 		}else{
 			$sul=M("options")->where("option_name='tlymsg'")->getfield("option_value");
 			$this->assign("tlymsg",$sul);
