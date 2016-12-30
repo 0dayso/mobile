@@ -6,8 +6,7 @@ class TongluyunController  extends Controller{
 
 	function index(){
 		$sul=M("options")->where("option_name='tlymsg'")->getfield("option_value");
-		echo $sul;
-		
+		$this->ajaxreturn($sul,'xml');
 	}
 
 }
