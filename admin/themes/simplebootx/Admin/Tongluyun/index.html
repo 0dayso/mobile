@@ -45,7 +45,7 @@
   function changval(e) {
   		var url="{:U('Tongluyun/update')}";
   		var uname=$(e).attr("name");
-  		var val=e.val();
+  		var val=$(e).val();
   		$.post(url,{"name":uname,"value":val},function(s){
 
   		})
