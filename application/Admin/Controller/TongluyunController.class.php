@@ -18,7 +18,7 @@ class TongluyunController extends AdminbaseController{
 	}
 
 	function update(){
-		if(if($_POST)){
+		if($_POST){
 			$map['option_name']=I("request.name");
 			
 			$data['option_value']=I("request.value");
