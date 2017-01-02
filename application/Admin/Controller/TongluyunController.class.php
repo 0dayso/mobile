@@ -10,45 +10,32 @@ class TongluyunController extends AdminbaseController{
 	}
 
 	function index(){
-		if($_POST){
-			$sul=M("options")->where("option_name='tlymsg'")->find();
+		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb'")->getfield("option_name,option_value");		
+		$data['tlymsg']=$sul["tlymsg"];
+		$data['nmb']=$sul["tlynmb"];
+		$this->assign("data",$data);
+		$this->display();
+	}
 
-			if(!$sul){
-				$data['option_name']="tlymsg";
-				$data['option_value']="哥我是张丹";
-				M("options")->add($data);	
-			}
-
-			$sul1=M("options")->where("option_name='tlynmb'")->find();
-			if(!$sul1){
-				$data['option_name']="tlynmb";
-				$data['option_value']="5";
-				M("options")->add($data);	
-			}
-
-			$map['option_name']="tlymsg";
-			$data['option_value']=I("request.name");
-			M("options")->where($map)->save($data);
-
-			$map['option_name']="tlynmb";
-			$data['option_value']=I("request.nmb");
-			M("options")->where($map)->save($data);
+	function update(){
+		if(if($_POST)){
+			$map['option_name']=I("request.name");
 			
-			$this->success("修改成功");
-		}else{
-			$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb'")->getfield("option_name,option_value");		
-			$data['tlymsg']=$sul["tlymsg"];
-			$data['nmb']=$sul["tlynmb"];
-
-			$this->assign("data",$data);
-
-			$this->display();
+			$data['option_value']=I("request.value");
+			$sul1=M("options")->where($map)->find();
+			if(!$sul1){
+				$data['option_name']=I("request.name");
+				M("options")->add($data);
+				
+			}else{
+				M("options")->where($map)->save($data);
+			}
+			
 		}
 	}
 	function addmsg(){
 		$sul=M("options")->where("option_name='tlymsg'")->getfield("option_value");
-		echo $sul;
-		
+		echo $sul;		
 	}
 
 }

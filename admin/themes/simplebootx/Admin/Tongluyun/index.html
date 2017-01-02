@@ -14,7 +14,7 @@
 								<div class="control-group">
 									<label class="control-label">增加好友信息</label>
 									<div class="controls">
-										<input type="text" name="name" value="{$data.tlymsg}">
+										<input type="text" name="name" value="{$data.tlymsg}" onchange="changval(this)">
 									</div>
 								</div>
 							</fieldset>
@@ -22,7 +22,7 @@
 								<div class="control-group">
 									<label class="control-label">增加次数</label>
 									<div class="controls">
-										<input type="text" name="nmb" value="{$data.nmb}">
+										<input type="text" name="nmb" value="{$data.nmb}" onchange="changval(this)">
 									</div>
 								</div>
 							</fieldset>
@@ -38,4 +38,15 @@
 
 	</div>
 </body>
+<script type="text/javascript">
+	
+  function changval(e) {
+  		var url="{:U('Tongluyun/update')}";
+  		var uname=e.attr("name");
+  		var val=e.val();
+  		$.post(url,{"name":uname,"value":val},function(s){
+
+  		})
+  	}	
+</script>
 </html>
