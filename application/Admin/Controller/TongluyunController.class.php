@@ -17,15 +17,31 @@ class TongluyunController extends AdminbaseController{
 				$data['option_name']="tlymsg";
 				$data['option_value']="哥我是张丹";
 				M("options")->add($data);	
-			}else{
-				$map['option_name']="tlymsg";
-				$data['option_value']=I("request.name");
-				M("options")->where($map)->save($data);
 			}
+
+			$sul1=M("options")->where("option_name='tlynmb'")->find();
+			if(!$sul1){
+				$data['option_name']="tlynmb";
+				$data['option_value']="5";
+				M("options")->add($data);	
+			}
+
+			$map['option_name']="tlymsg";
+			$data['option_value']=I("request.name");
+			M("options")->where($map)->save($data);
+
+			$map['option_name']="tlynmb";
+			$data['option_value']=I("request.nmb");
+			M("options")->where($map)->save($data);
+			
 			$this->success("修改成功");
 		}else{
-			$sul=M("options")->where("option_name='tlymsg'")->getfield("option_value");
-			$this->assign("tlymsg",$sul);
+			$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb'")->getfield("option_name,option_value");		
+			$data['tlymsg']=$sul["tlymsg"];
+			$data['nmb']=$sul["tlynmb"];
+
+			$this->assign("data",$data);
+
 			$this->display();
 		}
 	}
