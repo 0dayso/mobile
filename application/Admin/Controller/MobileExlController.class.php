@@ -41,6 +41,10 @@ class MobileExlController extends AdminbaseController{
     	export_csv($dataAry,"dumpexl");
     }
 
+    public function dumptxt(){
+
+    }
+
     public function mobileclose(){
     	$sul=M("mobilename")->where('1')->delete();
     	if($sul){
@@ -237,6 +241,62 @@ class MobileExlController extends AdminbaseController{
 
 			try {
 				$where['id']=$ndata['mid'];
+				$sul=M("mobile")->where($where)->save($parame);
+
+				$adata['mobile']=$ndata['mobile'];
+				$adata['mid']=$ndata['mid'];
+				$adata['username']=$ndata['username'];
+
+				M("applemobile")->add($adata);
+
+				$return['status']=1;
+				$return=array_merge($adata,$return);
+			} catch (\Exception $e) {
+				$return['status']=0;
+				$this->ajaxreturn($return);
+				exit();
+			}
+		}else{
+			$return['status']=2;
+		}
+		$this->ajaxreturn($return);
+	}
+
+	//不需要检测直接增加apple
+	public function addappletxt(){
+		if(S("addext")!="txt"){
+			$entry['status']=3;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+
+		$dataary=S("adddaata".session(ADMIN_ID));
+	
+
+		$data=$dataary;
+		if($data){
+			$entry = array_shift($data);
+		}
+		$dataary=$data;
+		S("adddaata".session(ADMIN_ID),$dataary);
+		
+		$return["status"]=0;
+
+		if($entry){
+			$map['mobile']=$entry;
+			$ndata=M("mobile")->where($map)->find();
+			if(!$ndata){
+				$return["mobile"]=$entry;
+				$this->ajaxreturn($return);
+				exit();
+			}
+
+		
+			$parame['updatetime']=time();
+			$parame['type']=2;
+
+			try {
+				$where['id']=$ndata['id'];
 				$sul=M("mobile")->where($where)->save($parame);
 
 				$adata['mobile']=$ndata['mobile'];

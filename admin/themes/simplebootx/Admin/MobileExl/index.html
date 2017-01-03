@@ -24,6 +24,7 @@
 			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>
 			<a   class="btn btn-primary" href="{:U('MobileExl/mobileclose')}">清空数据</a>
 			<a   class="btn btn-primary" href="{:U('MobileExl/dumpdata')}">导出数据</a>
+			<a  id="datatp" class="btn btn-primary" href="{:U('MobileExl/dumptxt')}">直接写入数据</a>
 		</div>
 			<!--
 		<div>
@@ -93,6 +94,7 @@
 	var cx=1;
 	var url="{:U('MobileExl/addmobile')}";
 	var murl="{:U('MobileExl/addapple')}";
+	var purl="{:U('MobileExl/addappletxt')}"
 	$('#cfinfo').click(function(){
 		t(url);
 	});
@@ -100,6 +102,10 @@
 	$("#datat").click(function(){
 
 		m(murl);
+	})
+
+	$("#datatp").click(function(){
+		mt(purl);
 	})
 
 
@@ -149,6 +155,30 @@
 				 		addt.prepend(data['mobile']+"已存在"+"\n");
 				 		$("#addlbl").text(cx++);
 					 	m(murl);
+				 	}
+				 }
+			});
+	}
+
+	function mt(murl){	
+		$.get(purl,function(data){
+				if(data['status']==3 || data['status']=='3'){
+					alert("顺序不对");
+					return;
+				}
+
+				 if(data['status']==1 || data['status']=='1'){
+				 		addt.prepend(data['mobile']+"增加成功"+"\n");
+					 	$("#addtxtlbl").text(ix++);
+					    mt(purl);
+				 }else{
+				 	if(data['status']==2 || data['status']=='2'){
+				 		addt.prepend("添加完成"+"\n");
+				 		return;
+				 	}else{
+				 		addt.prepend(data['mobile']+"已存在"+"\n");
+				 		$("#addlbl").text(cx++);
+					 	mt(purl);
 				 	}
 				 }
 			});
