@@ -280,7 +280,9 @@ class MobileExlController extends AdminbaseController{
 		$dataary=$data;
 		S("adddaata".session(ADMIN_ID),$dataary);
 		
+
 		$return["status"]=0;
+		var_dump($entry);
 
 		if($entry){
 			$map['mobile']=$entry;
