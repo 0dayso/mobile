@@ -430,6 +430,28 @@ class MobileController extends AdminbaseController{
     	return $return;
     }
 
+    public function setorderapple(){
+
+    	$map['status']=0;
+    	$map['type']=2;
+    
+    	// $data=D('Mobile')->where($map)->limit(10)->order("id desc")->select();
+    	
+    	if(S('aomobile')==false||count(S('omobile'))<2){    		
+    		S('aomobile',null);
+    		$data=D('Mobile')->field('id,mobile')->where($map)->limit(100)->order("id desc")->select();    		
+    		S('aomobile',$data);
+    	}else{
+    	
+    		$data=S('aomobile');
+    	}
+    	
+    	$return= array_shift($data);
+    	S('aomobile',$data);
+    	unset($data);
+    	return $return;
+    }
+
      //增加查询归属地
     public function onedelguangdong(){
 
@@ -444,6 +466,100 @@ class MobileController extends AdminbaseController{
     		   $mobile=trim($data['mobile']);
     		  
     		   $id=$data['id'];
+
+    		   $t=$this->semobile($mobile);
+
+    		   if(stripos($t,'302 Found')>0){
+    		   	
+    		   		$t=$this->semobile($mobile);
+    		   }
+    		
+
+			    $ati= mb_convert_encoding($t,"UTF-8", "GBK");
+			     			  
+			    $at=explode(',',str_ireplace("'","",$ati));
+				//$at=json_decode('('.trim($ati).')',true);
+
+				$pr=explode(':',$at[1]);
+				$data1['address']=$pr[1];
+				$cn=explode(':',$at[6]);
+				$data1['catName']=$cn[1];
+
+				if(empty($data1['province'])){
+					$data1['province']='没';
+				}
+			    if($data1['province']=='广东'){
+					//$data1['status']=1;//删除广东用户
+					$where['id']=$id;
+					$sul=D('applemobile')->where($where)->delete();//删除广东数据
+
+					unset($t);
+					unset($ati);
+					unset($at);
+					unset($cn);
+					unset($data1);
+
+					$retrun['status']=1;
+					$retrun['msg']='数据检查完成';
+					$retrun['mobile']=$mobile;
+					$retrun['province']=$pr[1];
+					unset($pr);
+					$this->ajaxreturn($retrun);
+					exit();
+				}
+				
+				$where['id']=$id;
+				$sul=D('applemobile')->where($where)->save($data1);
+				unset($t);
+				unset($ati);
+				unset($at);
+				unset($cn);
+				unset($data1);
+				if($sul){
+					$retrun['status']=1;
+					$retrun['msg']='数据检查完成';
+					$retrun['mobile']=$mobile;
+					$retrun['province']=$pr[1];
+					unset($pr);
+					$this->ajaxreturn($retrun);
+					exit();
+				}else{
+					$retrun['status']=2;
+					$retrun['msg']='修改失败';
+					$retrun['mobile']=$mobile;
+					$retrun['province']=$pr[1];	
+					unset($pr);			
+					$this->ajaxreturn($retrun);
+					exit();
+				}
+				
+
+    		//$this->deldata($data[$i]['id'],$data[$i]['mobile']);
+		}else{
+			$retrun['status']=3;
+			$retrun['msg']='数据检查完成';
+			$retrun['mobile']='没有数据';
+			$retrun['province']="没有数据";
+			$this->ajaxreturn($retrun);
+			exit();
+		}
+    	    	
+    }
+
+     //增加查询归属地
+    public function onedelguangdongapple(){
+
+    	set_time_limit(0);
+
+
+   		$data=$this->setorderapple();
+ 
+    	//$data=D('Mobile')->where($map)->find();
+
+    	if($data){
+    		   $mobile=trim($data['mobile']);
+    		  
+    		   $id=$data['mid'];
 
     		   $t=$this->semobile($mobile);
 

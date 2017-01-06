@@ -59,7 +59,7 @@ class MobileExlController extends AdminbaseController{
 	 *$column:字段名
 	 */
 	protected function uploadsexl($config){
-	
+		
 		
 		if($table == 'mobile'){
 			$config['saveName'] = '';
@@ -282,11 +282,12 @@ class MobileExlController extends AdminbaseController{
 		
 
 		$return["status"]=0;
-		var_dump($entry);
+
 
 		if($entry){
 			$map['mobile']=$entry;
 			$ndata=M("mobile")->where($map)->find();
+
 			if(!$ndata){
 				$return["mobile"]=$entry;
 				$this->ajaxreturn($return);
@@ -302,7 +303,7 @@ class MobileExlController extends AdminbaseController{
 				$sul=M("mobile")->where($where)->save($parame);
 
 				$adata['mobile']=$ndata['mobile'];
-				$adata['mid']=$ndata['mid'];
+				$adata['mid']=$ndata['id'];
 				$adata['username']=$ndata['username'];
 
 				M("applemobile")->add($adata);
