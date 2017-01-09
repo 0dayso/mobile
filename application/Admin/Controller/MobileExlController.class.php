@@ -166,6 +166,8 @@ class MobileExlController extends AdminbaseController{
 		}
 		$dataary['data']=$data;
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
+		
+
 	
 
 		if(!$dataary){
@@ -175,7 +177,28 @@ class MobileExlController extends AdminbaseController{
 		}
 	
 		if($entry){
-			
+
+			$mobile=$entry["mobile"];
+			/*是否是广东人*/
+			 $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+	    		   // echo $url;
+		    $jsul=$this->HTTP_GET($url);
+		    $t=substr($jsul,20,strlen(trim($jsul))-21);
+		    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+		    $at=explode(',',str_ireplace("'","",$ati));
+			//$at=json_decode('('.trim($ati).')',true);
+
+			$pr=explode(':',$at[1]);
+			$data1['province']=$pr[1];
+			$cn=explode(':',$at[6]);
+			$data1['catName']=$cn[1];
+
+		    if($data1['province']=='广东'){
+				$data1['status']=1;//删除广东用户
+			}
+			/*是否是广东人*/
+			$parame['catName']=$cn[1];
+			$parame['province']=$pr[1];
 			$parame['mobile']=$entry["mobile"];
 			$parame['username']=$entry["name"];
 			$parame['createtime']=time();
@@ -186,7 +209,7 @@ class MobileExlController extends AdminbaseController{
 					$parame['status']=1;
 				}
 				$sul=M("mobile")->add($parame);
-				if($sul){
+				if($sul&&$data1['province']!='广东'){
 					$para["mid"]=$sul;
 					$para['username']=$entry["name"];
 					$para['mobile']=$entry["mobile"];
