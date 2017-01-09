@@ -150,7 +150,9 @@ class MobileExlController extends AdminbaseController{
 	//增加一条手机号
 	public function addmobile(){
 
-		if(S("addext")=="txt" && empty(S("addextxls"))){
+		var_dump(S("addextxls"));
+		exit();
+		if(S("addext")=="txt" && S("addextxls")){
 
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
