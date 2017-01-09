@@ -213,6 +213,8 @@ class MobileExlController extends AdminbaseController{
 					$para["mid"]=$sul;
 					$para['username']=$entry["name"];
 					$para['mobile']=$entry["mobile"];
+					$para['catName']=$cn[1];
+					$para['address']=$pr[1];
 					$info=M("mobilename")->add($para);
 				}
 
