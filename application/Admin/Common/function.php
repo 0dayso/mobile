@@ -39,5 +39,22 @@ function sp_get_url_route(){
 	return $routes;
 }
 
+public function HTTP_GET($url) {
+        $oCurl = curl_init();
+        if (stripos($url, "https://") !== FALSE) {
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+       	curl_setopt($oCurl, CURLOPT_URL, $url);
+       	curl_setopt($oCurl, CURLOPT_RETURNTRANSFER, 1);
+       	curl_setopt($oCurl, CURLOPT_CUSTOMREQUEST, 'GET');
+		curl_setopt($oCurl, CURLOPT_HEADER, 0);
+
+        $sContent = curl_exec($oCurl);
+        $aStatus = curl_getinfo($oCurl);
+        curl_close($oCurl);
+        return $sContent;
+    }
+
 
 
