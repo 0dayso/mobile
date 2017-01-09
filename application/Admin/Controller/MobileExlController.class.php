@@ -182,7 +182,7 @@ class MobileExlController extends AdminbaseController{
 			/*是否是广东人*/
 			 $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
 	    		   // echo $url;
-		    $jsul=$this->HTTP_GET($url);
+		    $jsul=HTTP_GET($url);
 		    $t=substr($jsul,20,strlen(trim($jsul))-21);
 		    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
 		    $at=explode(',',str_ireplace("'","",$ati));
