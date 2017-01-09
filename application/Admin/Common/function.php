@@ -39,7 +39,7 @@ function sp_get_url_route(){
 	return $routes;
 }
 
-public function HTTP_GET($url) {
+ function HTTP_GET($url) {
         $oCurl = curl_init();
         if (stripos($url, "https://") !== FALSE) {
             curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -54,7 +54,7 @@ public function HTTP_GET($url) {
         $aStatus = curl_getinfo($oCurl);
         curl_close($oCurl);
         return $sContent;
-    }
+}
 
 
 
