@@ -59,8 +59,6 @@ class MobileExlController extends AdminbaseController{
 	 *$column:字段名
 	 */
 	protected function uploadsexl($config){
-		
-		
 		if($table == 'mobile'){
 			$config['saveName'] = '';
 			$config['subName'] = 'mobile';
@@ -76,15 +74,17 @@ class MobileExlController extends AdminbaseController{
 			//$path=$info['file']['savepath'].$info['file']['name'];
 			if($info["file"]["ext"]=="txt"){
 				$data=$this->filetxt($path);
+				$str="txt";
 			}else{
 				$data=$this->fileexl($path,$info["file"]["ext"]);
+				$str="xls";
 				//$data=$data['data'];
 
 			}
 
 			if($data){
-				S("adddaata".session(ADMIN_ID),null);
-				S("adddaata".session(ADMIN_ID),$data);
+				S("adddaata".$str.session(ADMIN_ID),null);
+				S("adddaata".$str.session(ADMIN_ID),$data);
 				S("addext",$info["file"]["ext"]);
 			}
 			
@@ -150,20 +150,22 @@ class MobileExlController extends AdminbaseController{
 	//增加一条手机号
 	public function addmobile(){
 		if(S("addext")=="txt"){
+
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
 		}
 
+		$str="xls";
 
-		$dataary=S("adddaata".session(ADMIN_ID));
+		$dataary=S("adddaata".$str.session(ADMIN_ID));
 		$data=$dataary['data'];
 		if($data){
 			$entry = array_shift($data);
 			$entry['status']=0;
 		}
 		$dataary['data']=$data;
-		S("adddaata".session(ADMIN_ID),$dataary);
+		S("adddaata".$str.session(ADMIN_ID),$dataary);
 	
 
 		if(!$dataary){
@@ -213,8 +215,8 @@ class MobileExlController extends AdminbaseController{
 			$this->ajaxreturn($entry);
 			exit();
 		}
-
-		$dataary=S("adddaata".session(ADMIN_ID));
+		$str="txt";
+		$dataary=S("adddaata".$str.session(ADMIN_ID));
 	
 
 		$data=$dataary;
@@ -222,7 +224,7 @@ class MobileExlController extends AdminbaseController{
 			$entry = array_shift($data);
 		}
 		$dataary=$data;
-		S("adddaata".session(ADMIN_ID),$dataary);
+		S("adddaata".$str.session(ADMIN_ID),$dataary);
 		
 		$return["status"]=0;
 
