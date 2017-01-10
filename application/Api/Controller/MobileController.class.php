@@ -10,7 +10,7 @@ class MobileController extends Controller {
 	//显示之前就修改状态
     public function index() {
         M()->startTrans();        
-    	$data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->lock(true)->find();
+    	$data=M('applemobile')->field('mid,mobile,username')->where('type=0 and isshow=0')->lock(true)->find();
 
         $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
         if(strlen($data['username'])>1){
@@ -34,8 +34,13 @@ class MobileController extends Controller {
         }
         M()->startTrans();        
         $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
+       
         foreach ($data as $k => $vl) {
-            $t=M('applemobile')->where("mid=%d",$vl['mid'])->setField('isshow',3);
+            $alter['type']=1;
+            $alter['nmbshow']=array("exp","nmbshow+1");
+            $alter['isshow']=3;
+            $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
+
             if(!$t){
                 M()->rollback();
                 echo 0;
