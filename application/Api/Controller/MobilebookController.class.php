@@ -61,10 +61,10 @@ class MobilebookController extends Controller {
         } catch (\Exception $e) {
             M()->rollback();
 
-        }finally{          
+        }    
             $this->ajaxreturn($data);
            
-        }
+       
     }
 
 
@@ -87,8 +87,6 @@ class MobilebookController extends Controller {
                 //$altsul=M('applemobile')->where($map)->save($data);
             } catch (\Exception $e) {
                 
-            }finally{
-               
             }
            
         }
