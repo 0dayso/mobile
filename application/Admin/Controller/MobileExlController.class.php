@@ -150,12 +150,11 @@ class MobileExlController extends AdminbaseController{
 	//增加一条手机号
 	public function addmobile(){
 
-		if(!S("addextxls".session(ADMIN_ID))){
+		if(!S("adddaataxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
 		}
-
 
 		$str="xls";
 

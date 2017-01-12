@@ -149,7 +149,11 @@ class MobilejcController extends AdminbaseController{
 
 	//增加一条手机号
 	public function addmobile(){
-		
+
+	    // S("ydataxls".session(ADMIN_ID),null);
+	   //  var_dump( S("ydataxls".session(ADMIN_ID)));
+	   
+
 
 		if(!S("ydataxls".session(ADMIN_ID))){
 			$entry['status']=3;
@@ -160,16 +164,16 @@ class MobilejcController extends AdminbaseController{
 
 		$str="xls";
 
-		$dataary=S("adddaata".$str.session(ADMIN_ID));
+		$dataary=S("ydata".$str.session(ADMIN_ID));
 		$data=$dataary['data'];
 		if($data){
 			$entry = array_shift($data);
 			$entry['status']=0;
 		}
 		$dataary['data']=$data;
-		S("adddaata".$str.session(ADMIN_ID),$dataary);
+		S("ydata".$str.session(ADMIN_ID),$dataary);
 		
-		if(!$dataary){
+		if(!$data){
 			$entry['status']=2;
 			$this->ajaxreturn($entry);
 			exit();
@@ -234,20 +238,16 @@ class MobilejcController extends AdminbaseController{
 			    			$mdata['type']=4;//用户性别保密
 			    		}
 
-			    		if($data["code"]!=4&&$data['sex']!=2){
+			    		if($data["code"]!=-4&&$data['sex']!=2){
 			    			$para["mid"]=$sul;
 							$para['username']=$entry["name"];
 							$para['mobile']=$entry["mobile"];
 
 							$para['type']=1;//群控系统
 							$para['sex']=$data['sex'];
+							var_dump($para);
 							$info=M("applemobile")->add($para);
-
-							$entry['status']=2;
-							$this->ajaxreturn($entry);
-							exit();
 			    		}
-		    			
 						$t=M("mobile")->where('id=%d',$sul)->save($mdata);
 				}
 			
