@@ -108,24 +108,33 @@ class MobilebookController extends Controller {
     public function adddata(){
 
         $datakey=I("REQUEST.book");
-        var_dump($datakey);
-        /*
+        $data=array();
         if($datakey){
-
             $jsondata=json_decode($datakey,true);
-            $data=array();
+           
+            foreach ($jsondata as $key => $vl) {
+                $booksul=M("mobilebook")->where("mobile=%s",$vl['phone'])->find();
+                $para['sex']=1;//性别为男;
+                $para['type']=1;
+                $para['mid']=$booksul['mid'];
+                $para['username']=$booksul['username'];
+                $para['mobile']=$vl['phone'];
+                $para['sex']=$vl['sex'];
+                $data[]=$para;
+                try {
+                    $altsul=M('applemobile')->add($data);
+                } catch (\Exception $e) {
+                    
+                }
 
-            foreach ($jsondata as $key => $value) {
-                
+                if($altsul){
+                        $data['status']=1;
+                }else{
+                        $data['status']=2;
+                }               
             }
-
-            $data=M("applemobile")->where()->addAll();
         }
-        */
-        
+        $this->ajaxreturn($data);               
     }
-
-
-
 }
 
