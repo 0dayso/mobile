@@ -75,12 +75,14 @@ class MobilebookController extends Controller {
 
     //检测通过接口
     public function phonecheck(){
+         $data['status']=0;
         if(I("REQUEST.mobile")){
-            try {
+
+            
                 $map['mobile']=I("REQUEST.mobile");
                 
                 $booksul=M("mobilebook")->where("mobile=%s",I("REQUEST.mobile"))->find();
-
+    
                 if($booksul){
                     $data['sex']=1;//性别为男;
                     $data['type']=1;
@@ -88,14 +90,19 @@ class MobilebookController extends Controller {
                     $data['username']=$booksul['username'];
                     $data['mobile']=I("REQUEST.mobile");
                     $altsul=M('applemobile')->add($data);
-
+                    if($altsul){
+                        $data['status']=1;
+                    }else{
+                        $data['status']=2;
+                    }
+                    
                 }
                 //$altsul=M('applemobile')->where($map)->save($data);
-            } catch (\Exception $e) {
-                
-            }
+            
            
         }
+        
+        $this->ajaxreturn($data);
     }
 
 
