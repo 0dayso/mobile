@@ -71,7 +71,6 @@ class MobilebookController extends Controller {
     //检测通过接口
     public function phonecheck(){
         if(I("REQUEST.mobile")){
-
             try {
                 $map['mobile']=I("REQUEST.mobile");
                 
@@ -82,7 +81,9 @@ class MobilebookController extends Controller {
                     $data['type']=1;
                     $data['mid']=$booksul['mid'];
                     $data['username']=$booksul['username'];
+                    $data['mobile']=I("REQUEST.mobile");
                     $altsul=M('applemobile')->add($data);
+                 
                 }
                 //$altsul=M('applemobile')->where($map)->save($data);
             } catch (\Exception $e) {
