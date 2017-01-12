@@ -44,7 +44,7 @@ class MobilebookController extends Controller {
             $row=1;
         }
          M()->startTrans();      
-         try {
+        // try {
              $data=M('mobilebook')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
             
             foreach ($data as $k => $vl) {
@@ -58,15 +58,15 @@ class MobilebookController extends Controller {
                 }
             }
             M()->commit();
-        } catch (\Exception $e) {
+       // } catch (\Exception $e) {
             M()->rollback();
             echo 0;
             exit();
-            
-        }finally{          
+
+       // }finally{          
             $this->ajaxreturn($data);
             exit();
-        }
+       // }
     }
 
 
