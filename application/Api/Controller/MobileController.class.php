@@ -27,31 +27,62 @@ class MobileController extends Controller {
         exit();
     }
 
+    //通讯云得到数据接口
+    public function txymobile(){
+        M()->startTrans();        
+        $data=M('applemobile')->field('mid,mobile,username')->where('type=0 and isshow=0')->lock(true)->find();
+
+        $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
+        if(strlen($data['username'])>1){
+           $data['username']= substr( $data['username'], 0,3);
+        }
+        
+        M()->commit();
+        if(!$t){
+            M()->rollback();
+            echo 0;
+            exit();
+        }
+        $this->ajaxreturn($data,"xml");
+        exit();
+    }
+
+    //手机导入通讯录数据接口
     public function phonemobile(){
         $row=I("REQUEST.row");
         if(!$row){
             $row=1;
         }
-        M()->startTrans();        
-        $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
-       
-        foreach ($data as $k => $vl) {
-            $alter['type']=1;
-            $alter['nmbshow']=array("exp","nmbshow+1");
-            $alter['isshow']=3;
-            $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
+         M()->startTrans();      
+		 try {
+             $data=M('applemobile')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
+            
+            foreach ($data as $k => $vl) {
+                $alter['type']=1;
+                $alter['nmbshow']=array("exp","nmbshow+1");
+                $alter['isshow']=3;
+                $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
 
-            if(!$t){
-                M()->rollback();
-                echo 0;
-                exit();
+                if(!$t){
+                    M()->rollback();
+                    echo 0;
+                    exit();
+                }
             }
+            M()->commit();
+       
+            
+        } catch (\Exception $e) {
+            M()->rollback();
+            echo 0;
+            exit();
+        }finally{          
+            $this->ajaxreturn($data);
+            exit();
         }
-        M()->commit();
-        $this->ajaxreturn($data);
-        exit();
-
     }
+
+
     //显示一个手机号码
     public function mboile(){
     	$data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->find();
