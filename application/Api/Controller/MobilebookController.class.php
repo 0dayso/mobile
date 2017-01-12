@@ -16,7 +16,7 @@ class MobilebookController extends Controller {
             if($data){
                 $t=M('mobilebook')->where("mid=%d",$data['mid'])->setField('isshow',1);
                 if(strlen($data['username'])>1){
-                   $data['username']=$data['mobile'] //substr( $data['username'], 0,3);
+                   $data['username']=substr( $data['username'], 0,3);
                 }
 
                 M()->commit();
@@ -60,6 +60,7 @@ class MobilebookController extends Controller {
                     echo 0;
                     exit();
                 }
+                $data[$k]['username']=$vl['mobile'];
             }
             M()->commit();
         } catch (\Exception $e) {
