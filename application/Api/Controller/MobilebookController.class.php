@@ -107,7 +107,9 @@ class MobilebookController extends Controller {
 
     public function adddata(){
 
-        $datakey=I("REQUEST.uname");
+        $datakey=I("REQUEST.book");
+        var_dump($datakey);
+        /*
         if($datakey){
 
             $jsondata=json_decode($datakey,true);
@@ -119,6 +121,7 @@ class MobilebookController extends Controller {
 
             $data=M("applemobile")->where()->addAll();
         }
+        */
         
     }
 
