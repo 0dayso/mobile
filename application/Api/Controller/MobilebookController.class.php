@@ -60,12 +60,10 @@ class MobilebookController extends Controller {
             M()->commit();
         } catch (\Exception $e) {
             M()->rollback();
-            echo 0;
-            exit();
 
         }finally{          
             $this->ajaxreturn($data);
-            exit();
+           
         }
     }
 
