@@ -149,9 +149,8 @@ class MobileExlController extends AdminbaseController{
 
 	//增加一条手机号
 	public function addmobile(){
-		
-		if(S("addext")=="txt" && !S("addextxls")){
 
+		if(!S("addextxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
@@ -231,6 +230,105 @@ class MobileExlController extends AdminbaseController{
 			$entry['status']=2;
 		}
 		$this->ajaxreturn($entry);
+	}
+
+	//增加一次增加百个手机号
+	public function addmobile100(){
+		
+		if(!S("addextxls".session(ADMIN_ID))){
+			$entry['status']=3;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+
+		$str="xls";
+
+		$dataary=S("adddaata".$str.session(ADMIN_ID));
+
+		if(!$dataary){
+			$entry['status']=2;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+
+		$list=array();
+		$data=$dataary['data'];
+		if($data){
+			for ($i=0; $i < 50; $i++) { 
+				if($data){
+
+					$entry = array_shift($data);
+					$entry['status']=0;
+					$list=$this->onemobile($entry);
+
+				}
+			}
+			
+		}
+
+		$dataary['data']=$data;
+		S("adddaata".$str.session(ADMIN_ID),$dataary);
+		$list['mobile']="增加成功50条，";
+		$list['name']=count($data)."条数据未增加，";
+
+		$this->ajaxreturn($list);
+	}
+
+
+	public function onemobile($entry){
+	
+		if($entry){
+
+			$mobile=$entry["mobile"];
+			/*是否是广东人*/
+			 $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+	    		   // echo $url;
+		    $jsul=HTTP_GET($url);
+		    $t=substr($jsul,20,strlen(trim($jsul))-21);
+		    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+		    $at=explode(',',str_ireplace("'","",$ati));
+			//$at=json_decode('('.trim($ati).')',true);
+
+			$pr=explode(':',$at[1]);
+			$data1['province']=$pr[1];
+			$cn=explode(':',$at[6]);
+			$data1['catName']=$cn[1];
+
+		    if($data1['province']=='广东'){
+				$data1['status']=1;//删除广东用户
+			}
+			/*是否是广东人*/
+			$parame['catName']=$cn[1];
+			$parame['province']=$pr[1];
+			$parame['mobile']=$entry["mobile"];
+			$parame['username']=$entry["name"];
+			$parame['createtime']=time();
+			$parame['updatetime']=time();
+			try {
+
+				if(count($parame['username'])>8){
+					$parame['status']=1;
+				}
+				$sul=M("mobile")->add($parame);
+				if($sul&&$data1['province']!='广东'){
+					$para["mid"]=$sul;
+					$para['username']=$entry["name"];
+					$para['mobile']=$entry["mobile"];
+					$info=M("mobilename")->add($para);
+				}
+
+			} catch (\Exception $e) {
+				return $entry;				
+			}
+			
+			if($sul&$info){
+				$entry['status']=1;
+			}
+
+		}else{
+			$entry['status']=2;
+		}
+		return $entry;
 	}
 
 	//不需要检测直接增加apple
