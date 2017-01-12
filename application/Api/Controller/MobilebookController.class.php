@@ -62,7 +62,7 @@ class MobilebookController extends Controller {
             M()->rollback();
 
         }    
-            $this->ajaxreturn($data);
+        $this->ajaxreturn($data);
            
        
     }
