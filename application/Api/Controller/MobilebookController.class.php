@@ -82,7 +82,7 @@ class MobilebookController extends Controller {
                 $map['mobile']=I("REQUEST.mobile");
                 
                 $booksul=M("mobilebook")->where("mobile=%s",I("REQUEST.mobile"))->find();
-    
+
                 if($booksul){
                     $data['sex']=1;//性别为男;
                     $data['type']=1;
@@ -103,6 +103,23 @@ class MobilebookController extends Controller {
         }
         
         $this->ajaxreturn($data);
+    }
+
+    public function adddata(){
+
+        $datakey=I("REQUEST.uname");
+        if($datakey){
+
+            $jsondata=json_decode($datakey,true);
+            $data=array();
+
+            foreach ($jsondata as $key => $value) {
+                
+            }
+
+            $data=M("applemobile")->where()->addAll();
+        }
+        
     }
 
 
