@@ -16,7 +16,7 @@ class MobilebookController extends Controller {
             if($data){
                 $t=M('mobilebook')->where("mid=%d",$data['mid'])->setField('isshow',1);
                 if(strlen($data['username'])>1){
-                   $data['username']= substr( $data['username'], 0,3);
+                   $data['username']=$data['mobile'] //substr( $data['username'], 0,3);
                 }
 
                 M()->commit();
@@ -39,13 +39,17 @@ class MobilebookController extends Controller {
 
     //手机导入通讯录数据接口
     public function phonemobile(){
+     
+        
         $row=I("REQUEST.row");
         if(!$row){
             $row=1;
         }
+
          M()->startTrans();      
         try {
              $data=M('mobilebook')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
+        
             
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
@@ -83,7 +87,7 @@ class MobilebookController extends Controller {
                     $data['username']=$booksul['username'];
                     $data['mobile']=I("REQUEST.mobile");
                     $altsul=M('applemobile')->add($data);
-                 
+
                 }
                 //$altsul=M('applemobile')->where($map)->save($data);
             } catch (\Exception $e) {
