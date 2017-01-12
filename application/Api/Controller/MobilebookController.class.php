@@ -111,6 +111,8 @@ class MobilebookController extends Controller {
         $data=array();
         if($datakey){
             $jsondata=json_decode($datakey,true);
+            $this->ajaxreturn($jsondata);
+            exit();
            
             foreach ($jsondata as $key => $vl) {
                 $booksul=M("mobilebook")->where("mobile=%s",$vl['phone'])->find();
