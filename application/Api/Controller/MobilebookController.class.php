@@ -48,7 +48,7 @@ class MobilebookController extends Controller {
 
          M()->startTrans();      
         try {
-             $data=M('mobilebook')->field('mid,mobile,username')->where('isshow=0')->limit($row)->lock(true)->select();
+             $data=M('mobilebook')->field('mid,mobile,username')->where('type=0 and isshow=0')->limit($row)->lock(true)->select();
         
             
             foreach ($data as $k => $vl) {
@@ -70,6 +70,10 @@ class MobilebookController extends Controller {
         $this->ajaxreturn($data);
            
        
+    }
+
+    public function phonecheck(){
+
     }
 
 
@@ -106,29 +110,25 @@ class MobilebookController extends Controller {
     }
 
     public function adddata(){
-
         $datakey=I("REQUEST.book");
         $data=array();
         if($datakey){
-            $jsondata=json_decode($datakey,true);
-            $this->ajaxreturn($jsondata);
-            exit();
-           
+            $datakey=str_replace("&quot;","\"",$datakey);
+            $jsondata= json_decode($datakey,true);
             foreach ($jsondata as $key => $vl) {
-                $booksul=M("mobilebook")->where("mobile=%s",$vl['phone'])->find();
-                $para['sex']=1;//性别为男;
+                $booksul=M("mobilebook")->where("mobile=%s",$vl['phone'])->find();              
                 $para['type']=1;
                 $para['mid']=$booksul['mid'];
                 $para['username']=$booksul['username'];
                 $para['mobile']=$vl['phone'];
                 $para['sex']=$vl['sex'];
+                $para['updatetime']=time();
                 $data[]=$para;
                 try {
-                    $altsul=M('applemobile')->add($data);
+                    $altsul=M('applemobile')->add($para);
                 } catch (\Exception $e) {
                     
                 }
-
                 if($altsul){
                         $data['status']=1;
                 }else{
