@@ -294,13 +294,13 @@ class MobilebatchController extends AdminbaseController{
 		$list=array();
 
 		if($dataary){
-			for ($i=0; $i < 100; $i++) { 
+			
 				if($dataary){
 					$entry = array_shift($dataary);
 					$entry['status']=0;
 					$list=$this->onemobile($entry);				
 				}
-			}
+			
 		}
 		S("btdata".$str.session(ADMIN_ID),$dataary);
 		$list['count']=count($dataary);
