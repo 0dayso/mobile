@@ -13,6 +13,7 @@ class MobilebatchController extends AdminbaseController{
     }
 
     public function upload_mobile(){
+    	set_time_limit(0);
     	$config = array(    
 			'maxSize'    =>   1024*1024*1024, 	
 			'rootPath'	 =>		'.',
