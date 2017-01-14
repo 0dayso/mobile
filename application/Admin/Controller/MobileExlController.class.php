@@ -7,7 +7,7 @@ class MobileExlController extends AdminbaseController{
 
     public function index(){
     	$str=S("addext");
-    	$this->assigin("count",count(S("adddaata".$str.session(ADMIN_ID))))
+    	$this->assign("count",count(S("adddaata".$str.session(ADMIN_ID)))-1);
     	$this->display();
     }
 
