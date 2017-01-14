@@ -11,13 +11,13 @@
 			<li><a href="{:U('mobile/index',array('type'=>3))}">使用人(女)</a></li>
 			<li><a href="{:U('Mobilecate/index')}">手机号码分类</a></li>
 			<li><a href="{:U('Mobile/addmobile')}">添加手机号码(手动添加)</a></li>
-			<li class="active"><a href="{:U('MobileExl/index')}">增加xls号码</a></li>
+			<li ><a href="{:U('MobileExl/index')}">增加xls号码</a></li>
 			<li><a target="_black" href="{:U('Mobile/mobilead')}">检查归属地</a></li>
 			<li><a target="_black" href="{:U('Mobileadd/newmobile')}">生成apple添加数据</a></li>
-			<li><a target="_black" href="{:U('Mobilejc/index')}">添加已检测数据</a></li>
+			<li class="active"><a target="_black" href="{:U('Mobilejc/index')}">添加已检测数据</a></li>
 		</ul>
 		<div class="well">
-			<form class=" form-search" style="display: inline-block;" id="mainform" enctype="multipart/form-data" action="{:U('MobileExl/upload_mobile')}" method="post">
+			<form class=" form-search" style="display: inline-block;" id="mainform" enctype="multipart/form-data" action="{:U('Mobilebatch/upload_mobile')}" method="post">
 				<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />
 				<button type="submit" class="btn btn-primary submit">上传</button>
 			</form>
@@ -39,6 +39,7 @@
 		</div>
 		-->
 		<div style="float: left">
+				<span id="count">{$count}</span> 未添加，
 				成功添加<span id="addtxtlbl">0</span>。重复<span id="addlbl">0</span>条<br/>
 				<textarea  id="addtxt" style="height: 650px; width: 350px; margin-right:20px;"></textarea>
 		</div>
@@ -93,9 +94,9 @@
 	})
 	var ix=1;
 	var cx=1;
-	var url="{:U('MobileExl/addmobile')}";
-	var murl="{:U('MobileExl/addapple')}";
-	var purl="{:U('MobileExl/addappletxt')}"
+	var url="{:U('Mobilebatch/addmobile100')}";
+	var murl="{:U('Mobilebatch/addapple')}";
+	var purl="{:U('Mobilebatch/addappletxt')}"
 	$('#cfinfo').click(function(){
 		t(url);
 	});
@@ -122,6 +123,7 @@
 				}
 				 if(data['status']==1 || data['status']=='1'){
 				 		addt.prepend(data['mobile']+"-"+data['name']+"增加成功"+"\n");
+				 		$("#count").text($("#count").val()-$data['count']);
 					 	$("#addtxtlbl").text(ix++);
 					    t(url);
 				 }else{

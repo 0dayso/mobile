@@ -23,6 +23,8 @@
 				<button type="submit" class="btn btn-primary submit">上传</button>
 			</form>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">添加到表</button>
+			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>
+			
 			<!--
 			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>
 			<a   class="btn btn-primary" href="{:U('MobileExl/mobileclose')}">清空数据</a>
@@ -97,7 +99,7 @@
 	var ix=1;
 	var cx=1;
 	var url="{:U('Mobilebook/addmobile')}";
-	var murl="{:U('Mobilejc/addapple')}";
+	var murl="{:U('Mobilebook/altercheck')}";
 	var purl="{:U('Mobilejc/addappletxt')}"
 	$('#cfinfo').click(function(){
 		t(url);

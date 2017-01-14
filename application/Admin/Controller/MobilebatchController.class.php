@@ -1,19 +1,22 @@
 <?php
 namespace Admin\Controller;
 use Common\Controller\AdminbaseController;
-class MobilebookController extends AdminbaseController{
+class MobilebatchController extends AdminbaseController{
 	protected $navcat_model;
     public static $numbpage=0;
 
     public function index(){
+       //var_dump(S("btdataxls".session(ADMIN_ID)));
+    	$this->assign("count",count(S("btdataxls".session(ADMIN_ID))));
+    
     	$this->display();
     }
 
     public function upload_mobile(){
     	$config = array(    
-			'maxSize'    =>    2000*1024*1024, 	
+			'maxSize'    =>   1024*1024*1024, 	
 			'rootPath'	 =>		'.',
-			'savePath'   =>    '/public/uploads/',    
+			'savePath'   =>    '/public/uploads/',   
 			'saveName'   =>    array('uniqid',''),    
 			'exts'       =>    array('xls','xlsx','txt'),    
 			'autoSub'    =>    true,    
@@ -66,9 +69,9 @@ class MobilebookController extends AdminbaseController{
 		$upload = new \Think\Upload($config);// 实例化上传类
 		$info   =   $upload->upload();
 
-		//if(!$info) {// 上传错误提示错误信息       			  
-		//	$this->error($upload->getError());    
-		//}else{// 上传成功 
+		if(!$info) {// 上传错误提示错误信息       			  
+			$this->error($upload->getError());    
+		}else{// 上传成功 
 			$path=$info['file']['savepath'].$info['file']['savename'];
 			//$path=$info['file']['savepath'].$info['file']['name'];
 			if($info["file"]["ext"]=="txt"){
@@ -76,16 +79,17 @@ class MobilebookController extends AdminbaseController{
 				$str="txt";
 			}else{
 				$data=$this->fileexl($path,$info["file"]["ext"]);
+				if($data['status']==1){
+					$data=$data['data'];
+				}
 				$str="xls";
 				//$data=$data['data'];
-
 			}
 
-
 			if($data){
-				S("ydata".$str.session(ADMIN_ID),null);
-				S("ydata".$str.session(ADMIN_ID),$data);
-				S("yext",$info["file"]["ext"]);
+				S("btdata".$str.session(ADMIN_ID),null);
+				S("btdata".$str.session(ADMIN_ID),$data);
+				S("btext",$info["file"]["ext"]);
 			}
 			
 			if($data){
@@ -94,7 +98,7 @@ class MobilebookController extends AdminbaseController{
 				$this->success('上传错误！'); 
 			}	
 			exit();		   			
-		//}
+		}
 	}
 	/*
 	 *生成txt文件
@@ -119,6 +123,10 @@ class MobilebookController extends AdminbaseController{
            
            
 		return $res;
+	}
+
+	public function addbatch(){
+
 	}
 
 	protected function filetxt($path){
@@ -150,12 +158,8 @@ class MobilebookController extends AdminbaseController{
 	//增加一条手机号
 	public function addmobile(){
 
-	    // S("ydataxls".session(ADMIN_ID),null);
-	   //  var_dump( S("ydataxls".session(ADMIN_ID)));
-	   
 
-
-		if(!S("ydataxls".session(ADMIN_ID))){
+		if(!S("btdataxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
@@ -164,14 +168,14 @@ class MobilebookController extends AdminbaseController{
 
 		$str="xls";
 
-		$dataary=S("ydata".$str.session(ADMIN_ID));
+		$dataary=S("btdata".$str.session(ADMIN_ID));
 		$data=$dataary['data'];
 		if($data){
 			$entry = array_shift($data);
 			$entry['status']=0;
 		}
 		$dataary['data']=$data;
-		S("ydata".$str.session(ADMIN_ID),$dataary);
+		S("btdata".$str.session(ADMIN_ID),$dataary);
 		
 		if(!$data){
 			$entry['status']=2;
@@ -218,12 +222,37 @@ class MobilebookController extends AdminbaseController{
 			
 				if($data1['province']!='广东'&&$sul){
 
-					$para['type']=1;//群控系统
-					$para['sex']=$data['sex'];
-					$para['mid']=$sul;
-					$para['username']=$entry["name"];
-					$para['mobile']=$entry["mobile"];
-					$info=M("mobilebook")->add($para);
+		    			$url='http://123.56.226.180:12345/?query='.$mobile;	    		   
+			    		$jsul=HTTP_GET($url);
+			    		$data=json_decode($jsul,true);
+
+			    		if($data["code"]==-4){
+			    			$mdata['status']=1;//用户不存在
+			    		}
+
+			    		if($data['sex']==2){
+			    			$mdata['type']=3;//用户为女号
+			    		}
+
+			    		if($data['sex']==1){
+			    			$mdata['type']=1;//用户为男号
+			    		}
+
+			    		if($data['sex']==0&&$data['code']==0){
+			    			$mdata['type']=4;//用户性别保密
+			    		}
+
+			    		if($data["code"]!=-4&&$data['sex']!=2){
+			    			$para["mid"]=$sul;
+							$para['username']=$entry["name"];
+							$para['mobile']=$entry["mobile"];
+
+							$para['type']=1;//群控系统
+							$para['sex']=$data['sex'];
+							var_dump($para);
+							$info=M("applemobile")->add($para);
+			    		}
+						$t=M("mobile")->where('id=%d',$sul)->save($mdata);
 				}
 			
 				
@@ -244,8 +273,8 @@ class MobilebookController extends AdminbaseController{
 
 	//增加一次增加百个手机号
 	public function addmobile100(){
-		
-		if(!S("ydataxls")){
+		set_time_limit(0);
+		if(!S("btdataxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
@@ -253,7 +282,7 @@ class MobilebookController extends AdminbaseController{
 
 		$str="xls";
 
-		$dataary=S("adddaata".$str.session(ADMIN_ID));
+		$dataary=S("btdata".$str.session(ADMIN_ID));
 
 		if(!$dataary){
 			$entry['status']=2;
@@ -262,25 +291,18 @@ class MobilebookController extends AdminbaseController{
 		}
 
 		$list=array();
-		$data=$dataary['data'];
-		if($data){
-			for ($i=0; $i < 50; $i++) { 
-				if($data){
 
-					$entry = array_shift($data);
+		if($dataary){
+			for ($i=0; $i < 100; $i++) { 
+				if($dataary){
+					$entry = array_shift($dataary);
 					$entry['status']=0;
-					$list=$this->onemobile($entry);
-
+					$list=$this->onemobile($entry);				
 				}
 			}
-			
 		}
-
-		$dataary['data']=$data;
-		S("adddaata".$str.session(ADMIN_ID),$dataary);
-		$list['mobile']="增加成功50条，";
-		$list['name']=count($data)."条数据未增加，";
-
+		S("btdata".$str.session(ADMIN_ID),$dataary);
+		$list['count']=count($dataary);
 		$this->ajaxreturn($list);
 	}
 
@@ -397,62 +419,15 @@ class MobilebookController extends AdminbaseController{
 		$this->ajaxreturn($return);
 	}
 
-	public function altercheck(){
-		set_time_limit(0); 
-		
-		if(!S("ydatatxt".session(ADMIN_ID))){
-			$entry['status']=3;
-			$this->ajaxreturn($entry);
-			exit();
-		}
-
-		$dataary=S("ydatatxt".session(ADMIN_ID));	
-		if($dataary){
-			$entry = array_shift($dataary);
-		}
-	
-		S("ydatatxt".session(ADMIN_ID),$dataary);
-
-		foreach ($dataary as $key => $vl) {
-			$map['mobile']=$vl;
-			$data['status']=1;//1为已检测
-			$ndata=M("mobilebook")->where($map)->save($data);
-			
-	
-		}
-		/*
-		$return["status"]=0;
-
-
-		if($entry){
-			try {
-				$map['mobile']=$entry;
-				$data['status']=1;//1为已检测
-				$ndata=M("mobilebook")->where($map)->save($data);
-				$return['mobile']=$entry;
-				$return['status']=1;				
-			} catch (\Exception $e) {
-				$return['status']=0;
-				
-			}
-
-		}
-		$this->ajaxreturn($return);
-		exit();
-
-*/
-
-	}
-
 	//不需要检测直接增加apple
 	public function addappletxt(){
-		if(S("ydatatxt".session(ADMIN_ID))!="txt"){
+		if(S("addext")!="txt"){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
 		}
 
-		$dataary=S("ydatatxt".session(ADMIN_ID));
+		$dataary=S("ydata".session(ADMIN_ID));
 	
 
 		$data=$dataary;

@@ -1,4 +1,4 @@
-<admintpl file="header" />
+	<admintpl file="header" />
 <style>
 	.trback{background: #999; color: #666;}
 	#mobile_inputs input{margin-bottom:10px;}
@@ -23,6 +23,7 @@
 			<div class="form-actions">
 				<input type="text" id="province" class="text" value="" placeholder="为空时检查没有的检没检测" />
 				<input type="botton" onclick="tm()" class="btn btn-primary js-ajax-submit" value="检查归属地" />
+				<a type="botton" onclick="tm()" class="btn btn-primary js-ajax-submit" >检查归属地</a>
 				<a class="btn" href="{:U('Mobile/index')}">{:L('BACK')}</a> 
 				
 			</div>
@@ -70,6 +71,34 @@
 					$("#suminfo").html(i);
 					$('.tbt').prepend(data.mobile+':城市'+data.province+"<br/>");
 					tm();
+
+				}
+				if(data.status==3){
+					
+				}else{
+					
+				}
+			});
+		}
+		var t=0;
+		function tbinfo(){
+			var url="{:U('mobile/onedelguangdongapple')}";
+			$.post(url,{'province':$('#province').val()},function(data){
+			//console.log(data);
+				switch(data.status){
+					case 2:
+						$("#suminfo").html(t);
+						$('.tbt').prepend(data.mobile+':城市'+data.province+"--<br/>");
+						tm();
+					break;
+					case 3:
+						$('.tbt').prepend('处理完成<br/>');
+					break;
+					default:
+					t++;
+					$("#suminfo").html(t);
+					$('.tbt').prepend(data.mobile+':城市'+data.province+"<br/>");
+					tbinfo();
 
 				}
 				if(data.status==3){
