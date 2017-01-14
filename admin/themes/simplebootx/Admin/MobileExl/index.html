@@ -39,7 +39,7 @@
 		</div>
 		-->
 		<div style="float: left">
-				成功添加<span id="addtxtlbl">0</span>。重复<span id="addlbl">0</span>条<br/>
+				<span id="count">{$count}</span>条未添加，成功添加<span id="addtxtlbl">0</span>。重复<span id="addlbl">0</span>条<br/>
 				<textarea  id="addtxt" style="height: 650px; width: 350px; margin-right:20px;"></textarea>
 		</div>
 	
@@ -120,6 +120,7 @@
 					alert("顺序不对");
 					return;
 				}
+				$("#count").text(data['count']);
 				 if(data['status']==1 || data['status']=='1'){
 				 		addt.prepend(data['mobile']+"-"+data['name']+"增加成功"+"\n");
 					 	$("#addtxtlbl").text(ix++);

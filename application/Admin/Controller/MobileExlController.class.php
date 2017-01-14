@@ -6,6 +6,8 @@ class MobileExlController extends AdminbaseController{
     public static $numbpage=0;
 
     public function index(){
+    	$str=S("addext");
+    	$this->assigin("count",count(S("adddaata".$str.session(ADMIN_ID))))
     	$this->display();
     }
 
@@ -168,7 +170,7 @@ class MobileExlController extends AdminbaseController{
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
 		
 
-	
+		$entry['count']=count($data);
 
 		if(!$dataary){
 			$entry['status']=2;
