@@ -11,40 +11,16 @@ class MobileController extends AdminbaseController{
 	}
 	public function index(){
 		$map['status'] = 0;
+
 		if(I('type')){
-			$map['type'] =I('type');			
+			$map['type'] =I('type');
 		}else{
 			$map['type'] =2;	
 		}
-		
-		$count=M('mobile')->where("status=0")->group('type')->getField("type,count('type') as cut",true);
 
+		//$count=M('mobile')->where("status=0")->group('type')->getField("type,count('type') as cut",true);		
 		$mobile=M('applemobile')->group('isshow')->getField("isshow,count('isshow') as cut",true);
-	
-		/*
-		$Page = new \Think\Page($count,13);// 实例化分页类 传入总记录数和每页显示的记录数(25)
-		$Page->setConfig('first','第一页');
-		$Page->setConfig('last','末页');
-        $show = $Page->show();// 分页显示输出
-	/*
-		$data=M('mobile')->where($map)->limit($Page->firstRow.','.$Page->listRows)->getfield('id,mobile,cate_id,authorid',true);
-		foreach($data as $k=>$v){
-			$cateinfo = $this->GetCatebyid($v['cate_id']);
-			$data[$k]['cate_name'] = $cateinfo['cate_name'];
-			$userinfo = $this->Getuserbyid($v['authorid']);
-			$data[$k]['username'] = $userinfo['user_login'];
-		}
-		// $countlist = M('mobile')->group('type')->getField('type,count(*)',true);
-		// $uselist = M('mobile')->where('type=2')->group('status')->getField('status,count(*)',true);
-		// $allcount=M('mobile')->count();
-		
-		// $this->assign('countlist',$countlist);
-		// $this->assign('uselist',$uselist);
-		
-		//$this->assign('allcount',$allcount);
-		$this->assign('data',$data);
-		$this->assign('page',$show);
-		*/
+
 		$this->assign("mobile",$mobile);
 		$this->assign('count',$count);
 		$this->display();
