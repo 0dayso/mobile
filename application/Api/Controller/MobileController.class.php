@@ -74,12 +74,10 @@ class MobileController extends Controller {
             
         } catch (\Exception $e) {
             M()->rollback();
-            echo 0;
-            exit();
-        }finally{          
-            $this->ajaxreturn($data);
-            exit();
-        }
+
+        }    
+        $this->ajaxreturn($data);
+         
     }
 
 
