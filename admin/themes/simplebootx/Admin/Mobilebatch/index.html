@@ -121,9 +121,11 @@
 					alert("顺序不对");
 					return;
 				}
+
+				$("#count").text(data['count']);
 				 if(data['status']==1 || data['status']=='1'){
 				 		addt.prepend(data['mobile']+"-"+data['name']+"增加成功"+"\n");
-				 		$("#count").text($("#count").val()-$data['count']);
+				 		
 					 	$("#addtxtlbl").text(ix++);
 					    t(url);
 				 }else{
@@ -145,6 +147,7 @@
 					alert("顺序不对");
 					return;
 				}
+
 
 				 if(data['status']==1 || data['status']=='1'){
 				 		addt.prepend(data['mobile']+"增加成功"+"\n");
