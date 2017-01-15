@@ -62,7 +62,6 @@ class MobileController extends Controller {
                 $alter['nmbshow']=array("exp","nmbshow+1");
                 $alter['isshow']=3;
                 $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
-
                 if(!$t){
                     M()->rollback();
                     echo 0;
