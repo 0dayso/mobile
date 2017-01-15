@@ -38,19 +38,14 @@ class MobilebookController extends Controller {
     }
 
     //手机导入通讯录数据接口
-    public function phonemobile(){
-     
-        
+    public function phonemobile(){  
         $row=I("REQUEST.row");
         if(!$row){
             $row=1;
         }
-
-         M()->startTrans();      
+        M()->startTrans();      
         try {
-             $data=M('mobilebook')->field('mid,mobile,username')->where('type=0 and isshow=0')->limit($row)->lock(true)->select();
-        
-            
+            $data=M('mobilebook')->field('mid,mobile,username')->where('type=1 and isshow=0')->limit($row)->lock(true)->select();
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
                 $alter['isshow']=array("exp","isshow+1");
@@ -68,25 +63,13 @@ class MobilebookController extends Controller {
 
         }    
         $this->ajaxreturn($data);
-           
-       
     }
-
-    public function phonecheck(){
-
-    }
-
-
     //检测通过接口
     public function phonecheck(){
          $data['status']=0;
         if(I("REQUEST.mobile")){
-
-            
-                $map['mobile']=I("REQUEST.mobile");
-                
+                $map['mobile']=I("REQUEST.mobile");                
                 $booksul=M("mobilebook")->where("mobile=%s",I("REQUEST.mobile"))->find();
-
                 if($booksul){
                     $data['sex']=1;//性别为男;
                     $data['type']=1;
