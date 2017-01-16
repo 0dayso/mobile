@@ -181,8 +181,27 @@ class MobileExlController extends AdminbaseController{
 		if($entry){
 
 			$mobile=$entry["mobile"];
+
+
+			$url='http://sj.apidata.cn/?mobile='.$mobile;//15818618500
+			$jsul=HTTP_GET($url);
+		
+			$jsondata=json_decode($jsul,true);
+			if($jsondata['status']==1){
+				
+				$jsont['province']=$jsondata['data']['province'];				
+				$jsont['types']=$jsondata['data']['province'];
+
+				$data1['province']=$jsondata['data']['city'];
+				$data1['catName']=json_encode($jsont);
+
+				$parame['province']=$jsondata['data']['city'];
+				$parame['catName']=json_encode($jsont);
+			}
 			/*是否是广东人*/
+			/*
 			 $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+			 $url='http://sj.apidata.cn/?mobile='.$mobile;//15818618500
 	    		   // echo $url;
 		    $jsul=HTTP_GET($url);
 		    $t=substr($jsul,20,strlen(trim($jsul))-21);
@@ -194,13 +213,16 @@ class MobileExlController extends AdminbaseController{
 			$data1['province']=$pr[1];
 			$cn=explode(':',$at[6]);
 			$data1['catName']=$cn[1];
+			*/
 
-		    if($data1['province']=='广东'){
+			
+			
+
+		    if($data1['province']=='广州'){
 				$data1['status']=1;//删除广东用户
 			}
 			/*是否是广东人*/
-			$parame['catName']=$cn[1];
-			$parame['province']=$pr[1];
+			
 			$parame['mobile']=$entry["mobile"];
 			$parame['username']=$entry["name"];
 			$parame['createtime']=time();
@@ -211,7 +233,7 @@ class MobileExlController extends AdminbaseController{
 					$parame['status']=1;
 				}
 				$sul=M("mobile")->add($parame);
-				if($sul&&$data1['province']!='广东'){
+				if($sul&&$data1['province']!='广州'){
 					$para["mid"]=$sul;
 					$para['username']=$entry["name"];
 					$para['mobile']=$entry["mobile"];
