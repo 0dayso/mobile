@@ -193,10 +193,10 @@ class MobileExlController extends AdminbaseController{
 				$jsont['types']=$jsondata['data']['province'];
 
 				$data1['province']=$jsondata['data']['city'];
-				$data1['catName']=json_encode($jsont);
+				$data1['catName']=$jsondata['data']['province'];//json_encode($jsont);
 
 				$parame['province']=$jsondata['data']['city'];
-				$parame['catName']=json_encode($jsont);
+				$parame['catName']=$jsondata['data']['province'];
 			}
 			/*是否是广东人*/
 			/*
