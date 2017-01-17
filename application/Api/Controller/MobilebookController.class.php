@@ -45,11 +45,11 @@ class MobilebookController extends Controller {
         }
         M()->startTrans();      
         try {
-            $data=M('applemobile')->field('mid,mobile,username')->where('type=1 and isshow=0')->limit($row)->lock(true)->select();
+            $data=M('mobilebook')->field('mid,mobile,username')->where('type=1 and isshow=0')->limit($row)->lock(true)->select();
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
                 $alter['isshow']=array("exp","isshow+1");
-                $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
+                $t=M('mobilebook')->where("mid=%d",$vl['mid'])->save($alter);
                 if(!$t){
                     M()->rollback();
                     echo 0;
