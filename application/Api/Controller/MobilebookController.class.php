@@ -15,10 +15,7 @@ class MobilebookController extends Controller {
         
             if($data){
                 $t=M('mobilebook')->where("mid=%d",$data['mid'])->setField('isshow',1);
-                if(strlen($data['username'])>1){
-                   $data['username']=substr( $data['username'], 0,3);
-                }
-
+               
                 M()->commit();
                 if(!$t){
                     M()->rollback();
