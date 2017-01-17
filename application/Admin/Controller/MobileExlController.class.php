@@ -27,7 +27,7 @@ class MobileExlController extends AdminbaseController{
 
     public function dumpdata(){
   
-    	set_time_limit(0)；
+    	set_time_limit(0);
     	ob_end_clean();
     	vendor ( 'download-xlsx' );
 
