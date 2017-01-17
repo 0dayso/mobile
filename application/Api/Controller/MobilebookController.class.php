@@ -16,6 +16,7 @@ class MobilebookController extends Controller {
             if($data){
                 $t=M('mobilebook')->where("mid=%d",$data['mid'])->setField('isshow',1);
                
+               
                 M()->commit();
                 if(!$t){
                     M()->rollback();
