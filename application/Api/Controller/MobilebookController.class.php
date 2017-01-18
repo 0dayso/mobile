@@ -136,7 +136,7 @@ class MobilebookController extends Controller {
                 $para['type']=1;
                 $para['mid']=$booksul['mid'];
                 $para['username']=$booksul['username'];
-                $para['mobile']=$vl['phone'];
+                $para['mobile']=$booksul['mobile'];
                 $para['sex']=$vl['sex'];
                 $para['wxid']=$vl['wxid'];
                 $para['updatetime']=time();
