@@ -38,16 +38,15 @@
 									<label class="control-label">切换微信</label>
 									<div class="controls">
 										 <label><input name="weixicut" type="radio" value="121" <if condition="$data.weixicut eq 121 || $data.weixicut eq 123">checked="checked"</if> />dhfaker</label>
-										 <!--<label><input name="weixicut" type="radio" value="122" <if condition="$data.weixicut eq 122">checked="checked"</if> />nzt</label>-->
-										 <label><input name="weixicut" type="radio" value="0" <if condition="$data.weixicut neq 121 && $data.weixicut neq 123 && $data.weixicut neq 122">checked="checked"</if>  />关闭</label>
+										 <!--<label><input name="weixicut" type="radio" value="122" <if condition="$data.weixicut eq 122">checked="checked"</if> />nzt</label>-->								
+										 <label><input name="weixicut" type="radio" value="0" <if condition="$data.weixicut eq 0">checked="checked"</if>  />关闭</label>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">进入方式</label>
 									<div class="controls">
 										<label class="checkbox" style="padding-left:0px;"><input name="onmoble" type="radio" value="132" id="onmoble_login" <if condition="$data.onmoble eq 132">checked="checked"</if> />登入</label> 
-										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="131" id="onmoble_reg" <if condition="$data.onmoble eq 131">checked="checked"</if> />注册 </label> 										
-
+										<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="131" id="onmoble_reg" <if condition="$data.onmoble eq 131">checked="checked"</if> />注册 </label> 
 										<label class="checkbox inline"><input type="checkbox" name="uploadactver" value="1" <if condition="$data['parame']['photo'] gt 0">checked="checked"</if> >上传头像</label>
 										<select name="photo" style="width:100px">
 											<option value='1' <if condition="$data['parame']['photo'] eq 1">selected="selected"</if> >第一相薄</option>
@@ -68,6 +67,9 @@
 									</div>	
 									<div class="controls">
 									<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="2001" id="tt_login" />探探登入</label> 
+									</div>
+									<div class="controls">
+									<label class="checkbox inline" style="padding-left:0px;"><input name="onmoble" type="radio" value="0" id="tt_login" />关闭</label> 
 									</div>
 								</div>
 								<div class="control-group">
