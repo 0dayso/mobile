@@ -80,7 +80,9 @@ class TaskController extends AdminbaseController{
 		$data['addtime']=time();
 		$data['mustt']=serialize($_POST['mustt']);
 		$data['mingle']=serialize($_POST['mingle']);
-		$data['weixicut']=$_POST['weixicut'];
+		
+
+
 		$data['onmoble']=$_POST['onmoble'];
 
 		if(I('onmoble')==132){
@@ -108,13 +110,16 @@ class TaskController extends AdminbaseController{
 				$parame[$k] = $v;
 			}
 		}	
+		$data['weixicut']=$_POST['weixicut'];
 		
 		$data['parame']=serialize($parame);
 		
 		$data['authorid'] = session("ADMIN_ID");
+	
 
 		$runcode=D('runcode');			
 		$data=$runcode->create($data);
+
 		if($data){
 			$sult=$runcode->where('id=%d',array($id))->save($data);
 			if($sult){
