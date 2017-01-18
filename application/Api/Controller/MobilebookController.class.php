@@ -77,6 +77,7 @@ class MobilebookController extends Controller {
                     $data['username']=$booksul['username'];
                     $data['mobile']=I("REQUEST.mobile");
                     $altsul=M('applemobile')->add($data);
+
                     if($altsul){
                         $data['status']=1;
                     }else{
@@ -105,6 +106,7 @@ class MobilebookController extends Controller {
                 $para['username']=$booksul['username'];
                 $para['mobile']=$vl['phone'];
                 $para['sex']=$vl['sex'];
+                $para['wxid']=$vl['wxid'];
                 $para['updatetime']=time();
                 $data[]=$para;
                 try {
