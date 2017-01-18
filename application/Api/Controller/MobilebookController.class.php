@@ -108,6 +108,39 @@ class MobilebookController extends Controller {
                 $para['sex']=$vl['sex'];
                 $para['wxid']=$vl['wxid'];
                 $para['updatetime']=time();
+
+                $data[]=$para;
+                try {
+                    $altsul=M('applemobile')->add($para);
+                } catch (\Exception $e) {
+                    
+                }
+                if($altsul){
+                        $data['status']=1;
+                }else{
+                        $data['status']=2;
+                }               
+            }
+        }
+        $this->ajaxreturn($data);               
+    }
+
+    public function addbook(){
+        $datakey=I("REQUEST.book");
+        $data=array();
+        if($datakey){
+            $datakey=str_replace("&quot;","\"",$datakey);
+            $jsondata= json_decode($datakey,true);
+            foreach ($jsondata as $key => $vl) {
+                $booksul=M("mobilebook")->where("mobilemd5=%s",$vl['phone'])->find();              
+                $para['type']=1;
+                $para['mid']=$booksul['mid'];
+                $para['username']=$booksul['username'];
+                $para['mobile']=$vl['phone'];
+                $para['sex']=$vl['sex'];
+                $para['wxid']=$vl['wxid'];
+                $para['updatetime']=time();
+                
                 $data[]=$para;
                 try {
                     $altsul=M('applemobile')->add($para);
