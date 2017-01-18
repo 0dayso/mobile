@@ -223,6 +223,7 @@ class MobilebookController extends AdminbaseController{
 					$para['mid']=$sul;
 					$para['username']=$entry["name"];
 					$para['mobile']=$entry["mobile"];
+					$para['moiblemd5']=md5(trim($entry["mobile"]));
 					$info=M("mobilebook")->add($para);
 				}
 			
