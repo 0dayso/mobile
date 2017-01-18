@@ -82,7 +82,6 @@ class MobileExlController extends AdminbaseController{
 				$data=$this->fileexl($path,$info["file"]["ext"]);
 				$str="xls";
 				//$data=$data['data'];
-
 			}
 
 			if($data){
@@ -152,7 +151,6 @@ class MobileExlController extends AdminbaseController{
 
 	//增加一条手机号
 	public function addmobile(){
-
 		if(!S("adddaataxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
@@ -160,7 +158,6 @@ class MobileExlController extends AdminbaseController{
 		}
 
 		$str="xls";
-
 		$dataary=S("adddaata".$str.session(ADMIN_ID));
 		$data=$dataary['data'];
 		if($data){
@@ -357,7 +354,7 @@ class MobileExlController extends AdminbaseController{
 
 	//不需要检测直接增加apple
 	public function addapple(){
-		if(S("addext")!="txt"){
+		if(S("adddaatatxe")){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
