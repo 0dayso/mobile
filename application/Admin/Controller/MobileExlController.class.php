@@ -354,7 +354,7 @@ class MobileExlController extends AdminbaseController{
 
 	//不需要检测直接增加apple
 	public function addapple(){
-		if(S("adddaatatxe")){
+		if(S("adddaatatxt")){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
 			exit();
@@ -369,8 +369,9 @@ class MobileExlController extends AdminbaseController{
 		}
 		$dataary=$data;
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
-		
+		$return["count"]=count($dataary);
 		$return["status"]=0;
+
 
 		if($entry){
 			$map['mobile']=$entry;
