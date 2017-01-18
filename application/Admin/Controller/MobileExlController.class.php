@@ -369,7 +369,7 @@ class MobileExlController extends AdminbaseController{
 		}
 		$dataary=$data;
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
-		$return["count"]=count($dataary);
+		$return["count"]=count($data);
 		$return["status"]=0;
 
 
