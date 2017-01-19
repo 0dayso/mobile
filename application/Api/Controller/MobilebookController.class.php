@@ -128,10 +128,12 @@ class MobilebookController extends Controller {
     public function addbook(){
         $datakey=I("REQUEST.book");
         $data=array();
+
         if($datakey){
             M()->startTrans();      
             $datakey=str_replace("&quot;","\"",$datakey);
             $jsondata= json_decode($datakey,true);
+
 
             foreach ($jsondata as $key => $vl) {
                 $booksul=M("mobilebook")->where("mobilemd5='%s'",$vl['phone'])->find();              
@@ -158,6 +160,7 @@ class MobilebookController extends Controller {
             }
             M()->commit();
         }
+        $data['12']=$datakey;
         $this->ajaxreturn($data);               
     }
 }
