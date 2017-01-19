@@ -45,10 +45,9 @@ class MobileExlController extends AdminbaseController{
 
         $order=M('mobilename')->field("mobile,username")->limit($post*40000,($post*40000)+40000)->select();
 
-       
-
         $dataAry=array_merge($dataAry,$order);
-    	export_csv($dataAry,"dumpexl");
+
+    	export_csv($dataAry,date("Y-m-d",time()).'('.($post*40000).'-'.(($post*40000)+40000).')');
     		/*
     		 array_chunk($order,floor(count($order)/40000));
         dump($order);
