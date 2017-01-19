@@ -155,10 +155,9 @@ class MobilebookController extends Controller {
                         $sul['error']++;
                 }              
             }
-
             M()->commit();
         }
-        $this->ajaxreturn($sul);               
+        $this->ajaxreturn($data);               
     }
 }
 
