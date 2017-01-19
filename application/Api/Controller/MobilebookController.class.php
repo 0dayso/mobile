@@ -116,13 +116,13 @@ class MobilebookController extends Controller {
                     
                 }
                 if($altsul){
-                        $data['status']=1;
+                        $sul['sucess']++;
                 }else{
-                        $data['status']=2;
+                        $sul['error']++;
                 }               
             }
         }
-        $this->ajaxreturn($data);               
+        $this->ajaxreturn($sul);               
     }
 
     public function addbook(){
@@ -148,13 +148,13 @@ class MobilebookController extends Controller {
                     
                 }
                 if($altsul){
-                        $data['status']=1;
+                        $sul['sucess']++;
                 }else{
-                        $data['status']=2;
-                }               
+                        $sul['error']++;
+                }              
             }
         }
-        $this->ajaxreturn($data);               
+        $this->ajaxreturn($sul);               
     }
 }
 
