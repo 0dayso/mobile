@@ -130,11 +130,9 @@ class MobilebookController extends Controller {
         $data=array();
 
         if($datakey){
-            M()->startTrans();      
+         
             $datakey=str_replace("&quot;","\"",$datakey);
             $jsondata= json_decode($datakey,true);
-
-
             foreach ($jsondata as $key => $vl) {
                 $booksul=M("mobilebook")->where("mobilemd5='%s'",$vl['phone'])->find();              
                 $para['type']=1;
@@ -158,10 +156,10 @@ class MobilebookController extends Controller {
                         $sul['error']++;
                 }              
             }
-            M()->commit();
+           
         }
-        $data['12']=$datakey;
-        $this->ajaxreturn($data);               
+   
+        $this->ajaxreturn($su);              
     }
 }
 
