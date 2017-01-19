@@ -7,6 +7,9 @@ class MobileExlController extends AdminbaseController{
 
     public function index(){
     	$str=S("addext");
+
+    	$count=M('mobilename')->count();
+    	$this->assign("mcount",$count);
     	$this->assign("count",count(S("adddaata".$str.session(ADMIN_ID)))-1);
     	$this->display();
     }
@@ -35,13 +38,26 @@ class MobileExlController extends AdminbaseController{
          $dataAry[0][0]="手机号码";
          $dataAry[0][1]="姓名";
 
+        $post=I('get.num',0);
+
         $starttime=strtotime(date("Y-m-d",time()));
         //$map['ori.addtime']=array(array("gt",$starttime),array("lt",time()),'and');
 
-        $order=M('mobilename')->field("mobile,username")->select();
-        $dataAry=array_merge($dataAry,$order);
+        $order=M('mobilename')->field("mobile,username")->limit($post*40000,($post*40000)+40000)->select();
 
+       
+
+        $dataAry=array_merge($dataAry,$order);
     	export_csv($dataAry,"dumpexl");
+    		/*
+    		 array_chunk($order,floor(count($order)/40000));
+        dump($order);
+        $i=0;
+        while ($order[$i]) {
+    		$i++;
+        }
+	*/
+        
     }
 
     public function dumptxt(){

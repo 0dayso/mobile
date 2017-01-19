@@ -22,11 +22,24 @@
 				<button type="submit" class="btn btn-primary submit">上传</button>
 			</form>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">去重数据</button>
-			<a   class="btn btn-primary" href="{:U('MobileExl/dumpdata')}">导出已去重数据</a>
+			<a   class="btn btn-primary" href="{:U('MobileExl/dumpdata',array('num'=>0))}">导出已去重数据(有{$mcount})</a>
 			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>
 			<a   class="btn btn-primary" href="{:U('MobileExl/mobileclose')}">清空数据</a>
 			<a  id="datatp" class="btn btn-primary" href="javascript:void(0)">直接写入数据</a>
 		</div>
+
+		<if condition="$mcount gt 40000">
+		<div class="well">
+		<for start="0" end="ceil($mcount/40000)">
+			<if condition="$i*40000+40000 lt $mcount">
+				<a class="btn btn-primary" href="{:U('MobileExl/dumpdata',array('num'=>$i))}">导出(有{$i*40000}-{$i*40000+40000})</a>
+				<else /> 
+				<a class="btn btn-primary" href="{:U('MobileExl/dumpdata',array('num'=>$i))}">导出(有{$i*40000}-{$mcount})</a>
+			</if>
+		</for>
+		</div>
+		</if>
+
 			<!--
 		<div>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">一键清空重复手机</button>（<b class="tinfo">清空比较慢请耐心等候</b>）
