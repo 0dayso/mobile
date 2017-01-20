@@ -122,7 +122,7 @@ class MobilebookController extends Controller {
             }
         }
         $data['12']=$datakey;
-        $this->ajaxreturn($$data);               
+        $this->ajaxreturn($data);               
     }
 
     public function addbook(){
