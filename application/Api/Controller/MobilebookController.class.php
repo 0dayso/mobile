@@ -11,8 +11,7 @@ class MobilebookController extends Controller {
     public function index() {
         M()->startTrans();        
     	$data=M('mobilebook')->field('mid,mobile,username')->where('type=1 and isshow=0')->lock(true)->find();
-        try {
-        
+        try {        
             if($data){
                 $t=M('mobilebook')->where("mid=%d",$data['mid'])->setField('isshow',1);
                 if(strlen($data['username'])>1){
@@ -122,7 +121,8 @@ class MobilebookController extends Controller {
                 }               
             }
         }
-        $this->ajaxreturn($sul);               
+        $data['12']=$datakey;
+        $this->ajaxreturn($$data);               
     }
 
     public function addbook(){
