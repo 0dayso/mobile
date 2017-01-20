@@ -120,9 +120,8 @@ class MobilebookController extends Controller {
                         $sul['error']++;
                 }               
             }
-        }
-        $data['12']=$datakey;
-        $this->ajaxreturn($data);               
+        }        
+        $this->ajaxreturn($sul);               
     }
 
     public function addbook(){
@@ -159,7 +158,7 @@ class MobilebookController extends Controller {
             M()->commit();
         }
    
-        $this->ajaxreturn($su);              
+        $this->ajaxreturn($sul);              
     }
 }
 
