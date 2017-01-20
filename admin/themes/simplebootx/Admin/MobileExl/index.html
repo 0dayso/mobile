@@ -23,8 +23,8 @@
 			</form>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">去重数据</button>
 			<a   class="btn btn-primary" href="{:U('MobileExl/dumpdata',array('num'=>0))}">导出已去重数据(有{$mcount})</a>
-			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>
-			<a   class="btn btn-primary" href="{:U('MobileExl/mobileclose')}">清空数据</a>
+			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>			
+			<a   class="btn btn-primary" href="javascript:if(confirm('确实要删除该内容吗?'))location='{:U('MobileExl/mobileclose')}'">清空数据</a>
 			<a  id="datatp" class="btn btn-primary" href="javascript:void(0)">直接写入数据</a>
 		</div>
 
