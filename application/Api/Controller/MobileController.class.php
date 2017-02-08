@@ -30,7 +30,7 @@ class MobileController extends Controller {
     //通讯云得到数据接口
     public function txymobile(){
         M()->startTrans();        
-        $data=M('applemobile')->field('mid,mobile,username')->where('type=0 and isshow=0')->lock(true)->find();
+        $data=M('applemobile')->field('mid,mobile,username')->where('type=1 and isshow=0')->lock(true)->find();
 
         $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
         if(strlen($data['username'])>1){
