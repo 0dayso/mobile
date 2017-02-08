@@ -7,10 +7,10 @@ namespace Api\Controller;
 use Think\Controller;
 class MobileController extends Controller {
     
-	//显示之前就修改状态
+	//通讯云增加朋友数据
     public function index() {
         M()->startTrans();        
-    	$data=M('applemobile')->field('mid,mobile,username')->where('mid>4413803 and TYPE=1 AND sex=1 and isshow=0')->lock(true)->find();
+    	$data=M('applemobile')->field('mid,mobile,username')->where('mid>4413803 and type=1 AND sex=1 and isshow=1')->lock(true)->find();
         if($data){
             $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
             if(strlen($data['username'])>1){
@@ -56,7 +56,7 @@ class MobileController extends Controller {
         }
          M()->startTrans();      
 		 try {
-             $data=M('applemobile')->field('mid,mobile,username')->where(' type=0 and isshow=0')->limit($row)->lock(true)->select();
+             $data=M('applemobile')->field('mid,mobile,username')->where('type=0 and isshow=0')->limit($row)->lock(true)->select();
             
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
