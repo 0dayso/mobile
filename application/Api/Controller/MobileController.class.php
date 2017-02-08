@@ -10,21 +10,22 @@ class MobileController extends Controller {
 	//显示之前就修改状态
     public function index() {
         M()->startTrans();        
-    	$data=M('applemobile')->field('mid,mobile,username')->where(' MID>4413803 and TYPE=1 AND sex=1 and isshow=0')->lock(true)->find();
+    	$data=M('applemobile')->field('mid,mobile,username')->where('mid>4413803 and TYPE=1 AND sex=1 and isshow=0')->lock(true)->find();
+        if($data){
+            $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
+            if(strlen($data['username'])>1){
+               $data['username']= substr( $data['username'], 0,3);
+            }
 
-        $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
-        if(strlen($data['username'])>1){
-           $data['username']= substr( $data['username'], 0,3);
+            M()->commit();
+            if(!$t){
+                M()->rollback();
+                echo 0;
+                exit();
+            }
         }
 
-        M()->commit();
-        if(!$t){
-            M()->rollback();
-            echo 0;
-            exit();
-        }
         $this->ajaxreturn($data,"xml");
-        exit();
     }
 
     //通讯云得到数据接口
