@@ -12,7 +12,7 @@ class MobileController extends Controller {
         M()->startTrans();        
     	$data=M('applemobile')->field('mid,mobile,username')->where('mid>4413803 and TYPE=1 AND sex=1 and isshow=0')->lock(true)->find();
         if($data){
-            $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
+            $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
             if(strlen($data['username'])>1){
                $data['username']= substr( $data['username'], 0,3);
             }
