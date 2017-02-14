@@ -14,7 +14,8 @@ class MobileController extends Controller {
         if($data){
             $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
             if(strlen($data['username'])>1){
-               $data['username']= substr( $data['username'], 0,3);
+            substr( $data['username'], 0,3)
+               $data['username']="";
             }
 
             M()->commit();
