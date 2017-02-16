@@ -10,8 +10,8 @@ class MobileController extends Controller {
 	//通讯云增加朋友数据
     public function index() {
         M()->startTrans();        
-        
-    	$data=M('applemobile')->field('mid,mobile,username')->where('type=0 and isshow=0')->lock(true)->find();
+
+    	$data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->lock(true)->find();
         if($data){
             $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
             if(strlen($data['username'])>1){
