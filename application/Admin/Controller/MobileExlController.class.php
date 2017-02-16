@@ -43,7 +43,7 @@ class MobileExlController extends AdminbaseController{
         $starttime=strtotime(date("Y-m-d",time()));
         //$map['ori.addtime']=array(array("gt",$starttime),array("lt",time()),'and');
 
-        $order=M('mobilename')->field("mobile,username")->limit($post*40000,($post*40000)+40000)->select();
+        $order=M('mobilename')->field("mobile,username")->limit($post*40000,40000)->select();
 
         $dataAry=array_merge($dataAry,$order);
 
@@ -404,7 +404,6 @@ class MobileExlController extends AdminbaseController{
 			try {
 				$where['id']=$ndata['mid'];
 				$sul=M("mobile")->where($where)->save($parame);
-
 				$adata['type']=7;//已去空数据
 				$adata['mobile']=$ndata['mobile'];
 				$adata['mid']=$ndata['mid'];
