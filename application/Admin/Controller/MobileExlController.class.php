@@ -405,6 +405,7 @@ class MobileExlController extends AdminbaseController{
 				$where['id']=$ndata['mid'];
 				$sul=M("mobile")->where($where)->save($parame);
 
+				$adata['type']=7;//已去空数据
 				$adata['mobile']=$ndata['mobile'];
 				$adata['mid']=$ndata['mid'];
 				$adata['username']=$ndata['username'];
