@@ -152,9 +152,6 @@ class MobilebookController extends AdminbaseController{
 
 	    // S("ydataxls".session(ADMIN_ID),null);
 	   //  var_dump( S("ydataxls".session(ADMIN_ID)));
-	   
-
-
 		if(!S("ydataxls".session(ADMIN_ID))){
 			$entry['status']=3;
 			$this->ajaxreturn($entry);
@@ -206,8 +203,6 @@ class MobilebookController extends AdminbaseController{
 			$parame['username']=$entry["name"];
 			$parame['createtime']=time();
 			$parame['updatetime']=time();
-
-
 			
 			try {	
 				if(count($parame['username'])>8){
@@ -225,8 +220,7 @@ class MobilebookController extends AdminbaseController{
 					$para['mobile']=$entry["mobile"];
 					$para['mobilemd5']=md5(trim($entry["mobile"]));
 					$info=M("mobilebook")->add($para);
-				}
-			
+				}			
 				
 			} catch (\Exception $e) {
 				$this->ajaxreturn($entry);
@@ -242,6 +236,106 @@ class MobilebookController extends AdminbaseController{
 		}
 		$this->ajaxreturn($entry);
 	}
+
+
+	//增加已去重
+	public function addmobileup(){
+
+	    // S("ydataxls".session(ADMIN_ID),null);
+	   //  var_dump( S("ydataxls".session(ADMIN_ID)));
+		if(!S("ydataxls".session(ADMIN_ID))){
+			$entry['status']=3;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+
+
+		$str="xls";
+
+		$dataary=S("ydata".$str.session(ADMIN_ID));
+		$data=$dataary['data'];
+		if($data){
+			$entry = array_shift($data);
+			$entry['status']=0;
+		}
+		$dataary['data']=$data;
+		S("ydata".$str.session(ADMIN_ID),$dataary);
+		
+		if(!$data){
+			$entry['status']=2;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+	
+		if($entry){
+
+			$mobile=$entry["mobile"];
+
+			/*是否是广东人*/
+			/*
+			 $url='https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel='.$mobile;
+	    		   // echo $url;
+		    $jsul=HTTP_GET($url);
+		    $t=substr($jsul,20,strlen(trim($jsul))-21);
+		    $ati= mb_convert_encoding($t,"UTF-8", "GBK");			  
+		    $at=explode(',',str_ireplace("'","",$ati));
+			//$at=json_decode('('.trim($ati).')',true);
+
+			$pr=explode(':',$at[1]);
+			$data1['province']=$pr[1];
+			$cn=explode(':',$at[6]);
+			$data1['catName']=$cn[1];
+
+		    if($data1['province']=='广东'){
+				$data1['status']=1;//删除广东用户
+			}
+			/*是否是广东人*/
+			/*
+			$parame['catName']=$cn[1];
+			$parame['province']=$pr[1];
+			*/
+
+			$parame['mobile']=$entry["mobile"];
+			$parame['username']=$entry["name"];
+			$parame['createtime']=time();
+			$parame['updatetime']=time();
+			
+			try {	
+				if(count($parame['username'])>8){
+					$parame['status']=1;
+				}
+				//echo "dsfds";
+				//$sul=M("mobile")->add($parame);
+				 $sul=M("mobile")->where('mobile='.$mobile)->getFeild("id");
+			
+				//if($data1['province']!='广东'&&$sul){
+
+					$para['type']=1;//群控系统
+					$para['sex']=$data['sex'];
+					$para['mid']=$sul;
+					$para['username']=$entry["name"];
+					$para['mobile']=$entry["mobile"];
+					$para['mobilemd5']=md5(trim($entry["mobile"]));
+					$info=M("mobilebook")->add($para);
+				//}			
+				
+			} catch (\Exception $e) {
+				$this->ajaxreturn($entry);
+				exit();
+			}
+			
+			if($sul){
+				$entry['status']=1;
+			}
+
+		}else{
+			$entry['status']=2;
+		}
+		$this->ajaxreturn($entry);
+	}
+
+
+
 
 	//增加一次增加百个手机号
 	public function addmobile100(){
