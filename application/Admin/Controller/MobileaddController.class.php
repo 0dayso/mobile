@@ -49,17 +49,18 @@ class MobileaddController extends AdminbaseController{
 		}
 		*/
 		$aryid=array();
-		foreach ($data as $key => $value) {		
+		foreach ($data as $key => $value) {	
+			/*	
 			$moibledata['isshow']=array('exp',"isshow+1");
 			$moibledata['ffid']=session('ADMIN_ID');
-			$moibledata['showtime']=time();
-			
+			$moibledata['showtime']=time();			
 			$t=M('mobile')->where("id=%d",$value['id'])->save($moibledata);
 			if(!$t){				
 			  // $isallsave=false;
 			   unset($data[$key]);
 			   //braek;
 			}
+			*/
 			
 			$sulap=M('applemobile')->where("mid=%d",$value['id'])->setField('isshow',1);
 			if(!$sulap){
@@ -194,7 +195,8 @@ class MobileaddController extends AdminbaseController{
 	//修改状态
 	public function update(){
 		$id=I('id');
-		
+
+
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
@@ -208,15 +210,25 @@ class MobileaddController extends AdminbaseController{
 			$this->ajaxreturn($data);
 			exit();
 		}
-
-
-		M()->startTrans();
+		
 		$data['status']=1;		
 		$data['updatetime']=time();
-		$data['userid']=session('ADMIN_ID');
-		$data1=M('mobile')->where('id='.$id)->save($data);
+		//$data['userid']=session('ADMIN_ID');
+		//$data1=M('mobile')->where('id='.$id)->save($data);		
+		$paramalter['isshow']=array("exp","isshow+1");
+		$paramalter['updatetime']=tiem();
+		$paramalter['status']=3;
+		$sulap=M('applemobile')->where("mid=%d",$id)->save($paramalter);
 		
+		if($sulap){
+			$data['status']=1;	
+		}else{
+			$data['status']=0;	
+		}
+		$this->ajaxreturn($data);
+		exit();
 
+		/*
 		if($data1){
 			//用户加1
 			$data['status']=1;	
@@ -230,7 +242,9 @@ class MobileaddController extends AdminbaseController{
 				M('usermobile')->add($ummap);	
 			}
 			//删除已经操作过的数据
-			$sulap=M('applemobile')->where("mid=%d",$id)->delete();
+			$paramalter['isshow']=array("exp","isshow+1");
+			$sulap=M('applemobile')->where("mid=%d",$id)->save($paramalter);
+
 			if($sulap){
 				M()->commit();	
 			}else{
@@ -241,8 +255,10 @@ class MobileaddController extends AdminbaseController{
 		}
 		M()->rollback();
 		$data['status']=0;	
+
 		$this->ajaxreturn($data);
 		exit();
+		*/
 	}
 
 	public function fileinfo($path){
