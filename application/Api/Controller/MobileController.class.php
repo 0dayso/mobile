@@ -63,7 +63,7 @@ class MobileController extends Controller {
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
                 $alter['nmbshow']=array("exp","nmbshow+1");
-                $alter['isshow']=3;
+                $alter['isshow']=array("exp","isshow+1");
                 $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
                 if(!$t){
                     M()->rollback();
