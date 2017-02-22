@@ -74,7 +74,7 @@ class MobilebookController extends Controller {
         try {
             $data=M('mobilebook')->field('mid,mobile,username')->where('type=1 and isshow=0')->limit($row)->lock(true)->select();
             foreach ($data as $k => $vl) {
-               // $data[$k]['username']=$data[$k]['username'].$vl['mid'];
+                $data[$k]['username']=$data[$k]['username'].$vl['mid'];
                 $alter['type']=1;
                 $alter['isshow']=array("exp","isshow+1");
                 $t=M('mobilebook')->where("mid=%d",$vl['mid'])->save($alter);
