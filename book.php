@@ -12,7 +12,7 @@ if(isset($_REQUEST['row'])){
 }else{
 	$row=1;
 }
-echo file_get_contents("http://g.7gu.cn/index.php?g=api&m=Mobilebook&a=phonemobile&row=".$row);
+echo file_get_contents("http://g.7gu.cn/index.php?g=api&m=Mobilebook&a=phonemobiletl&row=".$row);
 exit();
 ?>
 
