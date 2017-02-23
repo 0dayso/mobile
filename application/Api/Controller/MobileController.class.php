@@ -84,24 +84,30 @@ class MobileController extends Controller {
 
     //通讯云增加朋友数据
     public function mobilew() {
-        M()->startTrans();        
-
-        $data=M('applemobile')->field('mid,mobile,username')->where('type=3 and isshow=0')->lock(true)->find();
-        if($data){
-            $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
-            if(strlen($data['username'])>1){
-                //substr( $data['username'], 0,3)
-              // $data['username']="";
-            }
-
-            M()->commit();
-            if(!$t){
-                M()->rollback();
-                echo 0;
-                exit();
-            }
+        $row=I("REQUEST.row");
+        if(!$row){
+            $row=1;
         }
+        M()->startTrans();      
+        try {
+            $data=M('applemobile')->field('mid,mobile,username')->where('type=1 and isshow=0')->limit($row)->lock(true)->select();
+            foreach ($data as $k => $vl) {
+                $data[$k]['username']=$data[$k]['username'].$vl['mid'];              
+                $alter['isshow']=array("exp","isshow+1");
+                $alter['updatetime']=time();
+                $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
+                if(!$t){
+                    M()->rollback();
+                    echo 0;
+                    exit();
+                }
+               // $data[$k]['username']=$vl['mobile'];
+            }
+            M()->commit();
+        } catch (\Exception $e) {
+            M()->rollback();
 
+        }    
         $this->ajaxreturn($data);
     }
 
