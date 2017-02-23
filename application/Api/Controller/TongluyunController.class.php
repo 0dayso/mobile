@@ -25,15 +25,20 @@ class TongluyunController  extends Controller{
 		$data['sex']=$sex;
 
 		$where['mid']=$id;
-		$sul=M("applemobile")->where($where)->save($data);	
-		M('mobile')->where("id=".$id)->save("sex=".$sex);
-		if($sul){
-			$result['status']=1;
-			$result['msg']="修改成功";
+		try{
+			$sul=M("applemobile")->where($where)->save($data);	
+			M('mobile')->where("id=".$id)->save("sex=".$sex);
+			if($sul){
+				$result['status']=1;
+				$result['msg']="修改成功";
+			}
+		}catch (\Exception $e) {
+			$result['status']=0;
+			$result['msg']="不存在有效数据";
 		}
+		
 		$this->ajaxreturn($result);
 	}
-
 
 }
 
