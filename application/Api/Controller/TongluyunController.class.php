@@ -14,6 +14,8 @@ class TongluyunController  extends Controller{
 	function typeyi(){
 		$id=I('get.id');
 		$sex=I('get.sex');//性别
+		$result['status']=0;
+		$result['msg']="修改失败";
 		if(!$id){
 			$result['status']=0;
 			$result['msg']="不存在有效数据";
