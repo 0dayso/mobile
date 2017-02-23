@@ -102,7 +102,7 @@ class MobileController extends Controller {
             }
         }
 
-        $this->ajaxreturn($data,"xml");
+        $this->ajaxreturn($data);
     }
 
 
