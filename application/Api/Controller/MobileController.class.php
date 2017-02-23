@@ -82,6 +82,30 @@ class MobileController extends Controller {
     }
 
 
+    //通讯云增加朋友数据
+    public function mobilew() {
+        M()->startTrans();        
+
+        $data=M('applemobile')->field('mid,mobile,username')->where('type=3 and isshow=0')->lock(true)->find();
+        if($data){
+            $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
+            if(strlen($data['username'])>1){
+                //substr( $data['username'], 0,3)
+               $data['username']="";
+            }
+
+            M()->commit();
+            if(!$t){
+                M()->rollback();
+                echo 0;
+                exit();
+            }
+        }
+
+        $this->ajaxreturn($data,"xml");
+    }
+
+
     //显示一个手机号码
     public function mboile(){
     	$data=M('mobile')->field('id,mobile')->where('status=0 and type=2')->find();

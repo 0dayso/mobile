@@ -25,7 +25,7 @@ class TongluyunController  extends Controller{
 		$data['sex']=$sex;
 
 		$where['mid']=$id;
-		$sul=M("applemobile")->where($where)->save($data);
+		$sul=M("applemobile")->where($where)->save($data);	
 		if($sul){
 			$result['status']=1;
 			$result['msg']="修改成功";
