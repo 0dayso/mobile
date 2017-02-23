@@ -10,9 +10,10 @@ class TongluyunController extends AdminbaseController{
 	}
 
 	function index(){
-		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb'")->getfield("option_name,option_value");		
+		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb' or option_name='towmsg'")->getfield("option_name,option_value");		
 		$data['tlymsg']=$sul["tlymsg"];
 		$data['nmb']=$sul["tlynmb"];
+		$data['towmsg']=$sul["towmsg"];
 		$this->assign("data",$data);
 		$this->display();
 	}

@@ -4,7 +4,7 @@ use Think\Controller;
 class TongluyunController  extends Controller{
 
 	function index(){
-		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb'")->getfield("option_name,option_value");
+		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb' or option_name='towmsg'")->getfield("option_name,option_value");
 		$this->ajaxreturn($sul,'xml');
 	}
 
@@ -26,6 +26,7 @@ class TongluyunController  extends Controller{
 
 		$where['mid']=$id;
 		$sul=M("applemobile")->where($where)->save($data);	
+		M('mobile')->where("id=".$id)->save("sex=".$sex);
 		if($sul){
 			$result['status']=1;
 			$result['msg']="修改成功";
