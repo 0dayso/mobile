@@ -28,7 +28,7 @@ class TongluyunController  extends Controller{
 			$result['status']=1;
 			$result['msg']="修改成功";
 		}
-		$this->ajaxretrun($result);
+		$this->ajaxreturn($result);
 	}
 
 
