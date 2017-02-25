@@ -35,10 +35,10 @@
 							<td>	
 								<select id="s_province" style="width: 100px" required name="s_province"></select>  
 							    <select id="s_city" style="width: 100px" required name="s_city" ></select>  
-							    <select id="s_county" style="width: 100px" required name="s_county"></select>
+							    <select id="s_county" style="width: 160px" required name="s_county"></select>
 
 								<span class="form-required">*</span>
-								<div id="show"></div>
+								<div id="show" style="display: none"></div>
 							</td>
 
 						</tr>
@@ -107,9 +107,9 @@
 	<script type="text/javascript">
 		//var Gid  = document.getElementById ;
 		var showArea = function(){
-			document.getElementById('show').innerHTML = "<h3>省" + document.getElementById('s_province').value + " - 市" + 	
-			document.getElementById('s_city').value + " - 县/区" + 
-			document.getElementById('s_county').value + "</h3>"
+			document.getElementById('show').innerHTML = document.getElementById('s_province').value +"-"+	
+			document.getElementById('s_city').value +"-"+
+			document.getElementById('s_county').value 
 		}		
 		document.getElementById('s_county').setAttribute('onchange','showArea()');
 		

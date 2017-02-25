@@ -35,11 +35,9 @@
 								<select id="s_province" style="width: 100px" required name="s_province"></select>  
 							    <select id="s_city" style="width: 100px" required name="s_city" ></select>  
 							    <select id="s_county" style="width: 160px" required name="s_county"></select>					
-								<select  name="areaid" id="areaid" style="width: 100px" required placeholder="请输入地理区域">
-								<foreach name="area" item="vo"> 
-									<option value="{$key}">{$vo}</option>								
-								</foreach>
-							</select>
+								<select  name="areaid" id="areaid" style="width: 100px" required placeholder="请输入地理区域">								
+									<option value="0">请选择</option>	
+								</select>
 								<span class="form-required">*</span>
 							</td>
 						</tr>
@@ -104,11 +102,23 @@
 	<script type="text/javascript" src="__PUBLIC__/js/area.js"></script>
 	<script type="text/javascript">_init_area();</script>
 	<script type="text/javascript">
-		//var Gid  = document.getElementById ;
 		var showArea = function(){
-			document.getElementById('show').innerHTML = "<h3>省" + document.getElementById('s_province').value + " - 市" + 	
-			document.getElementById('s_city').value + " - 县/区" + 
-			document.getElementById('s_county').value + "</h3>"
+			var url="http://script.com/index.php?g=&m=Friends&a=friendarea&name="+document.getElementById('s_county').value;
+			$.get(url,function(data){
+				if(data['status']=='1'||data['status']==1){
+					var t="";
+					var st=eval(data['data']);	
+					for (var x in st){
+						if(x!="status"){
+							t+="<option value='"+st[x]['id']+"'>"+st[x]['area']+"</option>";
+						}						
+					}	
+					
+				}else{
+					t="<option value='0'>不存在</option>";
+				}
+				document.getElementById('areaid').innerHTML=t;
+			})
 		}		
 		document.getElementById('s_county').setAttribute('onchange','showArea()');
 		
@@ -139,7 +149,7 @@
 			/////---------------------
 			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
 				//javascript
-
+				/*
 				//编辑器
 				editorcontent = new baidu.editor.ui.Editor();
 				editorcontent.render('content');
@@ -155,6 +165,7 @@
 					}
 					return editorcontent.hasContents();
 				});
+				*/
 				var form = $('form.js-ajax-forms');
 				//ie处理placeholder提交问题
 				if ($.browser.msie) {
@@ -197,6 +208,7 @@
 						} catch (err) {
 						}
 					},
+					/*
 					//验证规则
 					rules : {
 						'post[post_title]' : {
@@ -215,6 +227,7 @@
 							editorcontent : '内容不能为空'
 						}
 					},
+					*/
 					//给未通过验证的元素加效果,闪烁等
 					highlight : false,
 					//是否在获取焦点时验证

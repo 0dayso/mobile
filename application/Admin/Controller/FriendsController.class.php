@@ -136,6 +136,17 @@ class FriendsController extends AdminbaseController {
 			$data['type']=1;
 			$data['area']=I("post.area");
 			$data['updatetime']=time();//修改时间
+			$adres["province"]=I("post.s_province");
+			$adres["city"]=I("post.s_city");
+			$adres["county"]=I("post.s_county");
+			if(!$adres["county"]){
+				$this->error("数据有误");
+			}
+
+			$data['adrres']=json_encode($adres);
+			$map["name"]=$adres["county"];
+			$data['parent']=M("area")->where($map)->getfield("code");		
+
 			$sul=M('friendsarea')->add($data);//增加分类信息
 			if($sul){
 				$this->success("增加成功");
@@ -152,8 +163,19 @@ class FriendsController extends AdminbaseController {
 		If(IS_POST){
 			$data['name']=I("post.name");
 			$data["type"]=1;
-			$data["status"]=1;
+			$data["status"]=I("post.status");
 			$data['remark']=I("post.remark");
+			$imgary=I("post.photos_alt");
+			$imgs=array();
+			if(I("post.photos_url")){
+				foreach (I("post.photos_url") as $key => $vo) {
+					$imgs[$key]['url']=$vo;
+					$imgs[$key]['alt']=$imgary[$key];
+				}
+			}
+
+			$data['images']=json_encode($imgs);
+
 			$sul=M("friendstype")->add($data);
 			if($sul){
 				$this->success("增加成功");
@@ -164,6 +186,26 @@ class FriendsController extends AdminbaseController {
 		$list=M("friendstype")->field("id,name,status")->select();
 		$this->assign("list",$list);
 		$this->display();
+	}
+
+	public function friendarea(){	
+		$map['name']=I("get.name");		
+		try {
+			$list=M("friendsarea")->field("mbl_friendsarea.id,area")->join("__AREA__  on __FRIENDSAREA__.parent=__AREA__.code","left")->where($map)->select();	
+			if($list){
+				$list['status']=1;
+				$list['data']=$list;
+				$this->ajaxReturn($list);
+			}else{
+				$list['status']=0;
+				$this->ajaxReturn($list);
+			}
+		} catch (Exception $e) {
+			$list['status']=0;
+			$this->ajaxreturn($list);
+		}
+		
+		
 	}
 }
 
