@@ -1,0 +1,274 @@
+<admintpl file="header" />
+
+<style type="text/css">
+.pic-list li {
+	margin-bottom: 5px;
+}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('Friends/index')}">朋友圈管理</a></li>			
+			<li><a href="{:U('Friends/add')}">朋友圈添加</a></li>	
+			<li><a href="{:U('Friends/addfriends')}">添加朋友圈(手动添加)</a></li>
+			<li><a href="{:U('Friends/cat')}">信息分类</a></li>
+			<li class="active"><a href="{:U('Friends/timingmsg')}">添加定时朋友圈</a></li>	
+			<li><a href="{:U('Friends/friendtype')}">朋友圈类型</a></li>		
+		</ul>
+		<form action="" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<div class="row-fluid">
+				<div class="span12">
+					<table class="table table-bordered">
+					<!--
+						<tr>
+							<th width="80">栏目</th>
+							<td>
+								<select multiple="multiple" style="max-height: 100px;" name="term[]">{$taxonomys}</select>
+								<div>windows：按住 Ctrl 按钮来选择多个选项,Mac：按住 command 按钮来选择多个选项</div>
+							</td>
+						</tr>
+						-->
+						<tr>
+							<th>选择地区</th>
+							<td>
+								<select id="s_province" style="width: 100px" required name="s_province"></select>  
+							    <select id="s_city" style="width: 100px" required name="s_city" ></select>  
+							    <select id="s_county" style="width: 160px" required name="s_county"></select>					
+								<select  name="areaid" id="areaid" style="width: 100px" required placeholder="请输入地理区域">
+								<foreach name="area" item="vo"> 
+									<option value="{$key}">{$vo}</option>								
+								</foreach>
+							</select>
+								<span class="form-required">*</span>
+							</td>
+						</tr>
+						<tr>
+							<th>发送时间</th>
+							<td><input type="text" name="sendtime" value="{:date('Y-m-d H:i:s',time())}" class="js-datetime" style="width: 160px;"></td>
+						</tr>
+						<tr>
+							<th>周期</th>
+							<td><select  name="cycle" id="cycle" style="width: 160px" placeholder="请选择天数">
+								<for start="1" end="date('t')">
+								<option value="{$i}">{$i}天</option>								
+								</for>
+							</select></td>
+						</tr>
+						<tr>
+							<th>类型</th>
+							<td><select  name="type" id="type" style="width: 160px" placeholder="请选择类型">	
+							 <foreach name="ftype" item="fo">							
+								<option value="{$key}">{$fo}</option>
+							</foreach>
+							</select></td>
+						</tr>
+						<tr>
+							<th>文字信息</th>
+							<td>
+								<textarea name="friendtext" id="friendtext" required style="width: 98%; height: 50px;" placeholder="请填写发送朋友圈内容"></textarea>
+							</td>
+						</tr>
+						<!--
+						<tr>
+							<th></th>
+							<td>
+								<script type="text/plain" id="content" name="post[post_content]"></script>
+							</td>
+						</tr>-->
+						<tr>
+							<th>图片</th>
+							<td>
+								<fieldset>
+									<legend>图片列表</legend>
+									<ul id="photos" class="pic-list unstyled"></ul>
+								</fieldset>
+								<a href="javascript:;" onclick="javascript:flashupload('albums_images', '图片上传','photos',change_images,'10,gif|jpg|jpeg|png|bmp,0','','','')" class="btn btn-small">选择图片</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary js-ajax-submit" type="submit">提交</button>
+				<a class="btn" href="{:U('AdminPost/index')}">返回</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="__PUBLIC__/js/common.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/content_addtop.js"></script>
+	<script type="text/javascript">
+		//编辑器路径定义
+		var editorURL = GV.DIMAUB;
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/js/area.js"></script>
+	<script type="text/javascript">_init_area();</script>
+	<script type="text/javascript">
+		//var Gid  = document.getElementById ;
+		var showArea = function(){
+			document.getElementById('show').innerHTML = "<h3>省" + document.getElementById('s_province').value + " - 市" + 	
+			document.getElementById('s_city').value + " - 县/区" + 
+			document.getElementById('s_county').value + "</h3>"
+		}		
+		document.getElementById('s_county').setAttribute('onchange','showArea()');
+		
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$(".js-ajax-close-btn").on('click', function(e) {
+				e.preventDefault();
+				Wind.use("artDialog", function() {
+					art.dialog({
+						id : "question",
+						icon : "question",
+						fixed : true,
+						lock : true,
+						background : "#CCCCCC",
+						opacity : 0,
+						content : "您确定需要关闭当前页面嘛？",
+						ok : function() {
+							setCookie("refersh_time", 1);
+							window.close();
+							return true;
+						}
+					});
+				});
+			});
+			/////---------------------
+			Wind.use('validate', 'ajaxForm', 'artDialog', function() {
+				//javascript
+
+				//编辑器
+				editorcontent = new baidu.editor.ui.Editor();
+				editorcontent.render('content');
+				try {
+					editorcontent.sync();
+				} catch (err) {
+				}
+				//增加编辑器验证规则
+				jQuery.validator.addMethod('editorcontent', function() {
+					try {
+						editorcontent.sync();
+					} catch (err) {
+					}
+					return editorcontent.hasContents();
+				});
+				var form = $('form.js-ajax-forms');
+				//ie处理placeholder提交问题
+				if ($.browser.msie) {
+					form.find('[placeholder]').each(function() {
+						var input = $(this);
+						if (input.val() == input.attr('placeholder')) {
+							input.val('');
+						}
+					});
+				}
+
+				var formloading = false;
+				//表单验证开始
+				form.validate({
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//是否在敲击键盘时验证
+					onkeyup : false,
+					//当鼠标掉级时验证
+					onclick : false,
+					//验证错误
+					showErrors : function(errorMap, errorArr) {
+						//errorMap {'name':'错误信息'}
+						//errorArr [{'message':'错误信息',element:({})}]
+						try {
+							$(errorArr[0].element).focus();
+							art.dialog({
+								id : 'error',
+								icon : 'error',
+								lock : true,
+								fixed : true,
+								background : "#CCCCCC",
+								opacity : 0,
+								content : errorArr[0].message,
+								cancelVal : '确定',
+								cancel : function() {
+									$(errorArr[0].element).focus();
+								}
+							});
+						} catch (err) {
+						}
+					},
+					//验证规则
+					rules : {
+						'post[post_title]' : {
+							required : 1
+						},
+						'post[post_content]' : {
+							editorcontent : true
+						}
+					},
+					//验证未通过提示消息
+					messages : {
+						'post[post_title]' : {
+							required : '请输入标题'
+						},
+						'post[post_content]' : {
+							editorcontent : '内容不能为空'
+						}
+					},
+					//给未通过验证的元素加效果,闪烁等
+					highlight : false,
+					//是否在获取焦点时验证
+					onfocusout : false,
+					//验证通过，提交表单
+					submitHandler : function(forms) {
+						if (formloading)
+							return;
+						$(forms).ajaxSubmit({
+							url : form.attr('action'), //按钮上是否自定义提交地址(多按钮情况)
+							dataType : 'json',
+							beforeSubmit : function(arr, $form, options) {
+								formloading = true;
+							},
+							success : function(data, statusText, xhr, $form) {
+								formloading = false;
+								if (data.status) {
+									setCookie("refersh_time", 1);
+									//添加成功
+									Wind.use("artDialog", function() {
+										art.dialog({
+											id : "succeed",
+											icon : "succeed",
+											fixed : true,
+											lock : true,
+											background : "#CCCCCC",
+											opacity : 0,
+											content : data.info,
+											button : [ {
+												name : '继续添加？',
+												callback : function() {
+													reloadPage(window);
+													return true;
+												},
+												focus : true
+											}, {
+												name : '返回列表页',
+												callback : function() {
+													location = "{:U('Friends/index')}";
+													return true;
+												}
+											} ]
+										});
+									});
+								} else {
+									isalert(data.info);
+								}
+							}
+						});
+					}
+				});
+			});
+			////-------------------------
+		});
+	</script>
+</body>
+</html>

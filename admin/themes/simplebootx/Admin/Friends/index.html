@@ -5,7 +5,10 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{:U('Friends/index')}">朋友圈管理</a></li>			
 			<li><a href="{:U('Friends/add')}">朋友圈添加</a></li>	
-			<li><a href="{:U('Friends/addfriends')}">添加朋友圈(手动添加)</a></li>		
+			<li><a href="{:U('Friends/addfriends')}">添加朋友圈(手动添加)</a></li>
+			<li><a href="{:U('Friends/cat')}">信息分类</a></li>
+			<li><a href="{:U('Friends/timingmsg')}">添加定时朋友圈</a></li>		
+			<li><a href="{:U('Friends/friendtype')}">朋友圈类型</a></li>	
 		</ul>
 		<form class="js-ajax-form" action="{:U('Friends/index')}" method="post">
 
@@ -24,7 +27,7 @@
 				<foreach name="data" item="vo" key="k">
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
-						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.friendtext}</td>
+						<td style="font-size:1.2em;height:1.8em;line-height:1.8em; overflow: hidden; text-overflow: ellipsis;" class="text" onkeydown="t()">{$vo.friendtext}</td>
 						<td>{$vo.username}</td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->

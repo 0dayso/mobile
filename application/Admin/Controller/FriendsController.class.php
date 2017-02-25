@@ -17,13 +17,13 @@ class FriendsController extends AdminbaseController {
      * 后台框架首页
      */
     public function index() {
-		$count=M('Friends')->where('status=0')->count();
+		$count=M('Friends')->count();
 		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$data=M('Friends')->where('status=0')->limit($Page->firstRow.','.$Page->listRows)->getfield('id,friendtext,authorid',true);
+		$data=M('Friends')->order("id DESc")->limit($Page->firstRow.','.$Page->listRows)->getfield('id,friendtext,authorid',true);
 		foreach($data as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['username'] = $userinfo['user_login'];
@@ -91,6 +91,79 @@ class FriendsController extends AdminbaseController {
 		}else{
 			$this->success('已删除');
 		}
+	}
+	//增加定时信息
+	public function timingmsg(){
+		if(IS_POST){
+			$data['type']=3;
+			$data['userid']=ADMIN_ID;
+			$data['friendtext']=I("post.friendtext");
+			if(!$data['friendtext']){
+				$this->error('请填写信息再提交');
+			}
+			$data['status']=1;
+			$data['areaid']=I("post.areaid");
+			$data['createtime']=time();
+			$ary=I("post.photos_url");
+			$aryalt=I("post.photos_alt");			
+			$smete=array();
+			foreach ($ary as $key => $vo) {
+				$smete[$key]['url']=$vo;
+				$smete[$key]['alt']=$aryalt[$key];
+			}			
+		    $data['smete']=json_encode($smete);
+
+			$sul=M('friends')->add($data);
+			
+			if($sul){
+				$this->success("增加成功");
+			}else{
+				$this->error("数据有误");
+			}
+		}
+		$area=M('friendsarea')->getfield("id,area",true);
+		$this->assign("area",$area);
+
+		$ftype=M("friendstype")->getfield("id,name",true);
+		$this->assign('ftype',$ftype);
+
+		$this->display();
+	}
+	//信息分类
+	public function cat(){
+		if(IS_POST){
+			$data['remark']=I("post.remark");
+			$data['type']=1;
+			$data['area']=I("post.area");
+			$data['updatetime']=time();//修改时间
+			$sul=M('friendsarea')->add($data);//增加分类信息
+			if($sul){
+				$this->success("增加成功");
+			}else{
+				$this->error("数据已经存在");
+			}
+
+		}
+		$list=M("friendsarea")->field("id,area,remark")->select();
+		$this->assign("list",$list);
+		$this->display();
+	}
+	public function friendtype(){
+		If(IS_POST){
+			$data['name']=I("post.name");
+			$data["type"]=1;
+			$data["status"]=1;
+			$data['remark']=I("post.remark");
+			$sul=M("friendstype")->add($data);
+			if($sul){
+				$this->success("增加成功");
+			}else{
+				$this->error("数据已经存在");
+			}
+		}
+		$list=M("friendstype")->field("id,name,status")->select();
+		$this->assign("list",$list);
+		$this->display();
 	}
 }
 
