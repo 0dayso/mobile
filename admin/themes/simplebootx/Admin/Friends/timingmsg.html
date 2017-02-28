@@ -103,7 +103,7 @@
 	<script type="text/javascript">_init_area();</script>
 	<script type="text/javascript">
 		var showArea = function(){
-			var url="http://script.com/index.php?g=&m=Friends&a=friendarea&name="+document.getElementById('s_county').value;
+			var url="{:U('Friends/friendarea')}"+"&name="+document.getElementById('s_county').value;
 			$.get(url,function(data){
 				if(data['status']=='1'||data['status']==1){
 					var t="";
