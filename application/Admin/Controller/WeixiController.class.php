@@ -62,5 +62,28 @@ class WeixiController extends AdminbaseController {
 		}
 	}
 
+	public function saveweixi(){
+		$mobile=I("get.mobile");
+		$map["mobile"]=$mobile;
+		$cdkey=I("get.cdkey");
+
+		$sul=M("weixi")->where($map)->find();		
+		if($sul){
+
+		}else{
+			$data['mobile']=$mobile;
+			$data['cdkey']=$cdkey;
+			$data['createtime']=time();
+			$retrun=M("weixi")->add($data);
+		}		
+	}
+
+	public function friendlist(){
+
+		$map['cdkey']=I("post.cdkey");
+		$sul=M("friends")->where($map)->select();
+
+	}
+
 }
 

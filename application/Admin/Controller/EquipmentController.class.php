@@ -60,13 +60,32 @@ class EquipmentController extends AdminbaseController {
 		$aryi=D('runcode')->getField('id,taskname',true);
 		
 		$equiact = D('equiact')->select();
+		$citylist=M("city")->getfield("code,name");
 		
+		$province=M("province")->getfield('code,name');
+
+		$this->assign("province",$province);
+
 		$this->assign('parameters',$parameters);
+		$this->assign("citylist",$citylist);
 		$this->assign('equiact',$equiact);
 		$this->assign('aryi',$aryi);
         $this->assign('list',$list);
 		$this->assign('page',$show);
         $this->display();
+    }
+    public function city(){
+    	$map['provincecode']=I("get.code");
+    	$sul=M("city")->where($map)->getfield("code,name");
+    	if($sul){
+    		$data['data']=$sul;
+    		$data['status']=1;
+    		$this->ajaxReturn($data);
+    	}
+    	else{
+    		$data['status']=0;
+    		$this->ajaxReturn($data);
+    	}
     }
 	
 	 public function mobilecate(){
@@ -283,13 +302,34 @@ class EquipmentController extends AdminbaseController {
 		$aryi=D('runcode')->getField('id,taskname',true);
 		
 		$equiact = D('equiact')->select();
-		
+
 		$this->assign('parameters',$parameters);
 		$this->assign('equiact',$equiact);
 		$this->assign('aryi',$aryi);
         $this->assign('list',$list);
 		$this->assign('page',$show);
         $this->display();
+    }
+
+    public function cityinfo(){
+    	if(IS_POST){
+    		$province=I("post.province");
+    		$city=I("post.city");
+    		$id=I("post.id");
+    		$data['province']=$province;
+    		$data['city']=$city;
+    		$where["id"]=$id;
+    		$sul=M("equictive")->where($where)->save($data);
+
+    		if($sul){
+    			$result['status']=1;
+    			$this->success("保存成功");
+    		}else{
+    			$result['status']=0;    			
+    			$this->success("保存失败");
+    		}
+    	}
+    	$this->display();
     }
 
 

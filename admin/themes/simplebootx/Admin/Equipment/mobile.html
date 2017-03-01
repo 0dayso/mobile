@@ -3,6 +3,7 @@
 
  <style type="text/css">
         body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";font-family:"微软雅黑";}
+        #closemap{border:1px solid #000;background: #fff; z-index: 10000;width: 42px; height: 42px;position:absolute; line-height: 42px; font-size: 32px; top:0px;font-weight: 50px; text-indent: 10px;}
         #mapinfo{display:none;position:fixed; width:80%;height:80%; border:1px solid #000; top:10%; z-index: 9999; left:10%; right: 10%;}
         #allmap{width:100%;height:100%; position: fixed; }
         p{margin-left:5px; font-size:14px;}
@@ -34,7 +35,7 @@
 					background:#FE0100;}
 .list_ul li .error_pit{
 					position:absolute;
-					z-index:3;
+					z-index:1;
 					right:0;
 					top:0;
 					width:18px;
@@ -134,7 +135,10 @@
 						设备分类：{$val.cate_name} <span style="float:right;">>><a href="{:U('Admin/Equipment/mobilecate',array('id'=>$val['id']))}">改</a></span>
 					</p>
 					<p>
-						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/info',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
+						当前指令：<a href="{:U('Task/taskinfo',array('id'=>$val['runcodeid']))}">{$aryi[$val['runcodeid']]}</a><span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/getinfo',array('id'=>$val['id']))}" onclick="open_dialog(this,{$val['id']})">改</a></span>
+					</p>
+					<p>
+						当前城市：{$citylist[$val['city']]}<span style="float:right;">>><a href="javascript:;" data_url="{:U('Admin/Equipment/cityinfo',array('id'=>$val['id']))}" onclick="open_dialog1(this,{$val['id']})">改</a></span>
 					</p>
 					<p style="clear:both;display:block;">
 						x坐标:<input type="text" id="x{$val.id}" onclick="setzb(this,{$val.id})" class="alias" name="x" value="{$val.x}" onchange="changealias(this,{$val.id})"/><span></span>
@@ -158,8 +162,8 @@
 			{$page}
 		</div>
 		
-		<div class="dialog" style="width:100%;height:100%;position:fixed;z-index:100px;top:30%;display:none;">
-			<div class="dialog_con" style="width:600px;height:300px;margin:0 auto;background:#fff;border:1px #ddd solid;">
+		<div class="dialog" style="width:100%;height:100%;position:fixed;z-index:100px;top:30%;display:none;z-index: 99;">
+			<div class="dialog_con" style="width:600px;height:300px;margin:0 auto;background:#fff;border:1px #ddd solid; ">
 				<!--<iframe src="" style="width:100%;height:100%"></iframe>-->
 				<div class="wrap">
 					<ul class="nav nav-tabs">
@@ -185,29 +189,91 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="dialog1" style="width:100%;height:100%;position:fixed;z-index:100px;top:30%;display:none;z-index: 99;">
+			<div class="dialog_con" style="width:600px;height:300px;margin:0 auto;background:#fff;border:1px #ddd solid; ">
+				<!--<iframe src="" style="width:100%;height:100%"></iframe>-->
+				<div class="wrap">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="{:U('Equipment/mobile')}">城市</a></li>
+					</ul>
+					<form method="post" class="form-horizontal js-ajax-form" action="{:U('Equipment/cityinfo')}">
+						<fieldset>
+							<div class="control-group">
+								<label class="control-label">城市</label>
+								<div class="controls">									
+									<select name="province" id="citypr" style="width:80px;">
+										<foreach name="province" item="pvo">
+											<option value="{$key}">{$pvo}</option>
+										</foreach>
+									</select>
+									<select name="city" id="citylist" style="width:160px;">
+									</select>
+									<input type="hidden" id="city_id" name="id" value="{:I('id')}" />
+								</div>
+							</div>
+						</fieldset>
+						<div class="form-actions">
+							<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+							<a class="btn" href="javascript:;" onclick="close_dialog();">取消</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div id="mapinfo">
+	 
 	 <div id="allmap" ></div>
+	 <div id="closemap">X</div>
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>
 		$(function(){
 			setTimeout(function(){window.location.reload();},600*1000);
-		})
-		
+			$("#closemap").click(function(){
+				$("#mapinfo").hide();
+			})
+
+			$("#citypr").change(function(){	
+				var code=$(this).val();
+				var url="{:U('Equipment/city')}"+"&code="+code;
+				$.get(url,function(data){
+					
+					if(data['status']==1){
+						var tlist="";
+						for (var t in data['data']){
+							tlist+="<option value="+t+">"+data['data'][t]+"</option>";
+						}					
+						$("#citylist").html(tlist);
+						//$("#citylist").text("<option value='0'>不存在</option>");
+					}					
+				})
+			})
+		})		
+
 		function close_dialog(){
 			$('.dialog').hide();
+			$('.dialog1').hide();
 		}
 		function open_dialog(obj,id){
 			var data_url = $(obj).attr('data_url');
 			$('#info_id').val(id);
 			$('.dialog').show();
 			//$('.dialog iframe').attr('src',data_url);
-			getruncode(id);
+			getruncode(id,data_url);
+		}
+
+		function open_dialog1(obj,id){
+			var data_url = $(obj).attr('data_url');			
+			$("#city_id").val(id);
+			$('.dialog1').show();
+			//$('.dialog iframe').attr('src',data_url);
+			//getruncode(id,data_url);
 		}
 		
-		function getruncode(id){
-			var data_url = "{:U('Equipment/getinfo')}";
+		function getruncode(id ,data_url){
+			//var data_url = "{:U('Equipment/getinfo')}";
 			
 			$.post(data_url,{id:id},function(data){
 				var data = eval('('+data+')');
