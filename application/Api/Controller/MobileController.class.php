@@ -26,7 +26,6 @@ class MobileController extends Controller {
                 exit();
             }
         }
-
         $this->ajaxreturn($data,"xml");
     }
 
@@ -34,7 +33,6 @@ class MobileController extends Controller {
     public function txymobile(){
         M()->startTrans();        
         $data=M('applemobile')->field('mid,mobile,username')->where('type=1 and isshow=0 and sex=1')->lock(true)->find();
-
         $t=M('applemobile')->where("mid=%d",$data['mid'])->setField('isshow',2);
         if(strlen($data['username'])>1){
            $data['username']= substr( $data['username'], 0,3);
@@ -58,7 +56,7 @@ class MobileController extends Controller {
         }
          M()->startTrans();      
 		 try {
-             $data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->limit($row)->lock(true)->select();
+             $data=M('applemobile')->field('mid,mobile,username')->where('type=3 and isshow=0')->limit($row)->lock(true)->select();
             
             foreach ($data as $k => $vl) {
                 $alter['type']=1;
