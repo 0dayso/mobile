@@ -9,19 +9,40 @@ class FriendsController  extends Controller{
 	}
 
 	function friendnew(){
-		$mobile=I("get.mobile");
+		$mobile=I("get.mobile");		
+		$cdkey=I("get.id");
+
 		$map["mobile"]=$mobile;
-		$cdkey=I("get.cdkey");
+		$sul=M("weixi")->where($map)->find();	
 
-		$sul=M("weixi")->where($map)->find();		
-		if($sul){
+		if(!$sul){
 
-		}else{
 			$data['mobile']=$mobile;
 			$data['cdkey']=$cdkey;
 			$data['createtime']=time();
+			$data['type']=3;
 			$retrun=M("weixi")->add($data);
-		}		
+		}	
+
+		$sul=M("friends")->where($map)->find();
+
+		if($sul){
+			$imgart=json_decode($sul['smete'],true);
+			foreach ($imgart as $key => $vo) {
+				$sul['imga'.$key]=$vo['url'];
+				$sul['ximga'.$key]=substr($vo['url'],strripos($vo['url'],".",1)+1);
+			}
+			$sul['imagnum']=count($imgart);
+			$data['data']=$sul;
+			$data['status']=1;
+
+			$this->ajaxreturn($data,'xml');
+		}else{
+			$data['status']=0;
+			$data['msg']="没有朋友圈信息";
+			$this->ajaxreturn($data,'xml');
+		}
+		
 
 	}
 

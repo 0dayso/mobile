@@ -104,6 +104,10 @@ class FriendsController extends AdminbaseController {
 			$data['status']=1;
 			$data['areaid']=I("post.areaid");
 			$data['createtime']=time();
+			$data['mobile']=I("post.mobile");
+			$data['areatype']=I("post.areatype");
+			$data['cdkey']=I("post.cdkey");
+			
 			$ary=I("post.photos_url");
 			$aryalt=I("post.photos_alt");			
 			$smete=array();
@@ -207,9 +211,23 @@ class FriendsController extends AdminbaseController {
 		} catch (Exception $e) {
 			$list['status']=0;
 			$this->ajaxreturn($list);
+		}	
+		
+	}
+
+	public function showwxhao(){
+		$map['cdkey']=I("get.name");
+		$map['type']=3;
+		$sul=M("weixi")->where($map)->getfield("mobile,weixi");
+		if($sul){
+			$data['status']=1;
+			$data['data']=$sul;
+		}else{
+			$data['status']=0;
+			$data['msg']="没有微信号";
 		}
-		
-		
+
+		$this->ajaxreturn($data);
 	}
 }
 

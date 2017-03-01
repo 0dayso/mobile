@@ -20,24 +20,18 @@
 			<div class="row-fluid">
 				<div class="span12">
 					<table class="table table-bordered">
-					<!--
-						<tr>
-							<th width="80">栏目</th>
-							<td>
-								<select multiple="multiple" style="max-height: 100px;" name="term[]">{$taxonomys}</select>
-								<div>windows：按住 Ctrl 按钮来选择多个选项,Mac：按住 command 按钮来选择多个选项</div>
-							</td>
-						</tr>
-						-->
 						<tr>
 							<th>选择手机</th>
 							<td><!--
 								<select id="s_province" style="width: 100px" required name="s_province"></select>  
 							    <select id="s_city" style="width: 100px" required name="s_city" ></select>  
-							    <select id="s_county" style="width: 160px" required name="s_county"></select>		
+							    <select id="s_county" style="width: 160px" required name="s_county"></select>
+							    s_wxmobile		
 							    -->			
-								<select  name="areaid" id="areaid" style="width: 100px" required placeholder="请输入地理区域">								
-									<option value="0">请选择</option>	
+								<select  name="cdkey" id="equiid" style="width: 100px" required placeholder="请输入地理区域">		
+									<foreach name="equictive" item="qtv">						
+									<option value="{$key}">{$qtv}</option>	
+									</foreach>
 								</select>
 								<span class="form-required">*</span>
 							</td>
@@ -45,9 +39,9 @@
 						<tr>
 							<th>指定微信</th>
 							<td>
-								<label><input type="radio" name="weixi" value="1" checked="">指定微信 <select id="s_wxmobile" style="width: 100px"  name="s_wxmobile"></select>  </label>	
-								<label><input type="radio" name="weixi" value="2" checked="">该手机信息</label>		
-								<label><input type="radio" name="weixi" value="3" checked="">通用信息</label>							
+								<label><input type="radio" name="areatype" value="1" checked="">指定微信 <select id="s_wxmobile" style="width: 200px"  name="mobile"></select>  </label>	
+								<label><input type="radio" name="areatype" value="2" checked="">该手机信息</label>		
+								<label><input type="radio" name="areatype" value="3" checked="">通用信息</label>							
 							</td>
 						</tr>
 						<tr>
@@ -108,9 +102,39 @@
 		//编辑器路径定义
 		var editorURL = GV.DIMAUB;
 	</script>
+	<!--
 	<script type="text/javascript" src="__PUBLIC__/js/area.js"></script>
 	<script type="text/javascript">_init_area();</script>
+	-->
 	<script type="text/javascript">
+
+		var showwxhao = function(){
+			var url="{:U('Friends/showwxhao')}"+"&name="+document.getElementById('equiid').value;
+			$.get(url,function(data){
+				if(data['status']=='1'||data['status']==1){
+					var t="";
+					var st=eval(data['data']);	
+					for (var x in st){
+						if(x!="status"){
+							alert(st[x]);
+							if(st[x]==''){
+								t+="<option value='"+x+"'>"+x+"</option>";
+							}else{
+								t+="<option value='"+x+"'>"+st[x]+"</option>";
+							}
+							
+						}						
+					}	
+					
+				}else{
+					t="<option value='0'>不存在</option>";
+				}
+				document.getElementById('s_wxmobile').innerHTML=t;
+			})
+		}	
+		document.getElementById('equiid').setAttribute('onchange','showwxhao()');
+
+		/*
 		var showArea = function(){
 			var url="{:U('Friends/friendarea')}"+"&name="+document.getElementById('s_county').value;
 			$.get(url,function(data){
@@ -150,7 +174,7 @@
 			});
 
 		}
-
+		*/
 		
 		document.getElementById('areaid').setAttribute('onchange','showWeixi()');
 		
