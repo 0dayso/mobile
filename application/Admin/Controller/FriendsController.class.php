@@ -121,6 +121,10 @@ class FriendsController extends AdminbaseController {
 				$this->error("数据有误");
 			}
 		}
+
+		$equictive=M('equictive')->getfield("cdkey,alias",true);
+		$this->assign("equictive",$equictive);
+
 		$area=M('friendsarea')->getfield("id,area",true);
 		$this->assign("area",$area);
 
