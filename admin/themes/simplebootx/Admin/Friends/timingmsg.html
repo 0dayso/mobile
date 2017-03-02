@@ -39,23 +39,62 @@
 						<tr>
 							<th>指定微信</th>
 							<td>
-								<label><input type="radio" name="areatype" value="1" checked="">指定微信 <select id="s_wxmobile" style="width: 200px"  name="mobile"></select>  </label>	
-								<label><input type="radio" name="areatype" value="2" checked="">该手机信息</label>		
-								<label><input type="radio" name="areatype" value="3" checked="">通用信息</label>							
+								<label><input type="radio" name="areatype" value="2" checked="">该手机信息</label>	
+								<label><input type="radio" name="areatype" value="1" checked="">指定微信 
+								<select multiple="multiple" id="s_wxmobile" style="width: 160px;height: 180px;vertical-align: top;"  name="mobile[]" ></select></label>
+								
 							</td>
 						</tr>
 						<tr>
-							<th>发送时间</th>
-							<td><input type="text" name="sendtime" value="{:date('Y-m-d H:i:s',time())}" class="js-datetime" style="width: 160px;"></td>
+							<th>设置时间</th>
+
+
+							<td>
+							<label><input type="radio" name="sendtype" value="1" checked="">选择区间</label>
+							<div style="margin-left: 20px;">
+								<input type="text" name="qjstarttime" value="{:date('Y-m-d',time())}" class="js-datetime" style="width: 160px;">-<input type="text" name="qjsendtime" value="{:date('Y-m-d',time())}" class="js-datetime" style="width: 160px;">
+								<label>一天发送几次</label>
+								<span>
+									<select id="s_wxmobile" style="width: 120px"  name="qjsendtimesd[]">
+										<option value="0">随机</option>
+											<for start="9" end="22">
+												<option value="{$i}">{$i}:00-{$i+1}:00</option>
+											</for>
+									</select>
+								</span>
+								<span style="border:1px solid #ddd; display:inline-block;width:30px; text-align:center"  id="addnumq">+</span>
+							</div>
+
+
+							<label><span><input type="radio" name="sendtype" value="2" checked="">指定哪天</span></label>
+							<span>
+								<div style="margin-left: 20px;margin-bottom: 20px;">
+									<input type="text" name="zdsendtime0" value="{:date('Y-m-d',time())}" class="js-datetime" style="width: 160px;"><span style="border:1px solid #ddd; display:inline-block;width:30px; text-align:center"  id="addtime">+</span>								
+									<label>一天发送几次</label>
+									<span>
+										<select id="s_wxmobile" style="width: 120px"  name="tzdsendtime0[]">
+											<option value="0">随机</option>
+											<for start="9" end="22">
+												<option value="{$i}">{$i}:00-{$i+1}:00</option>
+											</for>
+										</select>
+									</span>
+									<span style="border:1px solid #ddd; display:inline-block;width:30px; text-align:center"  id="addnum">+</span>
+								</div>
+							</span>
+							
+
+							</td>
 						</tr>
 						<tr>
-							<th>周期</th>
-							<td><select  name="cycle" id="cycle" style="width: 160px" placeholder="请选择天数">
-								<for start="1" end="date('t')">
-								<option value="{$i}">{$i}天</option>								
+							<th>优先级别</th>
+							<td><select  name="level" style="width: 160px" placeholder="请选择权重">
+								<for start="1" end="7">
+								  <option value="{$i}">{$i}级</option>								
 								</for>
-							</select></td>
+							</select> 6为最高级别</td>
 						</tr>
+											
 						<tr>
 							<th>类型</th>
 							<td><select  name="type" id="type" style="width: 160px" placeholder="请选择类型">	
@@ -101,6 +140,7 @@
 	<script type="text/javascript">
 		//编辑器路径定义
 		var editorURL = GV.DIMAUB;
+		var fromint=0;
 	</script>
 	<!--
 	<script type="text/javascript" src="__PUBLIC__/js/area.js"></script>
@@ -131,57 +171,44 @@
 				document.getElementById('s_wxmobile').innerHTML=t;
 			})
 		}	
+		showwxhao();
 		document.getElementById('equiid').setAttribute('onchange','showwxhao()');
-
-		/*
-		var showArea = function(){
-			var url="{:U('Friends/friendarea')}"+"&name="+document.getElementById('s_county').value;
-			$.get(url,function(data){
-				if(data['status']=='1'||data['status']==1){
-					var t="";
-					var st=eval(data['data']);	
-					for (var x in st){
-						if(x!="status"){
-							t+="<option value='"+st[x]['id']+"'>"+st[x]['area']+"</option>";
-						}						
-					}	
-					
-				}else{
-					t="<option value='0'>不存在</option>";
-				}
-				document.getElementById('areaid').innerHTML=t;
-			})
-		}		
-		document.getElementById('s_county').setAttribute('onchange','showArea()');
-
-		var showWeixi=function(){
-			var aturl="{:U('Weixi/friendlist')}"+"&id="+document.getElementById('areaid').value;
-			$.get(aturl,function(data){
-				if(data['status']=='1'||data['status']==1){
-					var t="";
-					var st=eval(data['data']);	
-					for (var x in st){
-						if(x!="status"){
-							t+="<option value='"+st[x]['id']+"'>"+st[x]['area']+"</option>";
-						}						
-					}	
-					
-				}else{
-					t="<option value='0'>不存在</option>";
-				}
-				document.getElementById('s_wxmobile').innerHTML=t;
-			});
-
-		}
-		*/
-		
-		document.getElementById('areaid').setAttribute('onchange','showWeixi()');
 		
 	</script>
 	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
 	<script type="text/javascript">
-		$(function() {
+		function tclick(obj){
+			$(obj).prev().remove();	
+				$(obj).remove();
+
+			}
+		function sjt(obj){
+			$(obj).prev().append('<select id="s_wxmobile" style="width: 120px"  name="tzdsendtime'+fromint+'[]"><option value="0">随机</option><for start="9" end="22"><option value="{$i}">{$i}:00-{$i+1}:00</option></for></select><b onclick="tclick(this)" style="width:30px; display:inline-block; text-align:center;border:1px solid #ddd" class="jqt">-</b>');
+		}
+		function mintinfo(obj){			
+			$(obj).parent().remove();	
+			
+		}
+		$(function() {		
+
+			$("#addtime").click(function(){
+				fromint++;
+				$(this).parent().parent().append('<div style="margin-left: 20px;margin-bottom: 20px;">									<input type="text" name="zdsendtime'+fromint+'" value="{:date('Y-m-d',time())}" class="js-datetime" style="width: 160px;"><span style="border:1px solid #ddd; display:inline-block;width:30px; text-align:center"  onclick="mintinfo(this)">-</span>					<label>一天发送几次</label>						<span>							<select id="s_wxmobile" style="width: 120px"  name="tzdsendtime'+fromint+'[]">							<option value="0">随机</option>	<for start="9" end="22">												<option value="{$i}">{$i}:00-{$i+1}:00</option>				</for>	</select></span><span style="border:1px solid #ddd; display:inline-block;width:30px; text-align:center"  onclick="sjt(this)">+</span></div>');
+				
+			});
+
+			$("#addnum").click(function(){				
+				$(this).prev().append('<select id="s_wxmobile" style="width: 120px"  name="tzdsendtime'+fromint+'[]"><option value="0">随机</option><for start="9" end="22"><option value="{$i}">{$i}:00-{$i+1}:00</option></for></select><b onclick="tclick(this)" style="width:30px; display:inline-block; text-align:center;border:1px solid #ddd" class="jqt">-</b>');
+			});
+
+			$("#addnumq").click(function(){				
+				$(this).prev().append('<select id="s_wxmobile" style="width: 120px"  name="qjsendtimesd[]"><option value="0">随机</option><for start="9" end="22"><option value="{$i}">{$i}:00-{$i+1}:00</option></for></select><b onclick="tclick(this)" style="width:30px; display:inline-block; text-align:center;border:1px solid #ddd" class="jqt">-</b>');
+			});
+
+
+			
+
 			$(".js-ajax-close-btn").on('click', function(e) {
 				e.preventDefault();
 				Wind.use("artDialog", function() {

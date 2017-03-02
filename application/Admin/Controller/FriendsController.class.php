@@ -94,34 +94,121 @@ class FriendsController extends AdminbaseController {
 	}
 	//增加定时信息
 	public function timingmsg(){
-		if(IS_POST){
-			$data['type']=I("post.type");
-			$data['userid']=ADMIN_ID;
-			$data['friendtext']=I("post.friendtext");
+		if(IS_POST){	
+			$data['authorid']=ADMIN_ID;//发布人				
+			$data['type']=I("post.type");//类型			
+			$data['friendtext']=I("post.friendtext");//内容
+			$data['cdkey']=I("post.cdkey");//选择手机
+			$data['createtime']=time();//创建时间
+			$data['level']=I("post.level");//权限级别
+
+
 			if(!$data['friendtext']){
 				$this->error('请填写信息再提交');
 			}
-			$data['status']=1;
-			$data['areaid']=I("post.areaid");
-			$data['createtime']=time();
-			$data['mobile']=I("post.mobile");
-			$data['areatype']=I("post.areatype");
-			$data['cdkey']=I("post.cdkey");
-			$data['cycle']=I("post.cycle");
-
-			$map['sendtime']=strtotime(I("post.sendtime")) ;			
+			//图片转为json
 			$ary=I("post.photos_url");
-			$aryalt=I("post.photos_alt");			
+			$aryalt=I("post.photos_alt");	
 			$smete=array();
 			foreach ($ary as $key => $vo) {
 				$smete[$key]['url']=$vo;
 				$smete[$key]['alt']=$aryalt[$key];
-			}			
-		    $data['smete']=json_encode($smete);
+			}	
+			$data['smete']=json_encode($smete);
+			//end图片转为json
 
-			$sul=M('friends')->add($data);
+			$data['status']=1;//发布信息
+			$data['areatype']=I("post.areatype");//指定微信 整部手机微信，还是单个，还是1个	
+
+			$data['mobile']=I("post.mobile");
+
+			//得到手机号码
+			if(I("post.areatype")==2){
+				$where['cdkey']=I("post.cdkey");
+				$where['type']=3;
+				$wxary=M('weixi')->where($where)->getfield("mobile",true);
+			}
+
+			if(I("post.areatype")==1){
+				$wxary=I("post.mobile");
+			}
+
+			if(count($wxary)<=0 or $wxary=="" or empty($wxary)){
+				$this->error("没有选中微信号");
+				exit();
+			}
+			
+			//end得到手机号码			
+
+			//设置得到时间
+			$qtary=array();
+			if(I("post.sendtype")==1){
+				$qjstarttime=I("poxt.qjstarttime");
+				$qjsendtime=I("post.qjsendtime");
+				$qjsendtimesd=I("post.qjsendtimesd");
+
+				foreach ($qjsendtimesd as $kq => $vl) {
+					if($vl=0){
+						$vl=rand(9,22);						
+					}
+					$tint=strtotime(date("Y-m-d",strtotime($qjstarttime)));
+					$aryz=array();
+					$aryz["starttime"]=$tint+($vl*3600);
+
+					$tidn=strtotime(date("Y-m-d",strtotime($qjsendtime)));
+					$aryz["endtime"]=$tint+(3600*24);
+					$qtary[]=$aryz;
+				}
+			}
+
+			if(I("post.sendtype")==2){				
+				foreach ($_POST as $kp => $vp) {					
+					if(strpos($kp,"zdsendtime")!==false){					
+						$dayinfo=I('post.'.$kp);
+
+						$dayinfoa=I('post.t'.$kp);
+					
+						foreach ($dayinfoa as $kd => $vd) {							
+							if($vd=0){
+								$vd=rand(9,22);						
+							}
+							$tint=strtotime(date("Y-m-d",strtotime($dayinfo)));
+							$aryt=array();
+							$aryt["starttime"]=$tint+($vd*3600);
+
+							$tidn=strtotime(date("Y-m-d",strtotime($dayinfo)));
+							$aryt["endtime"]=$tint+(3600*24);
+							$qtary[]=$aryt;
+						}											
+					}
+				}
+			}
+			//end设置得到时间
+
+
+			$map['sendtime']=strtotime(I("post.sendtime"));		
+
+		   	
+			$sul=M('friends')->add($data);			
 			
 			if($sul){
+				//增加信息表
+				$datamsg=array();
+				foreach ($wxary as $km=> $vm) {
+					foreach ($qtary as $kq => $vq) {
+						$art["mobile"]=$vm;
+						$art["cdkey"]=$data['cdkey'];
+						$art["createtime"]=time();
+						$art['level']=$data['level'];
+						$art['starttime']=$vq['starttime'];
+						$art['endtime']=$vq['endtime'];
+						$art['frdid']=$sul;
+						$datamsg[]=$art;
+					}
+				}
+				M("friendmsg")->addAll($datamsg);
+				//end增加信息表
+
 				$this->success("增加成功");
 			}else{
 				$this->error("数据有误");

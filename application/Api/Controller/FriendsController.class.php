@@ -12,8 +12,8 @@ class FriendsController  extends Controller{
 		$mobile=I("get.mobile");		
 		$cdkey=I("get.id");
 
-		$map["mobile"]=$mobile;
-		$sulm=M("weixi")->where($map)->find();	
+		$where["mobile"]=$mobile;
+		$sulm=M("weixi")->where($where)->find();	
 
 		if(!$sulm){
 			$data['mobile']=$mobile;
@@ -22,34 +22,41 @@ class FriendsController  extends Controller{
 			$data['type']=3;
 			$retrun=M("weixi")->add($data);
 		}	
-		$map['areatype']=1;
-		$map['sendtime']=array("lt",time());
-		$map['sendnum']=0;
-		$sul=M("friends")->where($map)->find();		
-		if($sul){
-			$param['sendnum']=array("exp","sendnum+1");
-			M("friends")->where($map)->setInc("sendnum");
-		}else{
-			$map['areatype']=2;
-			$map['sendnum']=0;
-			$sul=M("friends")->where($map)->find();
-		}
+		$map["fm.mobile"]=$mobile;
+		$map["fm.starttime"]=array("lt",time());
+		$map["fm.sendnum"]=0;
+		$sul=M("friendmsg")->alias("fm")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->find();	
+
+		$pam['cdkey']=$mobile;
+		$pam['mobile']=$cdkey;
+		$pam['sendtime']=time();
+		$pam['status']=2;
+		$pam['num']=1;
+		$pam['type']=1;				
+		M("friendssend")->add($pam);
 		
 		if($sul){
+			//$param['sendnum']=array("exp","sendnum+1");
+			//M("friendmsg")->alias("fm")->where($map)->setInc("sendnum");//设置已发送
+
+			//处理图片
 			$imgart=json_decode($sul['smete'],true);
 			$mapt["id"]=$sul['type'];
 			$mapt["status"]=1;
 			$typimg=M("friendstype")->where($mapt)->find();
-			if($typimg){				
+			if($typimg&&!empty($typimg["images"])){			
 				$imgt=json_decode($typimg["images"],true);
-				$tttt=array_push($imgart,$imgt[0]);				
+				array_push($imgart,$imgt[0]);				
+			}	
+			if($imgart){
+				foreach ($imgart as $key => $vo) {
+					$sul['imga'.$key]=$vo['url'];
+					$sul['ximga'.$key]=substr($vo['url'],strripos($vo['url'],".",1)+1);
+				}	
 			}
-
-			foreach ($imgart as $key => $vo) {
-				$sul['imga'.$key]=$vo['url'];
-				$sul['ximga'.$key]=substr($vo['url'],strripos($vo['url'],".",1)+1);
-			}
-			$sul['imagnum']=count($imgart);
+			
+			$sul['imagnum']=count($imgart);//图片个数据
+			//设置已发送
 			$data['data']=$sul;
 			$data['status']=1;
 			$this->ajaxreturn($data,'xml');
