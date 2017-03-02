@@ -52,7 +52,6 @@ class FriendsController  extends Controller{
 			$sul['imagnum']=count($imgart);
 			$data['data']=$sul;
 			$data['status']=1;
-
 			$this->ajaxreturn($data,'xml');
 		}else{
 			$data['status']=0;
