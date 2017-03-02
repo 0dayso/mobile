@@ -42,7 +42,7 @@ class FriendsController  extends Controller{
 			$typimg=M("friendstype")->where($mapt)->find();
 			if($typimg){				
 				$imgt=json_decode($typimg["images"],true);
-				$tttt=array_unshift($imgart,$imgt[0]);				
+				$tttt=array_push($imgart,$imgt[0]);				
 			}
 
 			foreach ($imgart as $key => $vo) {
