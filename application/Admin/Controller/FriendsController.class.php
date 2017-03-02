@@ -107,7 +107,8 @@ class FriendsController extends AdminbaseController {
 			$data['mobile']=I("post.mobile");
 			$data['areatype']=I("post.areatype");
 			$data['cdkey']=I("post.cdkey");
-			
+			$data['cycle']=I("post.cycle");
+
 			$map['sendtime']=strtotime(I("post.sendtime")) ;			
 			$ary=I("post.photos_url");
 			$aryalt=I("post.photos_alt");			
