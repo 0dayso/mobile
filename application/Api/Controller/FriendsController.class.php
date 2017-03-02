@@ -32,7 +32,6 @@ class FriendsController  extends Controller{
 		}else{
 			$map['areatype']=2;
 			$map['sendnum']=0;
-
 			$sul=M("friends")->where($map)->find();
 		}
 		
