@@ -25,17 +25,14 @@ class FriendsController  extends Controller{
 		$map['areatype']=1;
 		$map['sendtime']=array("lt",time());
 		$map['sendnum']=0;
-		$sul=M("friends")->where($map)->find();
-		echo M()->getlastSql();
-		exit();
+		$sul=M("friends")->where($map)->find();		
 		if($sul){
 			$param['sendnum']=array("exp","sendnum+1");
 			M("friends")->where($map)->setInc("sendnum");
 		}else{
 			$map['areatype']=2;
 			$map['sendnum']=0;
-			$sul=M("friends")->where($where)->find();
-			
+			$sul=M("friends")->where($map)->find();
 		}
 		
 		if($sul){
