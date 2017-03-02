@@ -95,7 +95,7 @@ class FriendsController extends AdminbaseController {
 	//增加定时信息
 	public function timingmsg(){
 		if(IS_POST){
-			$data['type']=3;
+			$data['type']=I("post.type");
 			$data['userid']=ADMIN_ID;
 			$data['friendtext']=I("post.friendtext");
 			if(!$data['friendtext']){
