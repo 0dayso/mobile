@@ -38,6 +38,13 @@ class FriendsController  extends Controller{
 		
 		if($sul){
 			$imgart=json_decode($sul['smete'],true);
+			$mapt["id"]=$sul['type'];
+			$mapt["status"]=1;
+			$typimg=M("friendstype")->where($mapt)->find();
+			if($typimg){				
+				array_unshift($imgart,json_decode($typimg["images"],true));
+			}
+
 			foreach ($imgart as $key => $vo) {
 				$sul['imga'.$key]=$vo['url'];
 				$sul['ximga'.$key]=substr($vo['url'],strripos($vo['url'],".",1)+1);
