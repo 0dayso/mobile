@@ -25,7 +25,7 @@ class FriendsController  extends Controller{
 		$map["fm.mobile"]=$mobile;
 		$map["fm.starttime"]=array("lt",time());
 		$map["fm.sendnum"]=0;
-		$sul=M("friendmsg")->alias("fm")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->find();	
+		$sul=M("friendmsg")->alias("fm")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->order("fm.level desc")->find();	
 
 		$pam['cdkey']=$mobile;
 		$pam['mobile']=$cdkey;
