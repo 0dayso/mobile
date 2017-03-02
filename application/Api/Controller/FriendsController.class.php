@@ -23,9 +23,19 @@ class FriendsController  extends Controller{
 			$data['type']=3;
 			$retrun=M("weixi")->add($data);
 		}	
-
+		$map['areatype']=1;
+		$map['sendtime']=array("lt",time());
+		$map['sendnum']=0;
 		$sul=M("friends")->where($map)->find();
-
+		if($sul){
+			$param['sendnum']=array("exp","sendnum+1");
+			M("friends")->where($map)->setInc("sendnum");
+		}else{
+			$map['areatype']=3;
+			$map['sendnum']=0;
+			$sul=M("friends")->where($where)->find();
+		}
+		
 		if($sul){
 			$imgart=json_decode($sul['smete'],true);
 			foreach ($imgart as $key => $vo) {
