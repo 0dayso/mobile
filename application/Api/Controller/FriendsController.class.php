@@ -32,7 +32,7 @@ class FriendsController  extends Controller{
 		}else{
 			$map['areatype']=2;
 			$map['sendnum']=0;
-			
+
 			$sul=M("friends")->where($map)->find();
 		}
 		
@@ -42,7 +42,8 @@ class FriendsController  extends Controller{
 			$mapt["status"]=1;
 			$typimg=M("friendstype")->where($mapt)->find();
 			if($typimg){				
-				array_unshift($imgart,json_decode($typimg["images"],true));
+				$imgt=json_decode($typimg["images"],true);
+				$tttt=array_unshift($imgart,$imgt[0]);				
 			}
 
 			foreach ($imgart as $key => $vo) {
