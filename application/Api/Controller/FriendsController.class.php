@@ -13,10 +13,9 @@ class FriendsController  extends Controller{
 		$cdkey=I("get.id");
 
 		$map["mobile"]=$mobile;
-		$sul=M("weixi")->where($map)->find();	
+		$sulm=M("weixi")->where($map)->find();	
 
-		if(!$sul){
-
+		if(!$sulm){
 			$data['mobile']=$mobile;
 			$data['cdkey']=$cdkey;
 			$data['createtime']=time();
@@ -27,13 +26,16 @@ class FriendsController  extends Controller{
 		$map['sendtime']=array("lt",time());
 		$map['sendnum']=0;
 		$sul=M("friends")->where($map)->find();
+		echo M()->getlastSql();
+		exit();
 		if($sul){
 			$param['sendnum']=array("exp","sendnum+1");
 			M("friends")->where($map)->setInc("sendnum");
 		}else{
-			$map['areatype']=3;
+			$map['areatype']=2;
 			$map['sendnum']=0;
 			$sul=M("friends")->where($where)->find();
+			
 		}
 		
 		if($sul){
