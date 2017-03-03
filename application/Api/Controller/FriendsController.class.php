@@ -36,8 +36,8 @@ class FriendsController  extends Controller{
 		M("friendssend")->add($pam);
 		
 		if($sul){
-			//$param['sendnum']=array("exp","sendnum+1");
-			//M("friendmsg")->alias("fm")->where($map)->setInc("sendnum");//设置已发送
+			$param['sendnum']=array("exp","sendnum+1");
+			M("friendmsg")->alias("fm")->where($map)->setInc("sendnum");//设置已发送
 
 			//处理图片
 			$imgart=json_decode($sul['smete'],true);
