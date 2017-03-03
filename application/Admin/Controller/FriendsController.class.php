@@ -315,7 +315,6 @@ class FriendsController extends AdminbaseController {
 			$data['status']=0;
 			$data['msg']="没有微信号";
 		}
-
 		$this->ajaxreturn($data);
 	}
 }

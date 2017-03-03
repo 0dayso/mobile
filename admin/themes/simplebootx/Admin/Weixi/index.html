@@ -37,7 +37,7 @@
 						<td>{$vo.cdkey}</td>
 						<td>{$vo.alias}</td>		
 						<td>{$vo.mobile}</td>
-						<td>{$vo.weixiname}</td>						
+						<td><input type="text" value="{$vo.weixiname}" t="{$vo.id}" onchange="wxname(this)"></td>						
 						<td>{$vo.weixi}</td>
 						<td>{$vo.pwd}</td>
 						<td>{$vo.email}</td>
@@ -79,6 +79,20 @@
 	</div>
 	<script src="__PUBLIC__/js/common.js"></script>
 	<script>
+		function wxname(obj){
+			var url="{:U('weixi/weixiname')}";
+			var id=$(obj).attr("t");
+			var vl=$(obj).val();
+			var data="{id:"+id+",name:"+vl+"}";
+			$.post(url,{id:id,name:vl},function(data){
+				if(data.status==1){
+					
+				}else{
+					alert("数据有误");
+				}
+			})
+		}
+
 		$(document).ready(function() {
 			Wind.css('treeTable');
 			Wind.use('treeTable', function() {
@@ -105,7 +119,6 @@
 					alert('设置失败');
 				}
 			})
-			
 		}
 	</script>
 </body>

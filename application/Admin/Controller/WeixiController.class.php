@@ -47,6 +47,19 @@ class WeixiController extends AdminbaseController {
 		$this->assign('page',$show);
        	$this->display();        
     }
+
+    public function weixiname(){
+    	$wxname=I("post.name");
+    	$id=I("post.id");    
+    	$sul=M("weixi")->where("id=".$id)->setField("weixiname",$wxname);
+    	if($sul){
+    		$data['status']=1;
+    	}else{
+    		$data['status']=0;
+    	}
+    	$this->ajaxreturn($data);
+
+    }
 	
 	public function savemobileajax(){
 		$id = I('id');
@@ -81,7 +94,7 @@ class WeixiController extends AdminbaseController {
 	public function friendlist(){
 
 		$map['cdkey']=I("post.cdkey");
-		$sul=M("friends")->where($map)->select();
+		$sul=M("friends")->join()->where($map)->select();
 
 	}
 
