@@ -307,7 +307,7 @@ class FriendsController extends AdminbaseController {
 	public function showwxhao(){
 		$map['cdkey']=I("get.name");
 		$map['type']=3;
-		$sul=M("weixi")->where($map)->getfield("mobile,weixi");
+		$sul=M("weixi")->where($map)->getfield("mobile,weixiname");
 		if($sul){
 			$data['status']=1;
 			$data['data']=$sul;
