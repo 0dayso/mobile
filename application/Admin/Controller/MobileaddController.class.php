@@ -165,9 +165,12 @@ class MobileaddController extends AdminbaseController{
 	function reloadmobile(){
 		$id=I('post.id');
 		if($id){
-			$where['id']=array('in',$id);
+			$where['mid']=array('in',$id);
+
 			$where['status']=1;
+
 			$data=M('mobilewoman')->where($where)->limit(5)->lock(true)->getfield('mid,mobile',true);
+		
 
 			if($data){
 				$this->assign('data',$data);
@@ -218,7 +221,7 @@ class MobileaddController extends AdminbaseController{
 		$paramalter['updatetime']=time();
 		$paramalter['status']=3;//已添加
 		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);	
-		
+
 		if($sulap){
 			$data['status']=1;	
 		}else{
