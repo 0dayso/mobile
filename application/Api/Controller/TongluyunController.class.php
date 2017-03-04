@@ -40,6 +40,30 @@ class TongluyunController  extends Controller{
 		$this->ajaxreturn($result);
 	}
 
+	function seachman(){
+		$mobile=I("get.mobile");
+		$sex=I("get.sex");
+		$mid=I("get.mid");
+
+		$data["mobile"]=$mobile;
+		$data["sex"]=$sex;
+		$data['mid']=$mid;
+		$data["createtime"]=time();
+		$data["status"]=1;
+
+		$sul=M("mobilewoman")->where()->add($data);
+		if($sul){
+			$result['status']=1;
+			$result['msg']="增加成功";			
+		}else{
+			$result['status']=0;
+			$result['msg']="数据有误";
+		}
+		$this->ajaxreturn($result);
+
+
+	}
+
 }
 
 ?>
