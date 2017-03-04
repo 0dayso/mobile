@@ -132,13 +132,14 @@
 				$("#mainform").submit();
 			});
 				//touchstart
+
 			$(".trclick").on('touchstart',function(){	
 				$(this).addClass("trback");	
 				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
 				var id=$(this).find('.keyinfo').val();
 				$.post(url,{'id':id},function(data){
-					//alert(data);
+					alert(data);
 					if(data.status=="1" || data.status==1){						
 						$("#vl"+id).html('已');					
 					}else{
