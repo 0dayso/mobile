@@ -97,8 +97,8 @@
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$vo.id}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">{$vo.mobile}</td>
-						<!-- 
 						<td id="vl{$vo.id}" class="statustext" style="width:4px"><eq name="$vo.status" value="1">已<else/>未</eq></td>
+						<!-- 
 						<td>返回</td> -->
 					</tr>
 				</volist>
@@ -138,6 +138,7 @@
 				$(this).find('.text').select();
 				var id=$(this).find('.keyinfo').val();
 				$.post(url,{'id':id},function(data){
+					alert('sdfdsf');
 					if(data.status=="1" || data.status==1){						
 						$("#vl"+id).html('已');					
 					}else{
@@ -149,7 +150,7 @@
 						}
 					}				
 				});
-			});
+			});	
 
 			$("#zuofei").click(function(){
 				
