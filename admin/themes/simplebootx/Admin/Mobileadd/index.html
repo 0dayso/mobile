@@ -138,8 +138,7 @@
 				var url="{:U('Admin/Mobileadd/update')}";
 				$(this).find('.text').select();
 				var id=$(this).find('.keyinfo').val();
-				$.post(url,{'id':id},function(data){
-					alert(data);
+				$.post(url,{'id':id},function(data){					
 					if(data.status=="1" || data.status==1){						
 						$("#vl"+id).html('已');					
 					}else{
