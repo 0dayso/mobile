@@ -46,7 +46,7 @@ class TongluyunController  extends Controller{
 		$mid=I("get.mid");
 		$result['status']=0;
 		$result['msg']="数据有误";
-		if($mid>0 or empty($mid)){
+		if($mid<=0 or empty($mid)){
 			$this->ajaxreturn($result);
 		}
 		$data["mobile"]=$mobile;
@@ -56,6 +56,7 @@ class TongluyunController  extends Controller{
 		$data["status"]=1;
 
 		$sul=M("mobilewoman")->add($data);
+	
 		if($sul){
 			$result['status']=1;
 			$result['msg']="增加成功";			
