@@ -11,7 +11,8 @@ class MobileaddController extends AdminbaseController{
 	}
 	public function index(){
 		//->where('isshow=0')
-		$count=M('applemobile')->where('type=7 and isshow=0')->count();
+
+		$count=M('mobilewoman')->where('sex=1 and isshow=0')->count();
 		// $mobilest=M('users')->where('id=%d',session('ADMIN_ID'))->getField('mobilest');
 		// if($mobilest!=1){
 		// 	$data=M('mobile')->where("ffid=%d and status=0 and type=2 and isshow>0 ",session('ADMIN_ID'))->getfield('id,mobile,status',true);
@@ -37,7 +38,7 @@ class MobileaddController extends AdminbaseController{
    //      	//$data=M('mobile')->where("status=0 and type=2 and isshow=0 and province='江苏'")->limit(5)->lock(true)->getfield('id,mobile,status',true);	
 			// S('apdata',$data);	
    //      } 	
-        $data=M('applemobile')->where('type=7 and isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);
+        $data=M('mobilewoman')->where('sex=1 and isshow=0')->limit(5)->lock(true)->getfield('mid as id,mobile,status',true);
 
 
        	/*
@@ -62,7 +63,7 @@ class MobileaddController extends AdminbaseController{
 			}
 			*/
 			
-			$sulap=M('applemobile')->where("mid=%d",$value['id'])->setField('isshow',1);
+			$sulap=M('mobilewoman')->where("mid=%d",$value['id'])->setInc('isshow');
 			if(!$sulap){
 				//$isallsave=false;
 				unset($data[$key]);
@@ -196,29 +197,28 @@ class MobileaddController extends AdminbaseController{
 	public function update(){
 		$id=I('id');
 
-
 		if(empty($id)){
 			$data['status']=0;
 			$data['msg']=$id;	
 			$this->ajaxreturn($data);
 		}
-
-		$sdata=M('mobile')->where('id=%d',$id)->find();
+		/*
+		$sdata=M('mobilewoman')->where('id=%d',$id)->find();
 		if($sdata['status']==1){
 			$data['status']=2;	
 			$data['name']=$sdata['userid'];
 			$this->ajaxreturn($data);
 			exit();
 		}
-		
+		*/
 		$data['status']=1;		
 		$data['updatetime']=time();
 		//$data['userid']=session('ADMIN_ID');
 		//$data1=M('mobile')->where('id='.$id)->save($data);		
-		$paramalter['isshow']=array("exp","isshow+1");
+		//$paramalter['isshow']=array("exp","isshow+1");
 		$paramalter['updatetime']=tiem();
-		$paramalter['status']=3;
-		$sulap=M('applemobile')->where("mid=%d",$id)->save($paramalter);
+		$paramalter['status']=3;//已添加
+		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);
 		
 		if($sulap){
 			$data['status']=1;	
@@ -431,28 +431,19 @@ class MobileaddController extends AdminbaseController{
 		
 
 		M()->startTrans();
-		$data['status']=1;		
+		$data['status']=4;		
 		$data['updatetime']=time();
 		$data['userid']=session('ADMIN_ID');
 		$aryid=explode(',', $id);
 
 
 		foreach ($aryid as $k => $v) {	
-			$tmap['status']=1;
+			$tmap['status']=4;
 			$tmap['id']=$v;
-			$cuont=M('mobile')->where($tmap)->count();
+			$cuont=M('mobilewoman')->where($tmap)->count();
 			if($counts<=0){
-				$data1=M('mobile')->where('id=%d',$v)->save($data);	
-				if(!$data1){
-					break;
-				}		
-			}
-			
-			$t=M('applemobile')->where("mid=%d",$v)->delete();	
-			if(!$t){
-			    break;
-			}
-			
+				$data1=M('mobilewoman')->where('id=%d',$v)->save($data);	
+			}	
 		}
 
 		if($t){
