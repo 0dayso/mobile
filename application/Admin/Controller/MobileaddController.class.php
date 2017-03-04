@@ -168,6 +168,7 @@ class MobileaddController extends AdminbaseController{
 			$where['id']=array('in',$id);
 			$where['status']=1;
 			$data=M('mobilewoman')->where($where)->limit(5)->lock(true)->getfield('mid,mobile',true);
+
 			if($data){
 				$this->assign('data',$data);
 				$data['status']=0;
@@ -186,7 +187,6 @@ class MobileaddController extends AdminbaseController{
 			exit();
 		}
 
-
 	}
 
 
@@ -200,6 +200,7 @@ class MobileaddController extends AdminbaseController{
 			$this->ajaxreturn($data);
 		}
 		
+		/*
 		$sdata=M('mobilewoman')->where('mid=%d',$id)->find();
 		if($sdata['status']==3){
 			$data['status']=2;	
@@ -207,6 +208,7 @@ class MobileaddController extends AdminbaseController{
 			$this->ajaxreturn($data);
 			exit();
 		}
+		*/
 		
 		$data['status']=1;		
 		$data['updatetime']=time();
@@ -215,7 +217,8 @@ class MobileaddController extends AdminbaseController{
 		//$paramalter['isshow']=array("exp","isshow+1");
 		$paramalter['updatetime']=time();
 		$paramalter['status']=3;//已添加
-		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);		
+		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);	
+		
 		if($sulap){
 			$data['status']=1;	
 		}else{
