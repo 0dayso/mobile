@@ -51,7 +51,7 @@ class TongluyunController  extends Controller{
 		$data["createtime"]=time();
 		$data["status"]=1;
 
-		$sul=M("mobilewoman")->where()->add($data);
+		$sul=M("mobilewoman")->add($data);
 		if($sul){
 			$result['status']=1;
 			$result['msg']="增加成功";			
