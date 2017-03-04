@@ -30,7 +30,6 @@ class MobileaddController extends AdminbaseController{
 		// }
 		M()->startTrans();
         $isallsave=true;
-
    //      if(S('apdata')){
 
    //      }else{
@@ -167,9 +166,8 @@ class MobileaddController extends AdminbaseController{
 		$id=I('post.id');
 		if($id){
 			$where['id']=array('in',$id);
-			$where['status']=3;
+			$where['status']=1;
 			$data=M('mobilewoman')->where($where)->limit(5)->lock(true)->getfield('mid,mobile',true);
-
 			if($data){
 				$this->assign('data',$data);
 				$data['status']=0;
@@ -201,24 +199,23 @@ class MobileaddController extends AdminbaseController{
 			$data['msg']=$id;	
 			$this->ajaxreturn($data);
 		}
-		/*
-		$sdata=M('mobilewoman')->where('id=%d',$id)->find();
-		if($sdata['status']==1){
+		
+		$sdata=M('mobilewoman')->where('mid=%d',$id)->find();
+		if($sdata['status']==3){
 			$data['status']=2;	
-			$data['name']=$sdata['userid'];
+			$data['name']='已';
 			$this->ajaxreturn($data);
 			exit();
 		}
-		*/
+		
 		$data['status']=1;		
 		$data['updatetime']=time();
 		//$data['userid']=session('ADMIN_ID');
 		//$data1=M('mobile')->where('id='.$id)->save($data);		
 		//$paramalter['isshow']=array("exp","isshow+1");
-		$paramalter['updatetime']=tiem();
+		$paramalter['updatetime']=time();
 		$paramalter['status']=3;//已添加
-		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);
-		
+		$sulap=M('mobilewoman')->where("mid=%d",$id)->save($paramalter);		
 		if($sulap){
 			$data['status']=1;	
 		}else{
