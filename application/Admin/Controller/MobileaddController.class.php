@@ -167,9 +167,8 @@ class MobileaddController extends AdminbaseController{
 		$id=I('post.id');
 		if($id){
 			$where['id']=array('in',$id);
-			$where['status']=0;
-			$where['type']=2;
-			$data=M('mobile')->where($where)->limit(5)->lock(true)->getfield('id,mobile',true);
+			$where['status']=3;
+			$data=M('mobilewoman')->where($where)->limit(5)->lock(true)->getfield('mid,mobile',true);
 
 			if($data){
 				$this->assign('data',$data);
