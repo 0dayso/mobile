@@ -435,10 +435,9 @@ class MobileaddController extends AdminbaseController{
 
 		foreach ($aryid as $k => $v) {	
 			$tmap['status']=4;
-			$tmap['id']=$v;
-			$cuont=M('mobilewoman')->where($tmap)->count();
+			$tmap['id']=$v;			
 			if($counts<=0){
-				$data1=M('mobilewoman')->where('id=%d',$v)->save($data);	
+				$data1=M('mobilewoman')->where('mid=%d',$v)->save($data);	
 			}	
 		}
 
