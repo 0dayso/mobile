@@ -56,9 +56,14 @@ class FriendsController  extends Controller{
 			}
 			
 			$sul['imagnum']=count($imgart);//图片个数据
+			if($typimg['name']){
+				$sul['friendtext']="["+$typimg['name']+"]"+$sul["friendtext"]
+			}
+			
 			//设置已发送
 			$data['data']=$sul;
 			$data['status']=1;
+
 			$this->ajaxreturn($data,'xml');
 		}else{
 			$data['status']=0;
