@@ -60,6 +60,7 @@ class FriendsController  extends Controller{
 		
 			if($typimg['name']){
 				$sul['friendtext']="【".$typimg['name']."】".$sul["friendtext"];
+				
 			}
 			//设置已发送
 			$data['data']=$sul;
