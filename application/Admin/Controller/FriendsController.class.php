@@ -184,9 +184,7 @@ class FriendsController extends AdminbaseController {
 			}
 			//end设置得到时间
 
-			var_dump($qtary);
-			exit();
-
+	
 			$map['sendtime']=strtotime(I("post.sendtime"));		
 
 		   	
