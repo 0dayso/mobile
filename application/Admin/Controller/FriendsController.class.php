@@ -103,9 +103,7 @@ class FriendsController extends AdminbaseController {
 			$data['level']=I("post.level");//权限级别
 
 
-			if(!$data['friendtext']){
-				$this->error('请填写信息再提交');
-			}
+		
 			//图片转为json
 			$ary=I("post.photos_url");
 			$aryalt=I("post.photos_alt");	
