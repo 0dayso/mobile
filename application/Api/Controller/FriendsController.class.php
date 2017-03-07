@@ -26,7 +26,7 @@ class FriendsController  extends Controller{
 		$map["fm.starttime"]=array("lt",time());
 		$map["fm.sendnum"]=0;
 		
-		$sul=M("friendmsg")->alias("fm")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->order("fm.level desc")->find();
+		$sul=M("friendmsg")->alias("fm")->field("f.*,fm.*")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->order("fm.level desc")->find();
 
 		$pam['cdkey']=$mobile;
 		$pam['mobile']=$cdkey;
@@ -40,7 +40,8 @@ class FriendsController  extends Controller{
 			$param['sendnum']=array("exp","sendnum+1");
 			$map1['id']=$sul['id'];
 			M("friendmsg")->where($map1)->setInc("sendnum");//设置已发送
-			
+			echo M()->getLastSql();
+			exit();
 			//处理图片
 			$imgart=json_decode($sul['smete'],true);
 			$mapt["id"]=$sul['type'];
