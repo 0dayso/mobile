@@ -166,8 +166,9 @@ class FriendsController extends AdminbaseController {
 
 						$dayinfoa=I('post.t'.$kp);
 					
-						foreach ($dayinfoa as $kd => $vd) {							
-							if($vd=0){
+						foreach ($dayinfoa as $kd => $vd) {		
+
+							if($vd==0){
 								$vd=rand(9,22);						
 							}
 							$tint=strtotime(date("Y-m-d",strtotime($dayinfo)));
@@ -183,6 +184,8 @@ class FriendsController extends AdminbaseController {
 			}
 			//end设置得到时间
 
+			var_dump($qtary);
+			exit();
 
 			$map['sendtime']=strtotime(I("post.sendtime"));		
 
