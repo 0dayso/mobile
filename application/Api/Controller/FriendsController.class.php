@@ -59,8 +59,7 @@ class FriendsController  extends Controller{
 			$sul['imagnum']=count($imgart);//图片个数据
 		
 			if($typimg['name']){
-				$sul['friendtext']="【".$typimg['name']."】".$sul["friendtext"];
-				
+				$sul['friendtext']="【".$typimg['name']."】".$sul["friendtext"];				
 			}
 			//设置已发送
 			$data['data']=$sul;
