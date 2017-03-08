@@ -23,10 +23,11 @@ class FriendsController extends AdminbaseController {
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$data=M('Friends')->order("id DESc")->limit($Page->firstRow.','.$Page->listRows)->getfield('id,friendtext,authorid',true);
+		$data=M('Friends')->order("id DESc")->limit($Page->firstRow.','.$Page->listRows)->field('id,friendtext,authorid,cdkey,createtime')->select();
+		$arykey=M("equictive")->getfield("cdkey,alias",true);
 		foreach($data as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
-			$data[$k]['username'] = $userinfo['user_login'];
+			$data[$k]['cdkey'] = $arykey[$v['cdkey']];
 		}
 		$this->assign('count',$count);
 		$this->assign('data',$data);
@@ -185,11 +186,8 @@ class FriendsController extends AdminbaseController {
 			//end设置得到时间
 
 	
-			$map['sendtime']=strtotime(I("post.sendtime"));		
-
-		   	
-			$sul=M('friends')->add($data);			
-			
+			$map['sendtime']=strtotime(I("post.sendtime"));			   	
+			$sul=M('friends')->add($data);
 			if($sul){
 				//增加信息表
 				$datamsg=array();

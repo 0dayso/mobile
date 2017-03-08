@@ -17,22 +17,27 @@
 					<tr>
 						<th width="50">ID</th>
 						<th>朋友圈文本</th>
-						<th width="80">发布人</th>
+						<th>手机号码</th>
+						<th>创建时间</th>
+						
 						<!--<th width="80">{:L('STATUS')}</th>
 						<th width="180">{:L('ACTIONS')}</th>-->
+						<th width="180">{:L('ACTIONS')}</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php $i=0 ?>
-				<foreach name="data" item="vo" key="k">
+				<volist name="data" id="vo">
 					<tr class="trclick" >
 						<td style="width:4px;" >{$i++}<input type="hidden" class="keyinfo" value="{$k}" /></td>
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em; overflow: hidden; text-overflow: ellipsis;" class="text" onkeydown="t()">{$vo.friendtext}</td>
-						<td>{$vo.username}</td>
+						<td width="80px">{$vo.cdkey}</td>
+						<td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
+						<td><a href="">停止</a></td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>
-				</foreach>
+				</volist>
 				</tbody>
 				<!--
 				<tfoot>
