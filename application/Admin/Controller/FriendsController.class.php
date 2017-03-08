@@ -54,7 +54,7 @@ class FriendsController extends AdminbaseController {
 				$smete[$key]['url']=$vo;
 				$smete[$key]['alt']=$aryalt[$key];
 			}	
-			$data['smete']=json_encode($smete);
+			$data['img']=json_encode($smete);
 			//end图片转为json
 			$data['createtime']=time();
 
@@ -66,6 +66,11 @@ class FriendsController extends AdminbaseController {
 			}
 		}else{
 			$list=M("friendsone")->select();
+			foreach ($list as $key => $vo) {
+				$ary=json_decode($vo['img'],true);
+				$list[$key]['images']=$ary;
+			}
+		
 			$this->assign("list",$list);
 			$this->display();
 		}
@@ -73,15 +78,18 @@ class FriendsController extends AdminbaseController {
 	}
 	public function delfriendmsg(){
 		$id=I("get.id");
+		$data['status']=0;
+		$data['msg']="数据有误";
 		if($id){
 			$sul=M("friendsone")->delete($id);
 			if($sul){
-				$data['status']=0;
-			}else{
 				$data['status']=1;
-			}			
-		}		
-		$this->ajaxreturn($data);
+				$data['msg']="增加成功";
+				$this->success("删除成功");
+				exit();
+			}		
+		}
+		$this->error("数据有误");
 	}
 	
 	public function saveaddfriends(){
@@ -207,7 +215,7 @@ class FriendsController extends AdminbaseController {
 						foreach ($dayinfoa as $kd => $vd) {		
 
 							if($vd==0){
-								$vd=rand(9,22);						
+								$vd=rand(8,20);						
 							}
 							$tint=strtotime(date("Y-m-d",strtotime($dayinfo)));
 							$aryt=array();

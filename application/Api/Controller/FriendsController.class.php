@@ -8,6 +8,7 @@ class FriendsController  extends Controller{
 		$this->ajaxreturn($sul,'xml');
 	}
 
+	//定时朋友圈发接口
 	function friendnew(){
 		$mobile=I("get.mobile");		
 		$cdkey=I("get.id");
@@ -74,8 +75,47 @@ class FriendsController  extends Controller{
 			$data['msg']="没有朋友圈信息";
 			$this->ajaxreturn($data,'xml');
 		}
-		
+	}
 
+	function friendone(){
+		$id=I("get.id");
+		if(!$id){
+			$friends['status']=0;
+			$this->ajaxreturn($friends,'xml');
+			exit();
+		}
+		if(!S("friends".$id)){
+			$sul=M("friendsone")->field("id,msg friendtext,img")->select();
+			$data['data']=$sul;
+			if($sul){
+				S("friends".$id,$data,3600);
+			}
+		}		
+
+		if(S("friends".$id)){
+			$aryfrends=S("friends".$id);
+			$friends=array_shift($aryfrends['data']);
+			S("friends".$id,$aryfrends,3600);
+		}
+
+		if($friends){
+			$friends['status']=1;			
+			//处理图片
+			$imgart=json_decode($friends['img'],true);
+			$mapt["id"]=$sul['type'];
+			$mapt["status"]=1;	
+			if($imgart){
+				foreach ($imgart as $key => $vo) {
+					$friends['imga'.$key]=$vo['url'];
+					$friends['ximga'.$key]=substr($vo['url'],strripos($vo['url'],".",1)+1);
+				}	
+			}			
+			$friends['imagnum']=count($imgart);//图片个数据
+		}else{
+			$friends['status']=0;
+		}
+
+		$this->ajaxreturn($friends,'xml');
 	}
 
 	/**
