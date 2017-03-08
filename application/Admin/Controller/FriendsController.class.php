@@ -44,7 +44,44 @@ class FriendsController extends AdminbaseController {
 	}
 	
 	public function addfriends(){
-		$this->display();
+		if(IS_POST){
+			$data["msg"]=I("post.friendtext");
+			//图片转为json
+			$ary=I("post.photos_url");
+			$aryalt=I("post.photos_alt");	
+			$smete=array();
+			foreach ($ary as $key => $vo) {
+				$smete[$key]['url']=$vo;
+				$smete[$key]['alt']=$aryalt[$key];
+			}	
+			$data['smete']=json_encode($smete);
+			//end图片转为json
+			$data['createtime']=time();
+
+			$sul=M("friendsone")->add($data);
+			if($sul){
+				$this->success("增加成功");
+			}else{
+				$this->error("数据有误");
+			}
+		}else{
+			$list=M("friendsone")->select();
+			$this->assign("list",$list);
+			$this->display();
+		}
+		
+	}
+	public function delfriendmsg(){
+		$id=I("get.id");
+		if($id){
+			$sul=M("friendsone")->delete($id);
+			if($sul){
+				$data['status']=0;
+			}else{
+				$data['status']=1;
+			}			
+		}		
+		$this->ajaxreturn($data);
 	}
 	
 	public function saveaddfriends(){
