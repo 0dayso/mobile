@@ -191,28 +191,34 @@ class FriendsController extends AdminbaseController {
 				$qjsendtime=I("post.qjsendtime");
 				$qjsendtimesd=I("post.qjsendtimesd");
 
+				
+				$data['sendetime']=$qjsendtime;
 				foreach ($qjsendtimesd as $kq => $vl) {
 					if($vl==0){
 						$vl=rand(9,22);						
 					}
-					
-					$tint=strtotime(date("Y-m-d",strtotime($qjstarttime)));
-					$aryz=array();
-					$aryz["starttime"]=$tint+($vl*3600);
+					$day=$this->count_days($qjstarttime,$qjsendtime);	
+					for ($i=0; $i <=$day ; $i++) { 
+						$tint=strtotime(date("Y-m-d",strtotime($qjstarttime)));
+						$aryz=array();
+						$aryz["starttime"]=$tint+($vl*3600)+(3600*24*$i);
+						$tidn=strtotime(date("Y-m-d",strtotime($qjstarttime)));
+						$aryz["endtime"]=$tint+(3600*24);
+						$qtary[]=$aryz;
+					}
 
-					$tidn=strtotime(date("Y-m-d",strtotime($qjsendtime)));
-					$aryz["endtime"]=$tint+(3600*24);
-					$qtary[]=$aryz;
 				}
 			}
-			
-			if(I("post.sendtype")==2){				
+
+			if(I("post.sendtype")==2){	
+				
+				
+
 				foreach ($_POST as $kp => $vp) {					
 					if(strpos($kp,"zdsendtime")!==false){					
 						$dayinfo=I('post.'.$kp);
-
 						$dayinfoa=I('post.t'.$kp);
-					
+						$data['sendstime']=I("post.zdsendtime0");
 						foreach ($dayinfoa as $kd => $vd) {		
 
 							if($vd==0){
@@ -225,14 +231,15 @@ class FriendsController extends AdminbaseController {
 							$tidn=strtotime(date("Y-m-d",strtotime($dayinfo)));
 							$aryt["endtime"]=$tint+(3600*24);
 							$qtary[]=$aryt;
+							$data['sendetime']=$aryt["endtime"];
 						}											
 					}
 				}
 			}
 
 			//end设置得到时间
-
-	
+			$data['sendtype']=I("post.sendtype");
+			
 			$map['sendtime']=strtotime(I("post.sendtime"));			   	
 			$sul=M('friends')->add($data);
 			if($sul){
@@ -269,6 +276,23 @@ class FriendsController extends AdminbaseController {
 		$this->assign('ftype',$ftype);
 
 		$this->display();
+	}
+	//时间天数两个数之间的天数
+	public function count_days($a,$b){
+	    $a_dt = getdate(strtotime($a));
+	    $b_dt = getdate(strtotime($b));
+	    $a_new = mktime(12, 0, 0, $a_dt['mon'], $a_dt['mday'], $a_dt['year']);
+	    $b_new = mktime(12, 0, 0, $b_dt['mon'], $b_dt['mday'], $b_dt['year']);
+
+		 $second1 = $a_new;//strtotime($day1);
+	 	 $second2 =$b_new; //strtotime($day2);
+	    
+	  	if ($second1 < $second2) {
+		    $tmp = $second2;
+		    $second2 = $second1;
+		    $second1 = $tmp;
+		  }
+		  return ($second1 - $second2) / 86400;
 	}
 	//信息分类
 	public function cat(){
