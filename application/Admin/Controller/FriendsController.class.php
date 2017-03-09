@@ -49,11 +49,8 @@ class FriendsController extends AdminbaseController {
 			$this->error("数据有误");
 			exit();
 		}
-
-		$sul=M("friends")->delete($id);
-		
+		$sul=M("friends")->delete($id);		
 		if($sul){
-
 			$sul=M("friendmsg")->where("frdid=%d",$id)->delete();
 			if($sul){
 				$this->success("数据删除成功");
