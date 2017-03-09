@@ -187,14 +187,15 @@ class FriendsController extends AdminbaseController {
 			//设置得到时间
 			$qtary=array();
 			if(I("post.sendtype")==1){
-				$qjstarttime=I("poxt.qjstarttime");
+				$qjstarttime=I("post.qjstarttime");
 				$qjsendtime=I("post.qjsendtime");
 				$qjsendtimesd=I("post.qjsendtimesd");
 
 				foreach ($qjsendtimesd as $kq => $vl) {
-					if($vl=0){
+					if($vl==0){
 						$vl=rand(9,22);						
 					}
+					
 					$tint=strtotime(date("Y-m-d",strtotime($qjstarttime)));
 					$aryz=array();
 					$aryz["starttime"]=$tint+($vl*3600);
@@ -204,7 +205,7 @@ class FriendsController extends AdminbaseController {
 					$qtary[]=$aryz;
 				}
 			}
-
+			
 			if(I("post.sendtype")==2){				
 				foreach ($_POST as $kp => $vp) {					
 					if(strpos($kp,"zdsendtime")!==false){					
@@ -228,6 +229,7 @@ class FriendsController extends AdminbaseController {
 					}
 				}
 			}
+
 			//end设置得到时间
 
 	
