@@ -33,7 +33,7 @@
 						<td style="font-size:1.2em;height:1.8em;line-height:1.8em; overflow: hidden; text-overflow: ellipsis;" class="text" onkeydown="t()">{$vo.friendtext}</td>
 						<td width="80px">{$vo.cdkey}</td>
 						<td>{$vo.createtime|date="Y-m-d H:i:s",###}</td>
-						<td><a href="">停止</a></td>
+						<td><a href="">停止</a>  <a href="{:U('friends/delfriends')}&id={$vo.id}" onclick="return confirm('确认删除数据吗?')">删除</a></td>
 						<!--<td id="vl{$k}" style="width:4px">未</td>
 					 	<td>返回</td> -->
 					</tr>

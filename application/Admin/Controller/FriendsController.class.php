@@ -42,6 +42,25 @@ class FriendsController extends AdminbaseController {
 			
 		$this->display();
 	}
+	//删除朋友圈数据
+	public function delfriends(){
+		$id=I("get.id");
+		if(!$id){
+			$this->error("数据有误");
+			exit();
+		}
+
+		$sul=M("friends")->delete($id);
+		
+		if($sul){
+
+			$sul=M("friendmsg")->where("frdid=%d",$id)->delete();
+			if($sul){
+				$this->success("数据删除成功");
+			}
+		}
+		$this->error("数据有误");
+	}
 	
 	public function addfriends(){
 		if(IS_POST){
@@ -239,7 +258,7 @@ class FriendsController extends AdminbaseController {
 
 			//end设置得到时间
 			$data['sendtype']=I("post.sendtype");
-			
+
 			$map['sendtime']=strtotime(I("post.sendtime"));			   	
 			$sul=M('friends')->add($data);
 			if($sul){
