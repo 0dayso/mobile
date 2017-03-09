@@ -48,6 +48,22 @@ class WeixiController extends AdminbaseController {
        	$this->display();        
     }
 
+    public function delweixi(){
+    	$id=I("get.id");
+    	if(!$id){
+    		$this->error("数据有错");
+    		exit();
+    	}
+
+    	$sul=M("weixi")->delete($id);
+    	if($sul){
+    		$this->success("删除成功");
+    	}else{
+    		$this->error("数据有误");
+    	}
+
+    }
+
     public function weixiname(){
     	$wxname=I("post.name");
     	$id=I("post.id");    
