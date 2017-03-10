@@ -52,14 +52,14 @@ class EquictiveController extends Controller {
 
         if($device){
         	$result=D('equictive')->alias('eq')->join('mbl_runcode as rc on eq.runcodeid=rc.id')->where("cdkey='%s'",array($deviceid))->find();
-            if($result){           
-      
-                $parame['alterip']=$result['alterip'];
+            if($result){  
                 $parame['weixicut']=$result['weixicut']; 
+                $parame['alterip']=$result['alterip'];
                 $parame['onmoble']=$result['onmoble'];
 
                 $mingle=unserialize($result['mingle']);
                 $mustt=unserialize($result['mustt']);
+
                 if(is_array($mustt)){
                     $parame=array_merge($parame,$mustt);
                 }
