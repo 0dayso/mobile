@@ -133,8 +133,6 @@ class MobileExlController extends AdminbaseController{
                     'C' 
             );
             $res = importFormExcel ( $column, $dateCol,ROOTPATRH.$path,$extend );
-           
-           
 		return $res;
 	}
 
@@ -292,14 +290,11 @@ class MobileExlController extends AdminbaseController{
 		if($data){
 			for ($i=0; $i < 50; $i++) { 
 				if($data){
-
 					$entry = array_shift($data);
 					$entry['status']=0;
 					$list=$this->onemobile($entry);
-
 				}
-			}
-			
+			}			
 		}
 
 		$dataary['data']=$data;
@@ -422,6 +417,27 @@ class MobileExlController extends AdminbaseController{
 			$return['status']=2;
 		}
 		$this->ajaxreturn($return);
+	}
+
+	//-次增加1万条
+	public function addtxt(){
+		if(S("adddaatatxt")){
+			$entry['status']=3;
+			$this->ajaxreturn($entry);
+			exit();
+		}
+		$str="txt";
+		$dataary=S("adddaata".$str.session(ADMIN_ID));	
+		$data=$dataary;
+
+		if($data){
+			$entry = array_shift($data);
+		}
+		$dataary=$data;
+		S("adddaata".$str.session(ADMIN_ID),$dataary);
+		$return["count"]=count($data);
+		$return["status"]=0;
+
 	}
 
 	//不需要检测直接增加apple

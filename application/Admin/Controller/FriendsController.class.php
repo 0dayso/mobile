@@ -58,6 +58,20 @@ class FriendsController extends AdminbaseController {
 		}
 		$this->error("数据有误");
 	}
+
+	public function friendmsgtime(){
+		$id=I("get.id");	
+		$data['status']=0;
+		$sul=M("friendmsg")->where("frdid=%d",$id)->select();
+		foreach ($sul as $key => $vo) {
+			$sul[$key]['starttime']=date("Y-m-d H:i:s",$vo['starttime']);
+		}
+		if($sul){
+			$data['data']=$sul;
+			$data['status']=1;
+		}
+		$this->ajaxReturn($data);
+	}
 	
 	public function addfriends(){
 		if(IS_POST){
