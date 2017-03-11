@@ -50,6 +50,44 @@ class FriendsController extends AdminbaseController {
        	$this->display();
         
     }
+
+    /**
+     * 后台框架首页
+     */
+    public function msgdetails() {
+    	$key=I("request.mobile");
+   
+    	if(isset($key)&&!empty($key)){    		
+			$where['mbl_friendmsg.mobile']=$key;
+			S("mobile1",$key,3600);
+		}
+		if(S("mobile1")){
+			$where['mbl_friendmsg.mobile']=S("mobile1");
+		}
+		
+		$count=M('Friendmsg')->where($where)->count();
+		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
+		$Page->setConfig('first','第一页');
+		$Page->setConfig('last','末页');
+		$show = $Page->show();// 分页显示输出
+		
+		
+		$data=M('Friendmsg')->field("mbl_friendmsg.*,f.friendtext")->order("id DESc")->join("mbl_friends f on f.id=__FRIENDMSG__.frdid")->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+		
+		$arykey=M("weixi")->getfield("mobile,weixiname",true);
+
+		foreach($data as $k=>$v){
+			$userinfo = $this->Getuserbyid($v['authorid']);
+			$data[$k]['mobile'] = $arykey[$v['mobile']];
+		}
+		$eqlist=M("equictive")->getfield("cdkey,alias");
+		$this->assign("eqlist",$eqlist);
+		$this->assign('count',$count);
+		$this->assign('data',$data);
+		$this->assign('page',$show);
+       	$this->display();
+        
+    }
 	public function add(){
 		$sql="SELECT id,friendtext,COUNT(*) AS ct FROM mbl_friends GROUP BY id HAVING ct>1 ORDER BY ct DESC";
 		$data=M()->query($sql);
