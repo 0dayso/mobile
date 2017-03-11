@@ -17,18 +17,33 @@ class FriendsController extends AdminbaseController {
      * 后台框架首页
      */
     public function index() {
-		$count=M('Friends')->count();
+    	$key=I("request.cdkey");
+    	if($key==0){
+    		S("cdkey",null);
+    	}
+    	if($key){
+			$where['cdkey']=$key;
+			S("cdkey",$key,3600);
+		}
+		if(S("cdkey")){
+			$where['cdkey']=S("cdkey");
+		}
+		$count=M('Friends')->where($where)->count();
 		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
 		$Page->setConfig('first','第一页');
 		$Page->setConfig('last','末页');
 		$show = $Page->show();// 分页显示输出
 		
-		$data=M('Friends')->order("id DESc")->limit($Page->firstRow.','.$Page->listRows)->field('id,friendtext,authorid,cdkey,createtime')->select();
+		
+		$data=M('Friends')->order("id DESc")->where($where)->limit($Page->firstRow.','.$Page->listRows)->field('id,friendtext,authorid,cdkey,createtime')->select();
 		$arykey=M("equictive")->getfield("cdkey,alias",true);
+
 		foreach($data as $k=>$v){
 			$userinfo = $this->Getuserbyid($v['authorid']);
 			$data[$k]['cdkey'] = $arykey[$v['cdkey']];
 		}
+		$eqlist=M("equictive")->getfield("cdkey,alias");
+		$this->assign("eqlist",$eqlist);
 		$this->assign('count',$count);
 		$this->assign('data',$data);
 		$this->assign('page',$show);
@@ -63,8 +78,10 @@ class FriendsController extends AdminbaseController {
 		$id=I("get.id");	
 		$data['status']=0;
 		$sul=M("friendmsg")->where("frdid=%d",$id)->select();
+		$mobileas=M("weixi")->where("type=3")->getfield("mobile,weixiname");
 		foreach ($sul as $key => $vo) {
 			$sul[$key]['starttime']=date("Y-m-d H:i:s",$vo['starttime']);
+			$sul[$key]['mobile']= empty($mobileas[$sul[$key]['mobile']])?$sul[$key]['mobile']:$mobileas[$sul[$key]['mobile']];
 		}
 		if($sul){
 			$data['data']=$sul;
