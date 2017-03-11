@@ -18,7 +18,7 @@ class MobileController extends AdminbaseController{
 			$map['type'] =2;	
 		}
 
-		//$count=M('mobile')->where("status=0")->group('type')->getField("type,count('type') as cut",true);		
+		$count=M('mobilewoman')->where("sex=1 and isshow=0")->count();	
 		$mobile=M('applemobile')->group('isshow')->getField("isshow,count('isshow') as cut",true);
 
 		$this->assign("mobile",$mobile);
