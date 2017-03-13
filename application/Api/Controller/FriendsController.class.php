@@ -27,7 +27,31 @@ class FriendsController  extends Controller{
 		$map["fm.starttime"]=array("lt",time());
 		$map["fm.sendnum"]=0;
 		
-		$sul=M("friendmsg")->alias("fm")->field("f.*,fm.*")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->order("fm.level desc")->find();
+		if(S("friendsmsg".$mobile)){
+			$tmp=S("friendsmsg".$mobile);
+			$sul=array_shift($tmp);
+			S("friendsmsg".$mobile,$tmp,3600);
+		}else{
+			$sult=M("friendmsg")->alias("fm")->field("f.*,fm.*")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->limit(5)->order("fm.level desc")->select();
+		
+			foreach ($sult as $key => $vt) {
+				$param['sendnum']=array("exp","sendnum+1");
+				$param['sendtime']=time();
+				$map1['id']=$vt['id'];
+				$tsul=M("friendmsg")->where($map1)->save($param);//设置已发送
+				if(!$tsul){
+					unset($sult[$key]);
+				}
+			}
+			if($sult){
+				$sul=array_shift($sult);
+				S("friendsmsg".$mobile,$sult,3600);
+			}
+			
+		}
+
+		
+
 
 		$pam['cdkey']=$mobile;
 		$pam['mobile']=$cdkey;
@@ -42,7 +66,7 @@ class FriendsController  extends Controller{
 			$param['sendtime']=time();
 			$map1['id']=$sul['id'];
 
-			M("friendmsg")->where($map1)->save($param);//设置已发送
+			$tsul=M("friendmsg")->where($map1)->save($param);//设置已发送
 
 			//处理图片
 			$imgart=json_decode($sul['smete'],true);
