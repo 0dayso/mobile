@@ -46,7 +46,10 @@ class FriendsController  extends Controller{
 			if($sult){
 				$sul=array_shift($sult);
 				S("friendsmsg".$mobile,$sult,3600);
+			}else{
+				$sul=$sult;
 			}
+			
 			
 		}
 
