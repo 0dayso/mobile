@@ -64,6 +64,14 @@ class FriendsController extends AdminbaseController {
 		if(S("mobile1")){
 			$where['mbl_friendmsg.mobile']=S("mobile1");
 		}
+
+		$sendtime=I("request.sendtime");
+		if(isset($sendtime)&&!empty($sendtime)){
+			$tmp=date("Y-m-d",strtotime($sendtime));
+			$where['mbl_friendmsg.sendtime']=array(array("gt",strtotime($tmp)),array("lt",strtotime($tmp)+3600*24));
+		}
+
+	
 		
 		$count=M('Friendmsg')->where($where)->count();
 		$Page = new \Think\Page($count,12);// 实例化分页类 传入总记录数和每页显示的记录数(25)
@@ -73,6 +81,8 @@ class FriendsController extends AdminbaseController {
 		
 		
 		$data=M('Friendmsg')->field("mbl_friendmsg.*,f.friendtext")->order("id DESc")->join("mbl_friends f on f.id=__FRIENDMSG__.frdid")->where($where)->limit($Page->firstRow.','.$Page->listRows)->select();
+
+
 		
 		$arykey=M("weixi")->getfield("mobile,weixiname",true);
 
