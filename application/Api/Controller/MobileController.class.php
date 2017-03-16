@@ -50,6 +50,10 @@ class MobileController extends Controller {
 
     //手机导入通讯录数据接口
     public function phonemobile(){
+
+        echo 0;
+        exit();
+
         $row=I("REQUEST.row");
         if(!$row){
             $row=1;
