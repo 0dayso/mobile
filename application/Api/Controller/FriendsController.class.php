@@ -1,7 +1,7 @@
 <?php
 namespace Api\Controller;
 use Think\Controller;
-class FriendsController  extends Controller{
+class friendsController  extends Controller{
 
 	function index(){
 		$sul=M("options")->where("option_name='tlymsg' or option_name='tlynmb' or option_name='towmsg'")->getfield("option_name,option_value");
@@ -12,6 +12,7 @@ class FriendsController  extends Controller{
 	function friendnew(){
 		$mobile=I("get.mobile");		
 		$cdkey=I("get.id");
+		$runad=I("get.rd");
 
 		$where["mobile"]=$mobile;
 		$sulm=M("weixi")->where($where)->find();	
@@ -23,18 +24,22 @@ class FriendsController  extends Controller{
 			$data['type']=3;
 			$retrun=M("weixi")->add($data);
 		}	
+
+
 		$map["fm.mobile"]=$mobile;
 		$map["fm.starttime"]=array("lt",time());
-		$map["fm.sendnum"]=0;
+		$map["fm.sendnum"]=0;	
 		
-		if(S("friendsmsg".$mobile)){
-			$tmp=S("friendsmsg".$mobile);
+		if(S("friendsmsg".$mobile.$runad)){
+			$aty=S("friendsmsg".$mobile.$runad);
+			$tmp=$aty['data'];
 			$sul=array_shift($tmp);
-			S("friendsmsg".$mobile,$tmp,3600);
+			$aty['data']=$tmp;
+			S("friendsmsg".$mobile.$runad,$aty,3600);
 		}else{
 			$sult=M("friendmsg")->alias("fm")->field("f.*,fm.*")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->limit(5)->order("fm.level desc")->select();
 		
-			foreach ($sult as $key => $vt) {
+		    foreach ($sult as $key => $vt) {
 				$param['sendnum']=array("exp","sendnum+1");
 				$param['sendtime']=time();
 				$map1['id']=$vt['id'];
@@ -43,14 +48,14 @@ class FriendsController  extends Controller{
 					unset($sult[$key]);
 				}
 			}
+
 			if($sult){
 				$sul=array_shift($sult);
-				S("friendsmsg".$mobile,$sult,3600);
+				$sultary["data"]=$sult;
+				S("friendsmsg".$mobile.$runad,$sultary,3600);
 			}else{
 				$sul=$sult;
 			}
-			
-			
 		}
 
 		
