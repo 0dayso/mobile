@@ -91,8 +91,7 @@ class EquictiveController extends Controller {
         }else{
         	$data['cdkey']=$deviceid;
         	$data['status']=1;
-        	$data['version']=I('vn');
-            $data['authorid'] = session("ADMIN_ID");
+        	$data['version']=I('vn');           
         	$result=D('equictive')->add($data);
         	echo 2;
         	exit();
