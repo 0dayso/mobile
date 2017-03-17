@@ -12,7 +12,7 @@ class friendsController  extends Controller{
 	function friendnew(){
 		$mobile=I("get.mobile");		
 		$cdkey=I("get.id");
-		$runad=I("get.rd");
+		$runad="1";//I("get.rd");
 
 		$where["mobile"]=$mobile;
 		$sulm=M("weixi")->where($where)->find();	
