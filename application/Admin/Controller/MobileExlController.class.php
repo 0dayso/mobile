@@ -419,7 +419,7 @@ class MobileExlController extends AdminbaseController{
 		$this->ajaxreturn($return);
 	}
 
-	//-次增加1万条
+	//-次增加1千条
 	public function addtxt(){
 		if(S("adddaatatxt")){
 			$entry['status']=3;
@@ -429,14 +429,60 @@ class MobileExlController extends AdminbaseController{
 		$str="txt";
 		$dataary=S("adddaata".$str.session(ADMIN_ID));	
 		$data=$dataary;
-
-		if($data){
+		$countnum=count($data)<40?count($data):40;
+		$aryf=array();
+		for ($i=0; $i <$countnum ; $i++) { 
 			$entry = array_shift($data);
+			$aryf[]=$entry;
 		}
 		$dataary=$data;
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
 		$return["count"]=count($data);
 		$return["status"]=0;
+
+
+		if($aryf){
+			$padata=array();
+			foreach ($aryf as $kf => $vf) {
+				$map['mobile']=$vf;
+				$ndata=M("mobilename")->where($map)->find();
+				if(!$ndata){
+					continue;
+				}
+				/*
+				$where['id']=$ndata['mid'];
+				$parame['updatetime']=time();
+		    	$parame['type']=2;
+				$sul=M("mobile")->where($where)->save($parame);
+				*/
+
+				$adata['type']=7;//已去空数据
+				$adata['mobile']=$ndata['mobile'];
+				$adata['mid']=$ndata['mid'];
+				$adata['username']=$ndata['username'];
+
+				$padata[]=$adata;
+			}
+			
+			try {
+				
+				$count=M("applemobile")->addAll($padata);	
+				$return['status']=1;
+				$return['cont']=$count;
+				$return['mobile']="成功加载".$count."条数据";				
+				$this->ajaxreturn($return);
+				exit();
+
+			} catch (\Exception $e) {
+				$return['status']=0;
+				$this->ajaxreturn($return);
+				exit();
+			}
+			
+		}else{
+			$return['status']=2;
+		}
+		$this->ajaxreturn($return);
 
 	}
 

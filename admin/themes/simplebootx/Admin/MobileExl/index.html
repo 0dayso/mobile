@@ -23,9 +23,11 @@
 			</form>
 			<button type="submit" id="cfinfo" class="btn btn-primary submit">去重数据</button>
 			<a   class="btn btn-primary" href="{:U('MobileExl/dumpdata',array('num'=>0))}">导出已去重数据(有{$mcount})</a>
-			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>			
+			<a   id="datat" class="btn btn-primary" href="javascript:void(0)">添加已检测数据</a>	
+			<a   id="datap" class="btn btn-primary" href="javascript:void(0)">添加已检测数据批量增加</a>		
 			<a   class="btn btn-primary" href="javascript:if(confirm('确实要删除该内容吗?'))location='{:U('MobileExl/mobileclose')}'">清空数据</a>
 			<a  id="datatp" class="btn btn-primary" href="javascript:void(0)">直接写入数据</a>
+			
 		</div>
 
 		<if condition="$mcount gt 40000">
@@ -108,14 +110,18 @@
 	var cx=1;
 	var url="{:U('MobileExl/addmobile')}";
 	var murl="{:U('MobileExl/addapple')}";
-	var purl="{:U('MobileExl/addappletxt')}"
+	var purl="{:U('MobileExl/addappletxt')}";
+	var plurl="{:U('MobileExl/addtxt')}";
 	$('#cfinfo').click(function(){
 		t(url);
 	});
 
 	$("#datat").click(function(){
-
 		m(murl);
+	});
+
+	$("#datap").click(function(){		
+		pl(plurl);
 	})
 
 	$("#datatp").click(function(){
@@ -126,7 +132,29 @@
 
 	var addt=$("#addtxt");
 
-
+	function pl(plurl){
+		$.get(plurl,function(data){
+			if(data['status']==3 || data['status']=='3'){
+				alert("顺序不对");
+				return;
+			}
+			$("#count").text(data['count']);
+			 if(data['status']==1 || data['status']=='1'){
+			 		addt.prepend(data['mobile']+"增加成功"+"\n");
+				 	$("#addtxtlbl").text(ix++);
+				    pl(plurl);
+			 }else{
+			 	if(data['status']==2 || data['status']=='2'){
+			 		addt.prepend("添加完成"+"\n");
+			 		return;
+			 	}else{
+			 		addt.prepend(data['mobile']+"已存在"+"\n");
+			 		$("#addlbl").text(cx++);
+				 	pl(plurl);
+			 	}
+			 }
+		});
+	}
 	function t(url){	
 		$.get(url,function(data){
 				if(data['status']==3 || data['status']=='3'){
@@ -153,26 +181,27 @@
 
 	function m(murl){	
 		$.get(murl,function(data){
-				if(data['status']==3 || data['status']=='3'){
-					alert("顺序不对");
-					return;
-				}
+			if(data['status']==3 || data['status']=='3'){
+				alert("顺序不对");
+				return;
+			}
 
-				 if(data['status']==1 || data['status']=='1'){
-				 		addt.prepend(data['mobile']+"增加成功"+"\n");
-					 	$("#addtxtlbl").text(ix++);
-					    m(murl);
-				 }else{
-				 	if(data['status']==2 || data['status']=='2'){
-				 		addt.prepend("添加完成"+"\n");
-				 		return;
-				 	}else{
-				 		addt.prepend(data['mobile']+"已存在"+"\n");
-				 		$("#addlbl").text(cx++);
-					 	m(murl);
-				 	}
-				 }
-			});
+			 if(data['status']==1 || data['status']=='1'){
+			 		addt.prepend(data['mobile']+"增加成功"+"\n");
+				 	$("#addtxtlbl").text(ix++);
+				    m(murl);
+			 }else{
+			 	if(data['status']==2 || data['status']=='2'){
+			 		addt.prepend("添加完成"+"\n");
+			 		return;
+			 	}else{
+			 		addt.prepend(data['mobile']+"已存在"+"\n");
+			 		$("#addlbl").text(cx++);
+				 	m(murl);
+			 	}
+			 }
+			 $("#count").text(data['count']);
+		});
 	}
 
 	function mt(purl){	
@@ -196,6 +225,7 @@
 					 	mt(purl);
 				 	}
 				 }
+				 $("#count").text(data['count']);
 			});
 	}
 
