@@ -29,8 +29,8 @@ class friendsController  extends Controller{
 		$map["fm.mobile"]=$mobile;
 		$map["fm.starttime"]=array("lt",time());
 		$map["fm.sendnum"]=0;	
-		
-		if(S("friendsmsg".$mobile.$runad)){
+		$vtp=S("friendsmsg".$mobile.$runad);
+		if($vtp['data']){
 			$aty=S("friendsmsg".$mobile.$runad);
 			$tmp=$aty['data'];
 			$sul=array_shift($tmp);
