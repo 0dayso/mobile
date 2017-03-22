@@ -91,7 +91,7 @@ class MobileController extends Controller {
         }
         M()->startTrans();      
         try {
-            $data=M('applemobile')->field('mid,mobile,username')->where('type=3 and isshow=0')->limit($row)->lock(true)->select();
+            $data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->limit($row)->lock(true)->select();
             foreach ($data as $k => $vl) {
                 $data[$k]['username']=$data[$k]['username'].$vl['mid'];              
                 $alter['isshow']=array("exp","isshow+1");
