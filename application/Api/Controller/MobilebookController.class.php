@@ -65,7 +65,7 @@ class MobilebookController extends Controller {
     }
 
     //手机导入通讯录数据接口安卓跑群控
-    public function phonemobiletl(){  
+    public function booktl(){  
         $row=I("REQUEST.row");
         if(!$row){
             $row=1;
@@ -92,6 +92,34 @@ class MobilebookController extends Controller {
         }    
         $this->ajaxreturn($data);
     }
+
+    public function phonemobiletl(){  
+        $row=I("REQUEST.row");
+        if(!$row){
+            $row=1;
+        }
+        M()->startTrans();      
+        try {
+            $data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->limit($row)->lock(true)->select();
+            foreach ($data as $k => $vl) {
+                $data[$k]['username']=$data[$k]['username'].$vl['mid'];              
+                $alter['isshow']=array("exp","isshow+1");
+                $t=M('applemobile')->where("mid=%d",$vl['mid'])->save($alter);
+                if(!$t){
+                    M()->rollback();
+                    echo 0;
+                    exit();
+                }
+               // $data[$k]['username']=$vl['mobile'];
+            }
+            M()->commit();
+        } catch (\Exception $e) {
+            M()->rollback();
+
+        }    
+        $this->ajaxreturn($data);
+    }
+
     //检测通过接口
     public function phonecheck(){
          $data['status']=0;
