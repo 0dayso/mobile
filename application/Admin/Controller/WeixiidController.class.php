@@ -283,8 +283,17 @@ class WeixiidController extends AdminbaseController{
 			try {
 				$adata['wxid']=$entry;
 				$adata['createtime']=time();
-				M("wxid")->add($adata);
+				$wxid=M("wxid")->add($adata);
 				$return['status']=1;
+				if($wxid){
+					$adata['wid']=$wxid;
+					$sut=M("wxid_show")->add($adata);
+					if(!$sut){
+						M("wxid")->delete($wxid);
+						$return['status']=0;
+					}
+				}
+				
 				$return["mobile"]=$entry;
 				
 			} catch (\Exception $e) {
