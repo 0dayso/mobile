@@ -1,0 +1,216 @@
+<admintpl file="header" />
+<style>
+	.trback{background: #999; color: #666;}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">			
+			<li class="active"><a href="{:U('Weixiid/index')}">添加无需要验证微信号</a></li>
+		</ul>
+		<div class="well">
+			<form class=" form-search" style="display: inline-block;" id="mainform" enctype="multipart/form-data" action="{:U('Weixiid/upload_mobile')}" method="post">
+				<label>请选择上传文件</label>：<input type="file" name="file"  id="fileupdata" />
+				<button type="submit" class="btn btn-primary submit">上传文件</button>
+			</form>
+			<button type="submit" id="cfinfo" class="btn btn-primary submit">添加到数据库</button>
+			<button type="submit" id="datap" class="btn btn-primary submit">一次增加多条</button>
+			
+		</div>
+
+		
+		<div class="well">
+			未使用数据:{$sum}条，总共{$sum}条
+		</div>
+	
+
+			<!--
+		<div>
+			<button type="submit" id="cfinfo" class="btn btn-primary submit">一键清空重复手机</button>（<b class="tinfo">清空比较慢请耐心等候</b>）
+			共有重复<span class="nmb">{$cq}</span><input type="hidden" id="nmbcs"/>条数据
+			
+			<a class="btn btn-primary" href="{:U('Mobile/Cleardata')}" onclick="return confirm('是否确认清空所有手机号？');">清空所有手机号</a>
+			
+			<a class="btn btn-primary" href="{:U('Mobile/backups')}">备份所有手机号</a>
+			<a class="btn btn-primary" href="{:U('Mobile/backups',array('status'=>-1))}">备份未操作手机号</a>
+		</div>
+		-->
+		<div style="float: left">
+				<span id="count">{$count}</span>条未添加，成功添加<span id="addtxtlbl">0</span>。重复<span id="addlbl">0</span>条<br/>
+				<textarea  id="addtxt" style="height: 650px; width: 350px; margin-right:20px;"></textarea>
+		</div>
+	
+		<table class="table table-hover table-bordered table-list " style="width: 500px">
+				<!---<thead>
+					<tr>
+						<th width="50">序号</th>
+						<th>已上传文件名称</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</thead>-->
+				<tbody>
+				<foreach name="fileinfo" item="vo" key="k">
+					<if condition="$k lt 10">
+						<tr class="trclick" >
+							<!---<td style="width:4px;" >{$k}</td>-->
+							<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
+								<a href="{:U('Mobile/downloadtxt',array('path'=>$vo['path']))}">{$vo.filename}</a>
+							</td>
+							<td style="font-size:1.2em;height:1.8em;line-height:1.8em" class="text" onkeydown="t()">
+								{$vo.filepath}
+							</td>					
+						<!--	<td id="vl{$k}" style="width:4px">未</td>
+						 	<td>返回</td> -->
+						</tr>
+					</if>
+				</foreach>
+				</tbody>
+<!-- 
+				<tfoot>
+					<tr>				
+						<th width="50">ID</th>
+						<th>手机号码</th>
+						<th width="80">{:L('STATUS')}</th>
+						<th width="180">{:L('ACTIONS')}</th>
+					</tr>
+				</tfoot> -->
+			</table>	
+
+	</div>	
+</body>
+<script type="text/javascript">
+	$(function(){
+		//var url="{:U('Mobile/cqmobile')}";
+		//$.get(url,function(data){
+		//	$('.nmb').html(data);
+		//})
+
+
+	})
+	var ix=1;
+	var cx=1;
+	var url="{:U('Weixiid/addapple')}";
+	var murl="{:U('Weixiid/addapple')}";
+	var purl="{:U('Weixiid/addappletxt')}";
+	var plurl="{:U('Weixiid/addtxt')}";
+	$('#cfinfo').click(function(){
+		t(url);
+	});
+
+	$("#datat").click(function(){
+		m(murl);
+	});
+
+	$("#datap").click(function(){		
+		pl(plurl);
+	})
+
+	$("#datatp").click(function(){
+		mt(purl);
+	})
+
+
+
+	var addt=$("#addtxt");
+
+	function pl(plurl){
+		$.get(plurl,function(data){
+			if(data['status']==3 || data['status']=='3'){
+				alert("顺序不对");
+				return;
+			}
+			$("#count").text(data['count']);
+			 if(data['status']==1 || data['status']=='1'){
+			 		addt.prepend(data['mobile']+"增加成功"+"\n");
+				 	$("#addtxtlbl").text(ix++);
+				    pl(plurl);
+			 }else{
+			 	if(data['status']==2 || data['status']=='2'){
+			 		addt.prepend("添加完成"+"\n");
+			 		return;
+			 	}else{
+			 		addt.prepend(data['mobile']+"已存在"+"\n");
+			 		$("#addlbl").text(cx++);
+				 	pl(plurl);
+			 	}
+			 }
+		});
+	}
+	function t(url){	
+		$.get(url,function(data){
+				if(data['status']==3 || data['status']=='3'){
+					alert("顺序不对");
+					return;
+				}
+				$("#count").text(data['count']);
+				 if(data['status']==1 || data['status']=='1'){
+				 		addt.prepend(data['mobile']+"增加成功"+"\n");
+					 	$("#addtxtlbl").text(ix++);
+					    t(url);
+				 }else{				
+				 	if(data['status']==2 || data['status']=='2'){
+				 		addt.prepend("添加完成"+"\n");
+				 		return;
+				 	}else{
+				 		addt.prepend(data['mobile']+"已经存在"+"\n");
+				 		$("#addlbl").text(cx++);
+					 	t(url);
+				 	}
+				 }
+			});
+	}
+
+	function m(murl){	
+		$.get(murl,function(data){
+			if(data['status']==3 || data['status']=='3'){
+				alert("顺序不对");
+				return;
+			}
+
+			 if(data['status']==1 || data['status']=='1'){
+			 		addt.prepend(data['mobile']+"增加成功"+"\n");
+				 	$("#addtxtlbl").text(ix++);
+				    m(murl);
+			 }else{
+			 	if(data['status']==2 || data['status']=='2'){
+			 		addt.prepend("添加完成"+"\n");
+			 		return;
+			 	}else{
+			 		addt.prepend(data['mobile']+"已存在"+"\n");
+			 		$("#addlbl").text(cx++);
+				 	m(murl);
+			 	}
+			 }
+			 $("#count").text(data['count']);
+		});
+	}
+
+	function mt(purl){	
+		$.get(purl,function(data){
+				if(data['status']==3 || data['status']=='3'){
+					alert("顺序不对");
+					return;
+				}
+
+				 if(data['status']==1 || data['status']=='1'){
+				 		addt.prepend(data['mobile']+"增加成功"+"\n");
+					 	$("#addtxtlbl").text(ix++);
+					    mt(purl);
+				 }else{
+				 	if(data['status']==2 || data['status']=='2'){
+				 		addt.prepend("添加完成"+"\n");
+				 		return;
+				 	}else{
+				 		addt.prepend(data['mobile']+"已存在"+"\n");
+				 		$("#addlbl").text(cx++);
+					 	mt(purl);
+				 	}
+				 }
+				 $("#count").text(data['count']);
+			});
+	}
+
+	
+</script>
+</html>
