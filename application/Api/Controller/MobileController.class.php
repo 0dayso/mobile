@@ -9,6 +9,8 @@ class MobileController extends Controller {
     
 	//通讯云增加朋友数据
     public function index() {
+    	echo "数据错误";
+    	exit();
         M()->startTrans();        
 
     	$data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->lock(true)->find();
