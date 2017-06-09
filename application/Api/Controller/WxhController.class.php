@@ -10,7 +10,6 @@ class WxhController extends Controller{
 	/**	
 	*返回单个不重复的62数据
 	*@access public
-	*@since 1.0
 	*@return json
 	*/
 	public function wx62data(){
@@ -36,7 +35,8 @@ class WxhController extends Controller{
 			M()->rollback();	
 			$data['code']=2;
 		}
-		$this->ajaxReturn($data);
+	
+		$this->ajaxReturn($data,'xml');
 	}
 
 }
