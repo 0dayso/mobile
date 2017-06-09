@@ -3,6 +3,8 @@ namespace Api\Controller;
 use Think\Controller;
 /**
 *微信62数据处理
+*@author zharty
+*@since 1.0
 */
 class WxhController extends Controller{
 
