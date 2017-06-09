@@ -7,7 +7,6 @@ use Think\Controller;
 *@since 1.0
 */
 class WxhController extends Controller{
-
 	/**	
 	*返回单个不重复的62数据
 	*@access public
@@ -18,7 +17,7 @@ class WxhController extends Controller{
 		$data['status']=0;
 		M()->startTrans();
 		try{
-			$sul=M("wxid_show")->field("wid,wxid,wxpwd,wx62")->where(array('status'=>1))->find();//查询一个微信号
+			$sul=M("wxid_show")->field("wid,wxid,wxpwd,wx62")->where(array('status'=>1))->lock(true)->find();//查询一个微信号
 			if($sul){
 				$e=M("wxid_show")->where('wid=%d',$sul['wid'])->setInc('status'); //更改显示状态加1
 				if($e){
@@ -27,14 +26,14 @@ class WxhController extends Controller{
 					$data['data']=$sul;
 				}else{
 					$dat['status']=4;	
-					M()->rollbanck();
+					M()->rollback();
 				}				
 			}else{
 				$data['status']=3;
-				M()->rollbanck();	
+				M()->rollback();	
 			}			
 		}catch(\excption $t){	
-			M()->rollbanck();	
+			M()->rollback();	
 			$data['status']=2;
 		}
 		$this->ajaxReturn($sul);
