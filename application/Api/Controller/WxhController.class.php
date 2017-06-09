@@ -14,29 +14,29 @@ class WxhController extends Controller{
 	*@return json
 	*/
 	public function wx62data(){
-		$data['status']=0;
+		$data['code']=0;
 		M()->startTrans();
 		try{
 			$sul=M("wxid_show")->field("wid,wxid,wxpwd,wx62")->where(array('status'=>1))->lock(true)->find();//查询一个微信号
 			if($sul){
 				$e=M("wxid_show")->where('wid=%d',$sul['wid'])->setInc('status'); //更改显示状态加1
 				if($e){
-					$dat['status']=1;
+					$dat['code']=1;
 					M()->commit();
 					$data['data']=$sul;
 				}else{
-					$dat['status']=4;	
+					$dat['code']=4;	
 					M()->rollback();
 				}				
 			}else{
-				$data['status']=3;
+				$data['code']=3;
 				M()->rollback();	
 			}			
 		}catch(\excption $t){	
 			M()->rollback();	
-			$data['status']=2;
+			$data['code']=2;
 		}
-		$this->ajaxReturn($sul);
+		$this->ajaxReturn($data);
 	}
 
 }
