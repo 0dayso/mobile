@@ -277,29 +277,37 @@ class WeixiidController extends AdminbaseController{
 		$return["count"]=count($data);
 		$return["status"]=0;
 
-
-
 		if($entry){
+			$wxdata=explode("----",$entry);
+
+			$adata['wxid']=$wxdata[0];
+			$adata['wxpwd']=$wxdata[1];
+			$adata['wx62']=$wxdata[2];
 			try {
-				$adata['wxid']=$entry;
 				$adata['createtime']=time();
 				$wxid=M("wxid")->add($adata);
-				$return['status']=1;
-				if($wxid){
-					$adata['wid']=$wxid;
-					$sut=M("wxid_show")->add($adata);
-					if(!$sut){
-						M("wxid")->delete($wxid);
-						$return['status']=0;
-					}
-				}
-				
-				$return["mobile"]=$entry;
-				
 			} catch (\Exception $e) {
 				$return['status']=0;
-				$return["mobile"]=$entry;				
+				$return["mobile"]=$adata['wxid'];				
 			}
+			if($wxid){
+				try {
+					$return['status']=1;
+					
+						$adata['wid']=$wxid;
+						$sut=M("wxid_show")->add($adata);
+						if(!$sut){
+							M("wxid")->delete($wxid);
+							$return['status']=0;
+						}									
+					   $return["mobile"]=$adata['wxid'];
+				} catch (\Exception $e) {
+					M("wxid")->delete($wxid);
+					$return['status']=0;
+					$return["mobile"]=$adata['wxid'];				
+				}
+			}
+
 		}else{
 			$return['status']=2;
 		}
@@ -447,10 +455,6 @@ class WeixiidController extends AdminbaseController{
 		$result=M($table)->addAll($ary);
 		return $result;
 	}
-
-
-
-
 }
 
 ?>

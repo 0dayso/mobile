@@ -35,7 +35,7 @@ class friendsController  extends Controller{
 			$tmp=$aty['data'];
 			$sul=array_shift($tmp);
 			$aty['data']=$tmp;
-			S("friendsmsg".$mobile.$runad,$aty,3600);
+			S("friendsmsg".$mobile.$runad,$aty,1800);
 		}else{
 			$sult=M("friendmsg")->alias("fm")->field("f.*,fm.*")->join("__FRIENDS__ as f on f.id=fm.frdid","left")->where($map)->limit(5)->order("fm.level desc")->select();
 		
@@ -52,7 +52,7 @@ class friendsController  extends Controller{
 			if($sult){
 				$sul=array_shift($sult);
 				$sultary["data"]=$sult;
-				S("friendsmsg".$mobile.$runad,$sultary,3600);
+				S("friendsmsg".$mobile.$runad,$sultary,1800);
 			}else{
 				$sul=$sult;
 			}

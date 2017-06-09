@@ -15,6 +15,7 @@ class ListController extends HomebaseController {
 
 	//文章内页
 	public function index() {
+	
 		$term=sp_get_term($_GET['id']);
 		
 		if(empty($term)){
@@ -22,8 +23,7 @@ class ListController extends HomebaseController {
 		    header('Status:404 Not Found');
 		    if(sp_template_file_exists(MODULE_NAME."/404")){
 		        $this->display(":404");
-		    }
-		    	
+		    }		    	
 		    return ;
 		}
 		

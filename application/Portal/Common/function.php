@@ -387,6 +387,7 @@ function sp_get_term($term_id){
 	if(empty($terms)){
 		$term_obj= M("Terms");
 		$terms=$term_obj->where("status=1")->select();
+
 		$mterms=array();
 		
 		foreach ($terms as $t){

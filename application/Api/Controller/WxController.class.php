@@ -13,7 +13,6 @@ class WxController extends Controller {
     	$data=M('wxid_show')->field('wid,wxid')->where('type=1 and isshow=0')->lock(true)->find();
         if($data){
             $t=M('wxid_show')->where("wid=%d",$data['wid'])->setInc('isshow');
-  
             M()->commit();
             if(!$t){
                 M()->rollback();
