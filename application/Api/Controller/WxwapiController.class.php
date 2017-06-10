@@ -19,6 +19,7 @@ class WxwapiController extends Controller {
         	$result=$data['signname'];
         }
         echo $result;
+        exit();
         /*
         if($data){
             $parame['status']=1;
