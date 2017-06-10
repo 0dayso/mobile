@@ -13,7 +13,13 @@ class WxwapiController extends Controller {
  * 获取个性签名语录
  */
     public function sign(){
-        $data=  D('sign')->field('id,signname')->where('status=0')->limit(1)->find();
+        $data=  D('sign')->field('id,signname')->limit(1)->find();//->where('status=0')
+        $result=0;
+        if($data){
+        	$result=$data['signname'];
+        }
+        echo $result;
+        /*
         if($data){
             $parame['status']=1;
             $parame['updatetime']=time();
