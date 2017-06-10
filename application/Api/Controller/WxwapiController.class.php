@@ -35,6 +35,7 @@ class WxwapiController extends Controller {
             echo 0;
         }        
         exit();
+        */
         //$this->ajaxReturn($data,'xml');
     }
     
