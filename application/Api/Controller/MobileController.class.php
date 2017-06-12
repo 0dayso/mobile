@@ -31,6 +31,28 @@ class MobileController extends Controller {
         $this->ajaxreturn($data,"xml");
     }
 
+     public function mobilepohe() {
+    	
+        M()->startTrans();        
+
+    	$data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->lock(true)->find();
+        if($data){
+            $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
+            if(strlen($data['username'])>1){
+                //substr( $data['username'], 0,3)
+               $data['username']="";
+            }
+
+            M()->commit();
+            if(!$t){
+                M()->rollback();
+                echo 0;
+                exit();
+            }
+        }
+        $this->ajaxreturn($data,"xml");
+    }
+
     //通讯云得到数据接口
     public function txymobile(){
         M()->startTrans();        
