@@ -34,14 +34,18 @@ class MobileController extends Controller {
      public function mobilepohe() {
         M()->startTrans();        
         try{
-        	$data=M('sexman')->field('mobile')->where('status=1')->lock(true)->find();
-	        if($data){	        	
+        	$data=M('sexman')->field('id,mobile')->where('status=1')->lock(true)->find();
+        	
+	        if($data){	  
+
 	            $t=M('sexman')->where("id=%d",$data['id'])->setInc('status');
 	            if($t){
 	                M()->commit();
 	            }else{
 	            	M()->rollback();
 	            }	           
+	        }else{
+	        	$data['msg']="没有数据";
 	        }
         }catch(\Exception $ex){
         	M()->rollback();
