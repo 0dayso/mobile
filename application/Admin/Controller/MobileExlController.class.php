@@ -185,7 +185,6 @@ class MobileExlController extends AdminbaseController{
 		
 		if(count($data)<=0){
 			$entry['status']=2;
-			S("adddaata".$str.session(ADMIN_ID),null);
 			$this->ajaxreturn($entry);
 			exit();
 		}
