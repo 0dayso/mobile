@@ -43,7 +43,7 @@ class MobileController extends Controller {
 	            	M()->rollback();
 	            }	           
 	        }
-        }catch(/exception $ex){
+        }catch(\Exception $ex){
         	M()->rollback();
         }
         $this->ajaxreturn($data,"xml");
