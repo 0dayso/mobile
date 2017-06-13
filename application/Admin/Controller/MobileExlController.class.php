@@ -183,14 +183,16 @@ class MobileExlController extends AdminbaseController{
 		$dataary['data']=$data;
 		S("adddaata".$str.session(ADMIN_ID),$dataary);
 		
+		
+
+
+		$entry['count']=count($data);
+
 		if(count($data)<=0){
 			$entry['status']=2;
 			$this->ajaxreturn($entry);
 			exit();
 		}
-
-
-		$entry['count']=count($data);
 
 		if(!$dataary){
 			$entry['status']=2;
