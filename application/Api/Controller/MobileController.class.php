@@ -32,24 +32,19 @@ class MobileController extends Controller {
     }
 
      public function mobilepohe() {
-    	
         M()->startTrans();        
-
-    	$data=M('applemobile')->field('mid,mobile,username')->where('type=7 and isshow=0')->lock(true)->find();
-        if($data){
-        	$data['mobile']="+86"+$data['mobile'];
-            $t=M('applemobile')->where("mid=%d",$data['mid'])->setInc('isshow');
-            if(strlen($data['username'])>1){
-                //substr( $data['username'], 0,3)
-               $data['username']="";
-            }
-
-            M()->commit();
-            if(!$t){
-                M()->rollback();
-                echo 0;
-                exit();
-            }
+        try{
+        	$data=M('sexman')->field('mobile')->where('status=1')->lock(true)->find();
+	        if($data){	        	
+	            $t=M('sexman')->where("id=%d",$data['id'])->setInc('status');
+	            if($t){
+	                M()->commit();
+	            }else{
+	            	M()->rollback();
+	            }	           
+	        }
+        }catch(/exception $ex){
+        	M()->rollback();
         }
         $this->ajaxreturn($data,"xml");
     }
