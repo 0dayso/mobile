@@ -7,7 +7,7 @@ class WeixiidController extends AdminbaseController{
 
     public function index(){
     	$count=M("wxid_show")->group("status")->getField('status,COUNT(*) as count');
-
+  
     	$this->assign("sum",$count);
     	$this->assign("count",count(S("wxdatatxt".session(ADMIN_ID)))-1);
     	$this->display();
